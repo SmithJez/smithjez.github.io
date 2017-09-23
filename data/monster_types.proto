@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_package = "com.felania.msldb";
+
+package msggamedata;
+
+
+import "MonsterStatType.proto";
+import "MonsterStatWeightType.proto";
+import "MonsterEvolution.proto";
+
+message MsgMonsterType {
+   MonsterStatType type = 1;
+   MonsterStatWeightType weight_type = 2;
+   float attack_weight = 3;
+   float defence_weight = 4;
+   float heal_weight = 5;
+   float hp_weight = 6;
+   MonsterEvolution evolution = 11;
+   float prob_weight = 12;
+   uint32 sp = 13;
+}
