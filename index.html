@@ -1,7 +1,42 @@
-<!DOCTYPE html>
 <html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset =UTF-8"></meta>
+  <title>protobuf-js</title>
+  <style>
+    #container { width:280px; text-align:center; }
+    #target { width:50px; }
+    #decode-button { margin:5px; }
+    #result { border:1px solid black; width:250px; height:150px; padding:10px; text-align:left; }
+  </style>
+  <script src="lib/prototype.js"></script>
+  <script src="javascripts/protobuf.js"></script>
+  <script>
+  var description = {
+    1: {name: 'name',  type: 'string', rule: 'required'},
+    2: {name: 'id',    type: 'int32',  rule: 'required'},
+    3: {name: 'email', type: 'string', rule: 'optional'},
+  };
+  function inspect(obj) {
+    var ret = '';
+    for (var key in obj) {
+      ret += key + ':' + obj[key] + "\n";
+    }
+    return ret;
+  }
+  function testDecoder(file) {
+    var url = '/data/' + file + '.bin';
+    $('result').innerHTML = inspect(new Protobuf.Decoder(description).decode(url));
+  }
+  </script>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <div id="container">
+    <div>
+      <button onclick="testDecoder($('target').value)">Decode!</button>
+      Source: /data/<input id="target" value="simple"></input>.bin
+    </div>
+    <pre id="result"></pre>
+    <button onclick="$('result').innerHTML = ''">Clear!</button>
+  </div>
 </body>
 </html>
