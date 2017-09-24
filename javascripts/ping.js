@@ -1,25 +1,17 @@
+/* importScripts('../closure/goog/base.js');
+importScripts('../closure/goog/asserts/asserts.js');
+importScripts('../protobuf/arith.js');
+importScripts('../protobuf/constants.js');
+importScripts('../protobuf/utils.js');
+importScripts('../protobuf/decoder.js');
+importScripts('../protobuf/encoder.js');
+importScripts('../protobuf/reader.js');
+importScripts('../protobuf/writer.js');
+importScripts('../protobuf/map.js');
+importScripts('../protobuf/message.js'); */
+/* importScripts('msg_game_data.js'); */
 goog.require('proto.MsgGameData');
 goog.require('goog.dom');
-
-function sayHi() {
-  var newHeader = goog.dom.createDom('h1', {'style': 'background-color:#EEE'},
-    'Hello world!');
-  goog.dom.appendChild(document.body, newHeader);
-}
-
-function GetString(file) {
-	
-	var rawFile = new XMLHttpRequest();
-	rawFile.open("GET", file, false);
-	rawFile.onreadystatechange = function() 
-	{
-		
-	}
-	
-	var newHeader = new proto.msggamedata.MsgMonsterType.deserializeBinary (999);
-  
-	goog.dom.appendChild(document.body, newHeader);
-}
 
 function readUrl(url) {
 	var req = new XMLHttpRequest();
@@ -51,23 +43,12 @@ function readUrl(url) {
 	/* console.log(stringText.array[0][100]); */
 	
 	var arrayString = stringText.array[0];
-	console.log(arrayString.length);
-	var lookup = {};
-	for (var i = 0; i < arrayString.length; i++) {
-		/* console.log(arrayString[i][i]); */
-		lookup[arrayString[i][0]] = arrayString[i][1];
-		
-		/* console.log(arrayString[i][0]); */
-		
-		/* console.log(lookup[arrayString[i]]); */
-	}
+	/* console.log(arrayString.length); */
 	
-/* 	var arr=arrayString.map(function(value){
-		return {
-			Key: value
-		}
-		
-	}); */
+	var stringMap = {};
+	for (var i = 0; i < arrayString.length; i++) {
+		stringMap[arrayString[i][0]] = arrayString[i][1];
+	}
 	
 	
 	var arr = [];
@@ -77,42 +58,26 @@ function readUrl(url) {
 			Key: arrayString[i][0][0],
 			value: arrayString[i][0][1]
 		})
-			
 	}
 	
+	/* console.log(monster.array); */
 	
-	/* console.log (lookup); */
-	/* console.log (arr); */
-	console.log (lookup[1871302204]);
-	
-	
-/* 	var result = $.grep(monster.array, function(e){ return e[0] == 0; });
-	console.log(result); */
-	
-	console.log(monster.array);
+	var listMon =  [];
 	
 	for(i = 0; i < monster.array[3].length; i++) {
-		var newHeader = goog.dom.createDom('h4', {'style': 'background-color:#EEE'},
-			lookup[monster.array[3][i][1]]);
+		var newHeader = goog.dom.createDom('p', {'style': 'background-color:#EEE'},
+			stringMap[monster.array[3][i][1]]);
 			
-			console.log (lookup[monster.array[3][i][1]]);
-			/* console.log (lookup[monster.array[3][i][1]]); */
-			/* console.log(monster.array[3][i][1]); */
+			listMon.push ({
+				Key: stringMap[monster.array[3][i][0]],
+				value: stringMap[monster.array[3][i][1]]
+			})
+			
+			/* console.log (stringMap[monster.array[3][i][1]]); */
 			
 		goog.dom.appendChild(document.body, newHeader);	
 	}
 	
 	
 	return bytes;
-}
-
-
-function buildMap (obj) {
-	let map = new Map();
-	Object.keys(obj).forEach(key => {
-		map.set(key, obj[key]);
-	});
-	return map;
-	
-	
 }
