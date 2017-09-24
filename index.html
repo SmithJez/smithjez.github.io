@@ -19,7 +19,7 @@
   <script src="protobuf/writer.js"></script>
   <script src="protobuf/map.js"></script>
   <script src="protobuf/message.js"></script>
-  <script src="javascripts/myproto_libs.js"></script>
+  <script src="javascripts/msg_game_data.js"></script>
   <script src="javascripts/ping.js"></script>
   
   
@@ -31,7 +31,11 @@
 	<!-- var message = new goog.proto.MsgLocalizedString (); -->
 	<!-- message.setText("test"); -->
 	
-	var file = "/data/string.en.pb"
+	<!-- var file = "/data/gamedata.bin" -->
+	<!-- var file = "/data/monster_types.pb" -->
+	<!-- var file = "/data/uids.pb" -->
+	var file = "/data/monsters.smj"
+	
 	
 	readUrl(file);
 	
@@ -46,8 +50,6 @@
     <div>
       <button onclick="testDecoder()">Decode!</button>
     </div>
-    <pre id="result"></pre>
-    <button onclick="$('result').innerHTML = ''">Clear!</button>
   </div>
 </body>
 </html>
