@@ -1,5 +1,7 @@
 <html>
 <head>
+
+<meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
 	<meta http-equiv="Content-Type" content="text/html; charset =UTF-8"></meta>
 	<link rel="apple-touch-icon" sizes="57x57" href="fav/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="fav/apple-icon-60x60.png">
@@ -38,7 +40,7 @@
   <script src="protobuf/message.js"></script>
   <script src="javascripts/msg_game_data.js"></script>
   <script src="javascripts/ping.js"></script>
-  
+  <script src="javascripts/jquery.floatThead.js"></script>
   
   
   <script>
@@ -51,17 +53,25 @@
 		<!-- var file = "/data/gamedata.bin" -->
 		<!-- var file = "/data/monster_types.pb" -->
 		<!-- var file = "/data/uids.pb" -->
-		var file = "/data/monsters.smj"
+		
+		<!-- dun stage -> dun substage -> monster group -> dun monster -> monster -> string -->
+		
+		var file = "/data/dungeon_stages.smj"
+		var file2 = "/data/dungeon_substages.smj"
+		var file3 = "/data/dungeon_monster_groups.smj"
+		var file4 = "/data/dungeon_monsters.smj"
+		var file5 = "/data/monsters.smj"
+		var file6 = "/data/stage_monsters.smj"
 		
 		
-		readUrl(file);
+		readUrl(file, file2, file3, file4, file5, file6);
 		
 		<!-- document.getElementById("result").innerHTML = message; -->
 	  }
 	  
 	  var w;
 	  
-	  function loadDB() {
+	  /*function loadDB() {
 	  
 		if(typeof(Worker) !== "undefined") {
 			if(typeof(w) == "undefined") {
@@ -77,9 +87,43 @@
 		
 		}
 	  
+	  }*/
+	  
+	  function SetHead() {
+	  	/*$('table.mainTable').floatThead({
+			position: 'fixed'
+		});*/
+		$('table.mainTable').floatThead({
+		responsiveContainer: function($table){
+        return $table.closest('.table-responsive');
+    }
+		});
+		
+		console.log("set");
 	  }
 	  
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+					window.onload = function() {
+					if (oldonload) {
+						oldonload();
+					}
+					func();
+				}
+			}
+		}
+		addLoadEvent(testDecoder);
+		addLoadEvent(SetHead);
+		addLoadEvent(function() {
+			document.body.style.backgroundColor = '#EFDF95';
+		/* more code to run on page load */
+		});
+
 	  
+
   </script>
   
   
@@ -88,11 +132,29 @@
 </head>
 
 
+
 <body>
-  <div id="container">
-    <div>
-      <button onclick="testDecoder()">Decode!</button>
-    </div>
-  </div>
+
+	<div id="myDiv"  >
+	
+		<table class="table mainTable" id="mainTable" border=1>
+			<thead id ="mainHead" >
+			
+			</thead>
+			
+			<tbody id ="mainBody">
+			
+			</tbody>
+
+		
+		</table>
+
+	
+	</div>
+
+
+  
 </body>
+
+
 </html>
