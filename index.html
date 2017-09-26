@@ -22,10 +22,103 @@
 	<meta name="theme-color" content="#ffffff">
 	<title>MSL Databook by SmithJez</title>
 	<style>
-		#container { width:280px; text-align:center; }
-		#target { width:50px; }
-		#decode-button { margin:5px; }
-		#result { border:1px solid black; width:250px; height:150px; padding:10px; text-align:left; }
+		body {margin:0;}
+
+		ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+		
+		tbody, thead tr {
+		  display: table;
+		  width: 100%;
+		  table-layout: fixed;
+		}
+		td {
+		  word-wrap: break-word;
+		  border:1px solid;
+		}
+		* {box-sizing:border-box;}
+		
+		table {
+		  margin: 0 auto;
+		  max-width: 800px
+		}
+		
+		#mainTable img{
+			  display:block; width:100%; height:auto;
+		}
+		
+		html {
+			-webkit-transition: background-color 1s;
+			transition: background-color 1s;
+		}
+		html, body {
+			min-height: 100%;
+		}
+		html.loading {
+			background: #333 url('loading.gif') no-repeat 50% 50%;
+			-webkit-transition: background-color 0;
+			transition: background-color 0;
+		}
+		body {
+			-webkit-transition: opacity 1s ease-in;
+			transition: opacity 1s ease-in;
+		}
+		html.loading body {
+			opacity: 0;
+			-webkit-transition: opacity 0;
+			transition: opacity 0;
+		}
+		
+		
+		
 	</style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="closure/goog/base.js"></script>
@@ -40,7 +133,7 @@
   <script src="protobuf/message.js"></script>
   <script src="javascripts/msg_game_data.js"></script>
   <script src="javascripts/ping.js"></script>
-  <script src="javascripts/jquery.floatThead.js"></script>
+  <!-- <script src="javascripts/jquery.floatThead.js"></script> -->
   
   
   <script>
@@ -62,68 +155,207 @@
 		var file4 = "/data/dungeon_monsters.smj"
 		var file5 = "/data/monsters.smj"
 		var file6 = "/data/stage_monsters.smj"
+		var mapType = "stage_dungeon_golem"
+
 		
-		
-		readUrl(file, file2, file3, file4, file5, file6);
+		readUrl(file, file2, file3, file4, file5, file6, mapType);
 		
 		<!-- document.getElementById("result").innerHTML = message; -->
 	  }
 	  
-	  var w;
-	  
-	  /*function loadDB() {
-	  
-		if(typeof(Worker) !== "undefined") {
-			if(typeof(w) == "undefined") {
-				w = new Worker("javascripts/ping.js");
-				var file = "/data/monsters.smj"
-				<!-- w.start; -->
-				<!-- w.readUrl(file) =  -->
-			}
-			
+		$( document ).ready(function() {
+			$.when(SetHeaderText()).then(testDecoder());
+		});
 		
-		} else {
-			document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+		function FinishedLoad() {
+			$( "html" ).removeClass( "loading" );
 		
 		}
 	  
-	  }*/
 	  
 	  function SetHead() {
-	  	/*$('table.mainTable').floatThead({
-			position: 'fixed'
-		});*/
 		$('table.mainTable').floatThead({
-		responsiveContainer: function($table){
-        return $table.closest('.table-responsive');
-    }
+
+
 		});
 		
 		console.log("set");
 	  }
 	  
-		function addLoadEvent(func) {
-			var oldonload = window.onload;
-			if (typeof window.onload != 'function') {
-				window.onload = func;
-			} else {
-					window.onload = function() {
-					if (oldonload) {
-						oldonload();
-					}
-					func();
-				}
+
+
+	  function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+
+		window.onload = function() {
+			var darkDungeon = document.getElementById("dark_dungeon");
+			darkDungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_day_dark_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
 			}
+			
+			var fire_dungeon = document.getElementById("fire_dungeon");
+			fire_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_day_fire_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			var water_dungeon = document.getElementById("water_dungeon");
+			water_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_day_water_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			var wood_dungeon = document.getElementById("wood_dungeon");
+			wood_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_day_tree_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			
+			
+			var light_dungeon = document.getElementById("light_dungeon");
+			light_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_day_white_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			var special_dungeon = document.getElementById("special_dungeon");
+			special_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_day_special_1_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			var star_dungeon = document.getElementById("star_dungeon");
+			star_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_allday_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			var golem_dungeon = document.getElementById("golem_dungeon");
+			golem_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_golem"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			var gold_dungeon = document.getElementById("gold_dungeon");
+			gold_dungeon.onclick = function() {
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				var file = "/data/dungeon_stages.smj"
+				var file2 = "/data/dungeon_substages.smj"
+				var file3 = "/data/dungeon_monster_groups.smj"
+				var file4 = "/data/dungeon_monsters.smj"
+				var file5 = "/data/monsters.smj"
+				var file6 = "/data/stage_monsters.smj"
+				var mapType = "stage_dungeon_gold_icon"
+				readUrl(file, file2, file3, file4, file5, file6, mapType);
+				return false;
+			}
+			
+			gold_dungeon
+			
+        }
+
+
+		function SetHeaderText() {
+		
+			var mainHead = goog.dom.getElement('mainHead');
+			var tableHeaderList = ["Stage", "Astromon", "Lv", "Hp", "Atk", "Def", "Rec", "Crit Dmg", "Crit Rate", "Resist"];
+			var headTRChild = goog.dom.createDom('tr', "trHead", "");
+			for (i = 0; i < tableHeaderList.length; i++) {
+				var headTD = goog.dom.createDom('th', {'align': 'center'}, tableHeaderList[i])
+				headTD.setAttribute('bgColor', '#FF0000');
+				if(tableHeaderList[i] == "Astromon"){
+					headTD.setAttribute('colspan', 2);
+				}
+				
+
+				goog.dom.appendChild (headTRChild, headTD);
+				
+			}
+			goog.dom.append( mainHead,  headTRChild );
+		
 		}
-		addLoadEvent(testDecoder);
-		addLoadEvent(SetHead);
-		addLoadEvent(function() {
-			document.body.style.backgroundColor = '#EFDF95';
-		/* more code to run on page load */
-		});
-
-	  
-
+		
+		
   </script>
   
   
@@ -135,21 +367,42 @@
 
 <body>
 
-	<div id="myDiv"  >
+<div class="topnav" id="myTopnav">
+<ul>
+  <li><a id='golem_dungeon' href="#">Golem Dungeon</a></li>
+  <li><a id='gold_dungeon' href="#">Gold Dungeon</a></li>
+  
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">Stone Dungeon</a>
+    <div class="dropdown-content">
+	  <a id='star_dungeon' href="#">Star Dungeon</a>
+      <a id='dark_dungeon' href="#">Dark Dungeon</a>
+      <a id='fire_dungeon' href="#">Fire Dungeon</a>
+      <a id='water_dungeon' href="#">Water Dungeon</a>
+	  <a id='wood_dungeon' href="#">Wood Dungeon</a>
+	  <a id='light_dungeon' href="#">Light Dungeon</a>
+	  <a id='special_dungeon' href="#">Special Dungeon</a>
+    </div>
+  </li>
+</ul>
+  
+</div>
+
+
+	<div id="tableDiv">
 	
 		<table class="table mainTable" id="mainTable" border=1>
-			<thead id ="mainHead" >
+			<thead id ="mainHead" style="display:block;position: sticky;top:0;; background-color: grey;display:block;" >
 			
 			</thead>
 			
-			<tbody id ="mainBody">
+<!-- 			<tbody id ="mainBody">
 			
-			</tbody>
+			</tbody> -->
 
 		
 		</table>
 
-	
 	</div>
 
 

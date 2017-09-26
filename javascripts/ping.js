@@ -12,8 +12,9 @@ importScripts('../protobuf/message.js'); */
 /* importScripts('msg_game_data.js'); */
 goog.require('proto.MsgGameData');
 goog.require('goog.dom');
+goog.require('goog.net.XhrIo');
 
-function readUrl(url, url2, url3, url4, url5, url6) {
+function readUrl(url, url2, url3, url4, url5, url6, dunType) {
 	var req = new XMLHttpRequest();
 	req.open('GET', url, false);
 	req.overrideMimeType('text/plain; charset=x-user-defined');
@@ -162,6 +163,7 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 	
 	var golemArray = [];
 	
+	/* console.log(monster); */
 
 	
 	for(i = 0; i < displayArray.length; i++) {
@@ -170,7 +172,13 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 /* 		var newHeader = goog.dom.createDom('p', {'style': 'background-color:#EEE'},
 			stringMap[displayArray[i][1]]); */
 			
-			if(displayArray[i][8] == "stage_dungeon_golem") {
+/* 			if(displayArray[i][8] == "stage_dungeon_golem") {
+				golemArray = displayArray[i][11];
+			} */
+			
+			/* console.log(displayArray[i][8]); */
+			
+			if(displayArray[i][8] == dunType) {
 				golemArray = displayArray[i][11];
 			}
 			
@@ -187,34 +195,7 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 	var mainHead = goog.dom.getElement('mainHead');
 	
 	
-	
-	var tableHeaderList = ["Stage", "Astromon", "Lv", "Hp", "Atk", "Def", "Rec", "Crit Dmg", "Crit Rate", "Resist"];
-	var headTRChild = goog.dom.createDom('tr', "trHead", "");
-	for (i = 0; i < tableHeaderList.length; i++) {
-		var headTD = goog.dom.createDom('th', {'align': 'center'}, tableHeaderList[i])
-		headTD.setAttribute('bgColor', '#FF0000');
-		if(tableHeaderList[i] == "Astromon"){
-			headTD.setAttribute('colspan', 2);
-		} else {
-			if(i == 0 || i == 2){
-				
-			} else {
-				headTD.setAttribute('width', '14%');
-			}
-			
-		}
-		
-		
-		
-		
-
-		
-		goog.dom.appendChild (headTRChild, headTD);
-		
-	}
-	goog.dom.append( mainHead,  headTRChild );
-
-	var mainBody = goog.dom.getElement('mainBody');
+	var mainBody = goog.dom.createDom('tbody', {'id':'mainBody'}, "");
 	
 	for (i = 0; i < golemArray.length; i++) {
 			var displaySize = 0;
@@ -222,7 +203,7 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 			
 			var nonBossStageSize = mDubSubStage.length - 1;
 			
-			var mMonGroup = monGroupMap[mDubSubStage[1][2]];
+			var mMonGroup = monGroupMap[mDubSubStage[0][2]];
 			/* console.log(mMonGroup); */
 			
 			var stageTd = goog.dom.createDom('td',  {'align': 'center'}, "B" + (i+1))
@@ -239,7 +220,7 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 			var bossStat = CalStat(   stageMonBoss, monBossObj );
 
 			var line2 = goog.dom.createDom('tr', undefined, "")
-			
+			line2.setAttribute('bgColor' , "#19618e")
 			var img = goog.dom.createDom('img', undefined)
 			img.setAttribute('src', '/img/' + monBossObj[29] + '.webp')
 			var td = goog.dom.createDom('td', undefined, img)
@@ -286,7 +267,7 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 					var minionBossStat = CalStat(   stageMonMinionBoss, monMinionBossObj );
 					
 					var line2 = goog.dom.createDom('tr', undefined, "")
-					
+					line2.setAttribute('bgColor' , "#19618e")
 					var img = goog.dom.createDom('img', undefined)
 					img.setAttribute('src', '/img/' + monMinionBossObj[29] + '.webp')
 					var td = goog.dom.createDom('td', undefined, img)
@@ -329,7 +310,7 @@ function readUrl(url, url2, url3, url4, url5, url6) {
 					var minionBossStat = CalStat(   stageMonMinionBoss, monMinionBossObj );
 					
 					var line2 = goog.dom.createDom('tr', undefined, "")
-					
+					line2.setAttribute('bgColor' , "#19618e")
 					var img = goog.dom.createDom('img', undefined)
 					img.setAttribute('src', '/img/' + monMinionBossObj[29] + '.webp')
 					var td = goog.dom.createDom('td', undefined, img)
@@ -398,7 +379,10 @@ displaySize++;
 			
 stageTd.setAttribute('rowspan', displaySize+1);
 			
+			var table = goog.dom.getElement('mainTable');
+		
 			
+			goog.dom.appendChild(table, mainBody);
 			
 		/* goog.dom.appendChild(document.body, newHeader); */
 	}
