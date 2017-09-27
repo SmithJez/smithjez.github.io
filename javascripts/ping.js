@@ -387,8 +387,9 @@ stageTd.setAttribute('rowspan', displaySize+1);
 		/* goog.dom.appendChild(document.body, newHeader); */
 	}
 
+	/* callback(); */
 	
-	return bytes;
+	/* return bytes; */
 }
 
 

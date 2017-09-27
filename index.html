@@ -123,13 +123,13 @@ li.dropdown {
 		}
 		
 		
-		.animate-bottom {
+<!-- 		.animate-bottom {
 		  position: relative;
 		  -webkit-animation-name: animatebottom;
 		  -webkit-animation-duration: 1s;
 		  animation-name: animatebottom;
 		  animation-duration: 1s
-		}
+		} -->
 
 		@-webkit-keyframes animatebottom {
 		  from { bottom:-100px; opacity:0 } 
@@ -175,12 +175,15 @@ li.dropdown {
 	  document.getElementById("loader").style.display = "none";
 	  document.getElementById("tableDiv").style.display = "block";
 	}
-	function hidePage() {
+	function hidePage(callback) {
 	  document.getElementById("loader").style.display = "block";
 	  document.getElementById("tableDiv").style.display = "none";
+	  if(callback) {
+		callback();
+	  }
 	}
   
-	  function testDecoder(mapType) {
+	  function testDecoder(mapType, callback) {
 		
 		var file = "/data/dungeon_stages.smj"
 		var file2 = "/data/dungeon_substages.smj"
@@ -192,6 +195,10 @@ li.dropdown {
 
 		
 		readUrl(file, file2, file3, file4, file5, file6, mapType);
+		
+		if(callback) {
+			callback();
+		}
 		
 	  }
 	  
@@ -207,10 +214,19 @@ li.dropdown {
 		
 			var dark_dungeon = document.getElementById("dark_dungeon");
 			dark_dungeon.onclick = function() {
-				hidePage();
+			
 				var mainBody = goog.dom.getElement('mainBody');
 				goog.dom.removeNode(mainBody);
-				$.when(testDecoder("stage_dungeon_day_dark_icon")).then(loadPage());
+				
+				hidePage( function() {
+					testDecoder("stage_dungeon_day_dark_icon", function() {
+						loadPage();
+					});
+					
+					<!-- $.when(testDecoder("stage_dungeon_day_dark_icon")).then(loadPage()); -->
+				});
+				
+				
 			
 				return false;
 			}
@@ -355,7 +371,7 @@ li.dropdown {
 </div>
 
 
-	<div id="tableDiv" style="display:none;" class="animate-bottom">
+	<div id="tableDiv" style="display:none;">
 	
 		<table class="table mainTable" id="mainTable" border=1>
 			<thead id ="mainHead" style="display:block;position: sticky;top:0;; background-color: grey;display:block;" >
