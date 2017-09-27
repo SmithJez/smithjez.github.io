@@ -176,7 +176,7 @@ function readUrl(url, url2, url3, url4, url5, url6, dunType) {
 				golemArray = displayArray[i][11];
 			} */
 			
-			/* console.log(displayArray[i][8]); */
+			console.log(displayArray[i][8]);
 			
 			if(displayArray[i][8] == dunType) {
 				golemArray = displayArray[i][11];
