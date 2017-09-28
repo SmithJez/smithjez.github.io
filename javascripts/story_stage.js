@@ -228,7 +228,7 @@ function getStory(callback) {
               if (rewardRandom[0] == 11) {
                 //DungeonTicket
                 var img = goog.dom.createDom('img', "drop_icon")
-                img.setAttribute('src', '/img/_common_2_352.png')
+                img.setAttribute('src', '/img/common_2_352.png')
                 var td = goog.dom.createDom('td', {
                   'class': 'td_drop',
                   'align': 'center',
@@ -452,7 +452,7 @@ function getStory(callback) {
                 if (rewardRandom[0] == 11) {
                   //DungeonTicket
                   var img = goog.dom.createDom('img', "drop_icon")
-                  img.setAttribute('src', '/img/_common_2_352.png')
+                  img.setAttribute('src', '/img/common_2_352.png')
                   var td = goog.dom.createDom('td', {
                     'class': 'td_drop',
                     'align': 'center',
