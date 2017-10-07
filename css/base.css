@@ -1,0 +1,581 @@
+body {
+  font-family: Verdana, sans-serif;
+  font-size: 0.8em;
+  transition: background-color .5s;
+}
+
+header, article, footer, div.city, div.country {
+  border: 1px solid grey;
+  margin: 5px;
+  padding: 8px;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 5px;
+}
+
+#main {
+  /*max-width: 1080px;*/
+  /*width: 80%;*/
+  /*height: 100%;*/
+  /*margin:0 auto;*/
+}
+
+
+.sidenav {
+  height: 100%;
+  width: 400px;
+  max-width: 100%;
+  position: fixed;
+  z-index: 13;
+  top: 0;
+  left: -400px;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+
+}
+
+a {
+  text-decoration: none;
+}
+
+.sidenav a {
+  padding: 0px 8px 0px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+  white-space: nowrap;
+}
+
+.sidenav .closebtn {
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50%;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 10px;
+  }
+}
+
+
+.eqWrap {
+  display: flex;
+}
+
+h1, span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#nav_a {
+  white-space: nowrap;
+}
+
+#nav_a_sub {
+  white-space: nowrap;
+  font-size: 18px;
+  padding: 0px 8px 0px 42px;
+}
+
+hr {
+  padding: 0px;
+  margin: 0px;
+}
+
+#sub_nav_msl {
+  /*background-color: dimgray;*/
+  white-space: nowrap;
+  font-size: 18px;
+  padding: 0px 8px 0px 24px;
+  /*color: floralwhite;*/
+}
+
+footer {
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+.header {
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 8px;
+}
+
+h2, h3, h4, p {
+  color: white;
+}
+
+.bar {
+  left: 0px;
+}
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+
+
+img.menu_icon {
+  width: 36px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.monster_icon {
+    display: block;
+    margin: auto;
+    vertical-align: top;
+    /*width: 128px;*/
+    width: 100px;
+    max-width: 100px;
+    height: auto;
+}
+
+* {
+  /*color:white;*/
+  box-sizing: border-box;
+}
+
+.col-container {
+    display: table;
+    width: 100%;
+}
+.col {
+    display: table-cell;
+    padding: 16px;
+}
+
+/*#container {
+  overflow: auto;
+  will-change: transform;
+  padding: var(--default-padding);
+  background-color: #ECEFF1;
+  scroll-behavior: smooth;
+}*/
+
+
+
+.div_horizontal {
+  display: inline-block;
+}
+
+.div_parent {
+  display: table;
+  padding: 8px;
+  width: 100%;
+  max-width: 1024px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: thin;
+}
+
+.div_header_color {
+  /*background-color: #8E793E;*/
+}
+
+.dungeon_holer_stat {
+  vertical-align: top;
+  width: 49%;
+  background-color: #AD974F;
+  position: relative;
+  height: 100%;
+  display: table-cell;
+  /*background-color: #AD974F;*/
+}
+
+/*.dungeon_holer_stat::after {
+  content: "";
+  background-color: #000;
+  position: absolute;
+  width: 5px;
+  height: 100%;
+  left: 48%;
+  display: block;
+}*/
+
+.dungeon_holer_drop {
+  display: table-cell;
+  vertical-align: top;
+  width: 50%;
+  text-align: center;
+  /*background-color: #AD974F;*/
+
+}
+
+.stat_parent {
+  position: relative;
+  width: 100%;
+    display: inline-block
+}
+
+.stat_name {
+  position: relative;
+  width: 45%;
+  display: inline-block
+}
+
+.stat_value {
+  position: relative;
+  width: 40%;
+  display: inline-block
+}
+
+.stat_group {
+  width: 100%;
+  position: relative;
+}
+
+.div_child {
+  background-color: #231F20;
+}
+
+.div_align_top {
+  vertical-align: top;
+}
+
+.skill_desc {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.align_left {
+  text-align: left;
+  overflow: hidden;
+}
+
+.skill_icon {
+  max-width: 48px;
+  margin: 4px;
+  height: auto;
+}
+
+.float_right {
+  float: right;
+}
+
+.text_align_right {
+  text-align: right;
+}
+
+.text_align_center {
+  text-align: center;
+}
+
+.vl {
+    border-left: 6px solid green;
+    height: 500px;
+}
+
+.stat_col {
+    display: table-cell;
+}
+
+.floor_header {
+  position: sticky;
+  top: 0;
+  margin: 0;
+  padding: 10px;
+  z-index: 10;
+}
+
+.relative {
+  position: relative;
+}
+
+
+.main_body {
+  width: 80%;
+}
+
+
+[class^="group_"] {
+  margin: 4px;
+}
+
+@media only screen and (max-width: 720px) {
+    .col {
+        display: block;
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .hide_when_small {
+      display: none!important;
+    }
+
+    .main_body {
+      width: 100%;
+    }
+
+
+    /*.text_align_right {
+      text-align: left;
+    }*/
+}
+
+.black_1 {
+  background-color: #0e1111;
+}
+
+.black_2 {
+  background-color: #232b2b;
+}
+
+.black_3 {
+  background-color: #353839;
+}
+
+.black_4 {
+  background-color: #3b444b;
+}
+
+.black_5 {
+  background-color: #414a4c;
+}
+
+.gold {
+  background-color: #c09324;
+}
+.gold_2 {
+  background-color: #d8a528;
+}
+
+/*main {
+  display: flex;
+  height: 50vh;
+}*/
+
+.container {
+  overflow: auto;
+  background-color: #333;
+  font-family: Arial;
+}
+
+.container a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn,
+.dropbtn_stage {
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+}
+
+.container a:hover,
+.dropdown:hover .dropbtn,
+.dropdown:hover .dropbtn_stage {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 11;
+}
+
+.dropdown-content a {
+
+  float: none;
+  color: black;
+  padding: 12px 12px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  /*z-index: 11;*/
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
+}
+
+.stat_width {
+  min-width: 165px;
+}
+
+.width_half {
+  width: 49%;
+}
+
+.width_max {
+  position: relative;
+  width: 100%;
+}
+
+.padding_8 {
+  padding: 8px
+}
+
+.img_relative_position {
+  position: relative;
+}
+
+.img_absolute_position {
+  position: absolute;
+}
+
+.img_1 {
+  display: block;
+  margin: auto;
+  vertical-align: top;
+  width: 92px;
+  height: auto;
+  z-index: 1;
+  margin-bottom: -98px;
+}
+
+.img_2 {
+  position: relative;
+  z-index: 3;
+  margin-top: -20px;
+}
+
+.img_3 {
+  position: relative;
+  display: block;
+
+  margin: auto;
+  vertical-align: top;
+  width: 92px;
+  height: auto;
+
+  z-index: 5;
+}
+
+.below_icon {
+  position: relative;
+  top: 100px;
+}
+
+.two {
+  position:relative;
+}
+
+.one {
+  position: absolute;
+}
+
+div {
+  color: white;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+
+#toc {
+  margin-left: 4px;
+  width: 18%;
+  right: 0;
+  float: right;
+  --indent: 8px;
+  background: #3b444b;
+  /*border: 1px solid #ECEFF1;*/
+  padding: var(--default-padding) calc(var(--default-padding) + var(--indent));
+  overflow: auto;
+  font-size: 14px;
+}
+#toc ul {
+  margin: 0;
+  padding: 0;
+}
+#toc li {
+  list-style: none;
+}
+#toc .toc-item ul {
+  margin-left: var(--default-padding);
+  transition: height 150ms ease-in-out;
+  overflow: hidden;
+}
+.toc-title {
+  padding-left: 8px;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: calc(var(--default-padding) / 2);
+}
+#toc .toc-item a {
+  padding-left: 16px;
+  position: relative;
+  text-decoration: none;
+}
+#toc .toc-item.active a {
+  font-weight: bold;
+}
+#toc .toc-item.active h4::before {
+  content: '›';
+  position: absolute;
+  left: calc(-1 * var(--indent));
+  bottom: -3px;
+  font-size: 20px;
+}
+#toc .toc-item.active ul {
+  height: 70px;
+}
+#toc .toc-item ul {
+  height: 0;
+}
+
+/*.menu_icon span {
+  color: black;
+}*/
+
+/*.current_nav {
+  background-color: red;
+}*/

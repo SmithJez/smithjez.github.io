@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    
+  </head>
+  <body>
+    <p>&lt;!DOCTYPE html&gt;<br>
+      &lt;html&gt;<br>
+      &lt;body&gt;<br>
+      <br>
+      &lt;p&gt;The Pulpit Rock is a massive cliff 604 metres (1982 feet) above
+      Lysefjorden, opposite the Kjerag plateau, in Forsand, Ryfylke, Norway. The
+      top of the cliff is approximately 25 by 25 metres (82 by 82 feet) square
+      and almost flat, and is a famous tourist attraction in
+      Norway.&lt;/p&gt;<br>
+      <br>
+      &lt;figure&gt;<br>
+      &nbsp; &lt;img src="img_pulpit.jpg" alt="The Pulpit Rock" width="304"
+      height="228"&gt;<br>
+      &nbsp; &lt;figcaption&gt;Fig.1 - The Pulpit Rock,
+      Norway.&lt;/figcaption&gt;<br>
+      &lt;/figure&gt;<br>
+      <br>
+      &lt;/body&gt;<br>
+      &lt;/html&gt;</p>
+  </body>
+</html>

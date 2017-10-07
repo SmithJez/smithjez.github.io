@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>SmithJez's Databook: Golem Data</title>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="css/base.css">
+<script src="closure/goog/base.js"></script>
+<script src="protobuf/arith.js"></script>
+<script src="protobuf/constants.js"></script>
+<script src="protobuf/utils.js"></script>
+<script src="protobuf/decoder.js"></script>
+<script src="protobuf/encoder.js"></script>
+<script src="protobuf/reader.js"></script>
+<script src="protobuf/writer.js"></script>
+<script src="protobuf/map.js"></script>
+<script src="protobuf/message.js"></script>
+<script src="javascripts/msg_game_data.js"></script>
+<script src="javascripts/ping_2.js"></script>
+<script src="javascripts/story_stage.js"></script>
+
+
+<script>
+
+function GetData(mapType, callback) {
+
+  var file = "/data/dungeon_stages.smj"
+  var file2 = "/data/dungeon_substages.smj"
+  var file3 = "/data/dungeon_monster_groups.smj"
+  var file4 = "/data/dungeon_monsters.smj"
+  var file5 = "/data/monsters.smj"
+  var file6 = "/data/stage_monsters.smj"
+  // <!-- var mapType = "stage_dungeon_golem" -->
+
+  GenerateDungeon(file, file2, file3, file4, file5, file6, mapType);
+
+  if (callback) {
+    callback();
+  }
+
+}
+
+
+$(document).ready(function() {
+  // console.log("ffff")
+  // var key = "stage_dungeon_golem";
+  var key = "B_ColossusDungeon";
+
+
+  const container = document.querySelector('#main_body');
+  // console.log(container);
+
+
+  $.when(GetData(key)).then(generatePage(container));
+
+    // console.log(container);
+});
+
+  function activate_dropdown_stage() {
+    document.getElementById("dropdown_stage").classList.toggle("show");
+
+  }
+
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(e) {
+    if (!e.target.matches('.dropbtn')) {
+      var myDropdown = document.getElementById("myDropdown");
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+      }
+    }
+
+    if (!e.target.matches('.dropbtn_stage')) {
+      var myDropdown = document.getElementById("dropdown_stage");
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+      }
+    }
+
+  }
+
+  function normalizeTitle(title) {
+    return title.replace(/[\s!]/g, '-');
+  }
+
+  function scrollToHeader(el) {
+    const container = document.querySelector('#main_body');
+    event.preventDefault();
+    const target = document.querySelector(`#${normalizeTitle(el.textContent)}`);
+
+    // console.log(el.textContent);
+
+    const parent = target.parentElement;
+
+    // console.log(container);
+    // Slight px offset so IntersectionObserver triggers.
+    // Note: Smooth scroll is taken care of. Container has scroll-behavior: smooth.
+    // container.scrollTo({left: 0, top: parent.offsetTop + 2});
+    // container.scrollTo(0, 2500);
+
+    document.getElementById(el.textContent).scrollIntoView();
+  }
+
+  function generatePage(container) {
+    const MSGS = [
+      'B1',
+      'B2',
+      'B3',
+      'B4',
+      'B5',
+      'B6',
+      'B7',
+      'B8',
+      'B9',
+      'B10'
+    ];
+    const t = container.querySelectorAll('#floor_id');
+    const toc = document.querySelector('#toc > ul');
+    const t2 = toc.querySelector('template');
+    MSGS.forEach((msg, i) => {
+      const clone = t[i].cloneNode(true);
+      const h2 = clone.querySelector('h3');
+
+      h2.textContent = msg;
+
+      h2.id = normalizeTitle(msg);
+      // console.log(normalizeTitle(msg));
+      container.appendChild(clone);
+      const tocClone = t2.content.cloneNode(true);
+      const a = tocClone.querySelector('a');
+      a.textContent = msg;
+      a.href = `#${normalizeTitle(msg)}`;
+      toc.appendChild(tocClone);
+    });
+  }
+
+
+  var lastId,
+      topMenu = $("#toc_ul_menu-menu"),
+      topMenuHeight = topMenu.outerHeight()+15,
+      // All list items
+      menuItems = topMenu.find("a"),
+      // Anchors corresponding to menu items
+      scrollItems = menuItems.map(function(){
+        var item = $($(this).attr("href"));
+        if (item.length) { return item; }
+      });
+
+
+      // console.log(topMenu);
+
+
+  // Bind to scroll
+
+$(window).scroll(function(){
+   // Get container scroll position
+   var fromTop = $(this).scrollTop()+topMenuHeight;
+
+   // Get id of current scroll item
+   var cur = scrollItems.map(function(){
+     if ($(this).offset().top < fromTop)
+       return this;
+   });
+   // Get the id of the current element
+   cur = cur[cur.length-1];
+   var id = cur && cur.length ? cur[0].id : "";
+
+   if (topMenu !== id) {
+       topMenu = id;
+       // Set/remove active class
+       menuItems
+         .parent().removeClass("active")
+         .end().filter("[href='#"+id+"']").parent().addClass("active");
+   }
+});
+
+
+</script>
+
+
+
+<style>
+
+</style>
+
+<body bgcolor=black>
+
+
+  <header class="header eqWrap">
+
+    <h1><a id="nav_toggle" href="#" class="w3-xxxlarge fa fa-bars"></a>
+            SmithJez's Databook</h1>
+
+    <nav>
+      <div id="my_sidenav_golem" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn">&times;</a>
+        <a id="nav_a" href="#">Home</a>
+        <a id="nav_a">Monster Super League</a>
+
+        <a id="nav_a" href="#">About</a>
+        <a id="nav_a" href="#">Support me :3</a>
+
+      </div>
+
+    </nav>
+  </header>
+
+
+  <section>
+    <nav>
+      <div class="container">
+        <a href="#home">Astromon DB</a>
+
+        <div class="dropdown">
+          <button class="dropbtn" onclick="myFunction()">Dungeon DB <i class="fa fa-caret-down"></i></button>
+          <div class="dropdown-content" id="myDropdown">
+            <a id='' href="msl_golem_dungeon.html"><img class='menu_icon' src="/img/BossGolemD.png">
+                  <span class='menu_icon'>Golem Dungeon</span>
+                </a>
+            <a id='' href="msl_dragon_dungeon.html"><img class='menu_icon' src="/img/BossDragonW.png">
+                  <span class='menu_icon'>Dragon Dungeon</span>
+                </a>
+
+            <a id='' href="msl_colossus_dungeon"><img class='menu_icon' src="/img/BossColossusR.png">
+                  <span class='menu_icon'>Colossus Dungeon</span>
+                </a>
+
+
+            <a id='' href="#"><img class='menu_icon' src="/img/BossOverlord.png">
+                  <span class='menu_icon'>Stone Dungeon</span>
+                </a>
+
+
+            <a id='' href="msl_gold_dungeon.html"><img class='menu_icon' src="/img/BossGoldmick.png">
+                  <span class='menu_icon'>Gold Dungeon</span>
+                </a>
+
+
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropbtn_stage" onclick="activate_dropdown_stage()">Story Stage DB </button>
+          <div class="dropdown-content" id="dropdown_stage">
+            <a id='' href="#"><img class='menu_icon' src="/img/Cocomaru.png">
+                  <span class='menu_icon'>Phantom Forest</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/Candla.png">
+                  <span class='menu_icon'>Lunar Valley</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/Seiren.png">
+                  <span class='menu_icon'>Aria Lake</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/Flang.png">
+                  <span class='menu_icon'>Mirage Ruins</span>
+                </a>
+            <hr style="margin:0; border-top: 3px solid #eee">
+            <a id='' href="#"><img class='menu_icon' src="/img/MonaB.png">
+                  <span class='menu_icon'>Pagos Coast</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/BethG.png">
+                  <span class='menu_icon'>Seabed Caves</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/MandragoraR.png">
+                  <span class='menu_icon'>Magma Crags</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/Starkid.png">
+                  <span class='menu_icon'>Star Sanctuary</span>
+                </a>
+            <hr style="margin:0; border-top: 3px solid #eee">
+            <a id='' href="#"><img class='menu_icon' src="/img/Shellpy.png">
+                  <span class='menu_icon'>Sky Falls</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/Monk.png">
+                  <span class='menu_icon'>Slumbering City</span>
+                </a>
+            <hr style="margin:0; border-top: 3px solid #eee">
+            <a id='' href="#"><img class='menu_icon' src="/img/Wendigo.png">
+                  <span class='menu_icon'>Glacial Plains</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/RadisG.png">
+                  <span class='menu_icon'>Aurora Plateau</span>
+                </a>
+
+          </div>
+        </div>
+
+        <a href="#home">MSL Calculator</a>
+        <a href="#">Gem DB</a>
+        <a href="#">Super Stone DB</a>
+        <a href="#">Exp DB</a>
+
+
+      </div>
+    </nav>
+  </section>
+
+
+  <main>
+      <div id="container">
+        <article id="main">
+          <section>
+            <h2>Golem Dungeon Database</h2>
+
+          </section>
+
+          <div class="w3-row">
+
+            <section id="main_body" class="w3-col main_body" >
+              <template id="template_body">
+
+              </template>
+            </section>
+
+            <aside id="toc" class="floor_header hide_when_small">
+             <h3 class="toc-title">Navigation</h3>
+             <ul id="toc_ul_menu">
+               <template>
+                 <li class="toc-item">
+                   <a href="#" onclick="scrollToHeader(this)"></a>
+                   <ul>
+                     <li>One</li>
+                     <li>Two</li>
+                     <li>Three</li>
+                   </ul>
+                 </li>
+               </template>
+             </ul>
+            </aside>
+
+          </div>
+
+        </article>
+      </div>
+
+
+
+  </main>
+
+
+
+
+
+
+
+  <!-- <footer>
+    <p>&copy; All resources used in this website are owned by respectative owners.</p>
+  </footer> -->
+
+</body>
+
+
+<script>
+$('#nav_toggle').click(function(e) {
+  e.stopPropagation();
+  $(".sidenav").toggleClass('bar')
+});
+$('body').click(function(e) {
+  if ($('.sidenav').hasClass('bar')) {
+    $(".sidenav").toggleClass('bar')
+  }
+})
+
+$(window).click(function() {
+  var mySideNavSize = document.getElementById("my_sidenav_golem").style.width;
+  // console.log(mySideNavSize);
+  if (mySideNavSize > 0) {
+    document.getElementById("my_sidenav_golem").style.width = "0";
+    document.body.style.backgroundColor = "white";
+  }
+
+
+});
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+</html>

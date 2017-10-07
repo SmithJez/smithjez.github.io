@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <title></title>
+    <style>
+      
+      table {
+        white-space: normal;
+        line-height: normal;
+        font-weight: normal;
+        font-size: medium;
+        font-style: normal;
+        color: -internal-quirk-inherit;
+        text-align: start;
+    	}
+
+      .header_mon {
+        background-color: #38719C;
+        font-size: 14px;
+        font-family: book antiqua;
+        color: #E6F2FF;
+        
+      }
+      
+      
+      .lmd {
+        background-color: #D2EDFF;
+      	border-color: #38719C; 
+      }
+      
+      .bb {
+      	border-color: #38719C; 
+      }
+      
+      .content_box_db, .content_box_mob {
+        font-size: 12px;
+        font-family: verdana;
+        color: #00568a;
+        border: 1px solid #38719C;
+        border-collapse: collapse;
+        background-color: #E6F2FF;
+        
+      }
+
+      .btext {
+        font-size: 12px;
+        font-family: verdana;
+        color: #00568a;
+        
+      }
+      
+      .monster_icon {
+        display: block;
+        width: 128px;
+        height: auto;
+      }
+      
+      .td_center {
+       	text-align: center; 
+      }
+      
+      .icon {
+           vertical-align: middle; 
+      }
+      
+ 
+      
+    </style>
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="745">
+      <tbody>
+      </tbody>
+    </table>
+    <table class="content_box_mob" cellspancing="0" border="1" cellpadding="0" width="720">
+      <thead>
+        <tr class="header_mon">
+          <th class="bb" align="left">
+            <div style="width: 300px; margin: 0px 5px;"> B1 </div>
+          </th>
+          <th colspan="2" class="bb" align="center">Drops</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="bb" valign="top" width="300">
+            <table class="content_box_db" border="1" cellpadding="3" cellspacing="0">
+              <tbody>
+                <tr>
+                  <th colspan="2" class="lmd" align="left" width="86"> Ancient
+                    Golem </th>
+                  <th class="lmd" align="left" width="64"> Lv. </th>
+                  <td class="lmd" align="right" width="64"> 25 </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <div valign="center">
+                      <img class="icon" src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                      Light
+                    </div>
+                  </td>
+                  <th class="lmd" align="left" height="20" width="86"> HP </th>
+                  <td class="lmd" align="right" height="20" width="86"> 28,548 </td>
+                </tr>
+                <tr>
+                  <td rowspan="7" colspan="2" class="bb" align="center" valign="middle"
+
+                    width="128px"> <img class="monster_icon" src="img/BossGolemW.png">
+                  </td>
+                </tr>
+                <tr>
+                  <th class="lmd" align="left" height="21" width="86"> Attack </th>
+                  <td class="lmd" align="right" height="21" width="86"> 571 </td>
+                </tr>
+                <tr>
+                  <th class="lmd" align="left" height="21" width="86"> Defense </th>
+                  <td class="lmd" align="right" height="21" width="86"> 878 </td>
+                </tr>
+                <tr>
+                  <th class="lmd" align="left" height="21" width="86"> Recovery
+                  </th>
+                  <td class="lmd" align="right" height="21" width="86"> 1,903 </td>
+                </tr>
+                <tr>
+                  <th class="lmd" align="left" height="21" width="86"> Crit Dmg
+                  </th>
+                  <td class="lmd" align="right" height="21" width="86"> 50% </td>
+                </tr>
+                <tr>
+                  <th class="lmd" align="left" height="21" width="86"> Crit Rate
+                  </th>
+                  <td class="lmd" align="right" height="21" width="86"> 20% </td>
+                </tr>
+                <tr>
+                  <th class="lmd" align="left" height="21" width="86"> Resist </th>
+                  <td class="lmd" align="right" height="21" width="86"> 0% </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td class="bb" valign="top">
+            <table class="content_box_db" border="1" cellpadding="3" cellspacing="0">
+              <tbody>
+                <tr>
+                  <th class="lmd" colspan="6">Drops on Hit</th>
+                </tr>
+                <tr>
+                  <th colspan="2">Item</th>
+                  <th>Chance</th>
+                  <th>Min</th>
+                  <th>Max</th>
+                  <th>Capacity</th>
+                </tr>
+                <tr>
+                  <td> <img src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                  </td>
+                  <td>Red Soul</td>
+                  <td class="td_center">100%</td>
+                  <td class="td_center">3</td>
+                  <td class="td_center">7</td>
+                  <td class="td_center">100</td>
+                </tr>
+                <tr>
+                  <td> <img src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                  </td>
+                  <td>Blue Soul</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                </tr>
+                <tr>
+                  <td> <img src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                  </td>
+                  <td>Gold</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                </tr>
+                <tr>
+                  <td> <img src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                  </td>
+                  <td>Energy</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                </tr>
+                <tr>
+                  <td> <img src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                  </td>
+                  <td>Astrogem</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                  <td class="td_center">ggg</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td class="bb" valign="top">
+            <table class="content_box_db" border="1" cellpadding="3" cellspacing="0">
+              <tbody>
+                <tr>
+                  <th class="lmd" colspan="5">Drops on Killed</th>
+                </tr>
+                <tr>
+                  <th colspan="2">Item</th>
+                  <th>Chance</th>
+                  <th>Qty</th>
+                </tr>
+                <tr>
+                  <td> <img src="img/rune_icon_blue_diamond_1.png" border="0" width="24">
+                  </td>
+                  <td>Gold</td>
+                  <td class="td_center">99%</td>
+                  <td class="td_center">2</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" valign="top">
+            <table class="btext" cellpadding="1" cellspacing="0" width="100%">
+              <tbody>
+                <tr class="header_mon">
+                  <th class="bb" colspan="2" align="center">Skills</th>
+                </tr>
+                <tr>
+                  <td>
+                    <table border="0">
+                      <tbody>
+                        <tr>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem of Firefly <b>(</b>0.4%<b>)</b> </td>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem <b>(</b>0.4%<b>)</b> </td>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem <b>(</b>0.4%<b>)</b> </td>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem <b>(</b>0.4%<b>)</b> </td>
+                        </tr>
+                        <tr>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem of <b>(</b>0.4%<b>)</b> </td>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem <b>(</b>0.4%<b>)</b> </td>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem <b>(</b>0.4%<b>)</b> </td>
+                          <td> <img src="img/rune_icon_blue_diamond_1.png" border="0"
+
+                              width="24"> </td>
+                          <td> Gem <b>(</b>0.4%<b>)</b> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

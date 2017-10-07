@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>HTML5</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<style>
+  .container {
+    overflow: hidden;
+    background-color: #333;
+    font-family: Arial;
+  }
+
+  .container a {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  .dropdown {
+    float: left;
+    overflow: hidden;
+  }
+
+  .dropdown .dropbtn,
+  .dropbtn_stage {
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+  }
+
+  .container a:hover,
+  .dropdown:hover .dropbtn,
+  .dropdown:hover .dropbtn_stage {
+    background-color: red;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 12px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  .show {
+    display: block;
+  }
+</style>
+
+<body bgcolor=black>
+
+
+  <header class="header eqWrap">
+
+    <h2><a id="nav_toggle" href="#" class="w3-xxxlarge fa fa-bars" onclick="openNav()"></a>
+            SmithJez's Databook</h2>
+
+    <nav>
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a id="nav_a" href="#">Home</a>
+        <a id="nav_a">Monster Super League</a>
+
+        <a id="nav_a" href="#">About</a>
+        <a id="nav_a" href="#">Support me :3</a>
+
+      </div>
+
+    </nav>
+  </header>
+
+
+  <section>
+    <nav>
+      <div class="container">
+        <a href="#home">Astromon DB</a>
+        <div class="dropdown">
+          <button class="dropbtn" onclick="myFunction()">Dungeon DB</button>
+          <div class="dropdown-content" id="myDropdown">
+            <a id='' href="#"><img class='menu_icon' src="/img/BossGolemD.png">
+                  <span class='menu_icon'>Golem Dungeon</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/BossDragonW.png">
+                  <span class='menu_icon'>Dragon Dungeon</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/BossColossusR.png">
+                  <span class='menu_icon'>Colossus Dungeon</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/BossOverlord.png">
+                  <span class='menu_icon'>Stone Dungeon</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/BossGoldmick.png">
+                  <span class='menu_icon'>Gold Dungeon</span>
+                </a>
+
+
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button class="dropbtn_stage" onclick="activate_dropdown_stage()">Story Stage DB</button>
+          <div class="dropdown-content" id="dropdown_stage">
+            <a id='' href="#"><img class='menu_icon' src="/img/Cocomaru.png">
+                  <span class='menu_icon'>Phantom Forest</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/Candla.png">
+                  <span class='menu_icon'>Lunar Valley</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/Seiren.png">
+                  <span class='menu_icon'>Aria Lake</span>
+                </a>
+            <a id='' href="#"><img class='menu_icon' src="/img/Flang.png">
+                  <span class='menu_icon'>Mirage Ruins</span>
+                </a>
+            <hr style="margin:0; border-top: 3px solid #eee">
+            <a id='' href="#"><img class='menu_icon' src="/img/MonaB.png">
+                  <span class='menu_icon'>Pagos Coast</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/BethG.png">
+                  <span class='menu_icon'>Seabed Caves</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/MandragoraR.png">
+                  <span class='menu_icon'>Magma Crags</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/Starkid.png">
+                  <span class='menu_icon'>Star Sanctuary</span>
+                </a>
+            <hr style="margin:0; border-top: 3px solid #eee">
+            <a id='' href="#"><img class='menu_icon' src="/img/Shellpy.png">
+                  <span class='menu_icon'>Sky Falls</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/Monk.png">
+                  <span class='menu_icon'>Slumbering City</span>
+                </a>
+            <hr style="margin:0; border-top: 3px solid #eee">
+            <a id='' href="#"><img class='menu_icon' src="/img/Wendigo.png">
+                  <span class='menu_icon'>Glacial Plains</span>
+                </a>
+
+            <a id='' href="#"><img class='menu_icon' src="/img/RadisG.png">
+                  <span class='menu_icon'>Aurora Plateau</span>
+                </a>
+
+          </div>
+        </div>
+
+        <a href="#home">MSL Calculator</a>
+        <a href="#">Gem DB</a>
+        <a href="#">Super Stone DB</a>
+        <a href="#">Exp DB</a>
+
+
+      </div>
+    </nav>
+  </section>
+
+
+
+  <article id="main">
+    <section>
+      <h2>Home</h2>
+    </section>
+
+    <section>
+      <h3>Announcement</h3>
+      <div class="announcement">
+        <h4>Welcome</h4>
+        <p>Hey guys, welcome you all to the website. If you find any bugs, please contact me asap.</p>
+      </div>
+    </section>
+  </article>
+
+  <footer>
+    <p>&copy; All resources used in this website are owned by respectative owners.</p>
+  </footer>
+
+</body>
+
+
+
+<script>
+  function activate_dropdown_stage() {
+    document.getElementById("dropdown_stage").classList.toggle("show");
+
+  }
+
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(e) {
+    if (!e.target.matches('.dropbtn')) {
+      var myDropdown = document.getElementById("myDropdown");
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+      }
+    }
+
+    if (!e.target.matches('.dropbtn_stage')) {
+      var myDropdown = document.getElementById("dropdown_stage");
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
+      }
+    }
+
+  }
+
+
+  $('#nav_toggle').click(function(e) {
+    e.stopPropagation();
+    $(".sidenav").toggleClass('bar')
+  });
+  $('body').click(function(e) {
+    if ($('.sidenav').hasClass('bar')) {
+      $(".sidenav").toggleClass('bar')
+    }
+  })
+
+  $(window).click(function() {
+    var mySideNavSize = document.getElementById("mySidenav").style.width;
+    console.log(mySideNavSize);
+    if (mySideNavSize > 0) {
+      document.getElementById("mySidenav").style.width = "0";
+      document.body.style.backgroundColor = "white";
+    }
+
+
+  });
+</script>
+
+</html>

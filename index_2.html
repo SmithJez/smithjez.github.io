@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>HTML5</title>
+  <meta charset="utf-8">
+
+</head>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<body bgcolor=black >
+
+
+  <header class="header eqWrap">
+
+    <h1><a id="nav_toggle" href="#" class="w3-xxxlarge fa fa-bars"></a>
+            SmithJez's Databook</h1>
+
+    <nav>
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn">&times;</a>
+        <a id="nav_a" href="#">Home</a>
+        <a id="nav_a">Monster Super League</a>
+
+        <a id="nav_a" href="#">About</a>
+        <a id="nav_a" href="#">Support me :3</a>
+
+      </div>
+
+    </nav>
+  </header>
+
+
+
+
+
+  <article id="main">
+
+    <section>
+      <h2>Home</h2>
+    </section>
+
+    <section>
+      <h3>Announcement</h3>
+      <div class="announcement">
+        <h4>Welcome</h4>
+        <p>Hey guys, welcome you all to the website. If you find any bugs, please contact me asap.</p>
+      </div>
+    </section>
+
+
+
+  </article>
+
+  <footer>
+    <p>&copy; All resources used in this website are owned by respectative owners.</p>
+  </footer>
+
+</body>
+
+
+
+<script>
+
+
+
+  $('#nav_toggle').click(function(e) {
+    e.stopPropagation();
+    $(".sidenav").toggleClass('bar')
+  });
+  $('body').click(function(e) {
+    if ($('.sidenav').hasClass('bar')) {
+      $(".sidenav").toggleClass('bar')
+    }
+  })
+
+  $(window).click(function() {
+    var mySideNavSize = document.getElementById("mySidenav").style.width;
+    console.log(mySideNavSize);
+    if(mySideNavSize > 0) {
+      document.getElementById("mySidenav").style.width = "0";
+      document.body.style.backgroundColor = "white";
+    }
+  });
+
+
+
+</script>
+
+</html>
