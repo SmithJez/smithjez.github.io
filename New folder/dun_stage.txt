@@ -1,0 +1,371 @@
+dungeon_stages {
+  uid: 1114774866
+  stage_idx: 1
+  name: 1804385139
+  desc: 1793751035
+  stage_prefab: "DungeonMagic"
+  battle_type: B_AllDayRuneDungeon
+  stage_title_image: "stage_dungeon_golem_bg"
+  stage_mark_image: "stage_dungeon_golem"
+  substages: 394046460
+  substages: 394046457
+  substages: 394046458
+  substages: 394046463
+  substages: 394046464
+  substages: 394046461
+  substages: 394046462
+  substages: 394046451
+  substages: 394046452
+  substages: 395046462
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 251410831
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_All
+    open_days: OD_All
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 2004028970
+  stage_idx: 2
+  name: 1813587027
+  desc: 942918867
+  stage_prefab: "DungeonMagic"
+  battle_type: B_DayRuneDungeon
+  stage_title_image: "stage_dungeon_dragon_bg"
+  stage_mark_image: "stage_dungeon_dragon"
+  substages: 45509758
+  substages: 45509759
+  substages: 45509760
+  substages: 45509753
+  substages: 45509754
+  substages: 45509755
+  substages: 45509756
+  substages: 45509749
+  substages: 45509750
+  substages: 44509756
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1131476986
+      difficulty: 2
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_WeekEnd
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 849882661
+  stage_idx: 3
+  name: 1346780352
+  desc: 58412114
+  stage_prefab: "DungeonD"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_day_bg"
+  stage_mark_image: "stage_dungeon_day_dark_icon"
+  substages: 152615773
+  substages: 152615770
+  substages: 152615771
+  substages: 152615776
+  substages: 152615777
+  substages: 152615774
+  substages: 152615775
+  substages: 152615764
+  substages: 152615765
+  substages: 153615847
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Mon
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 1406012737
+  stage_idx: 4
+  name: 1946910536
+  desc: 1026352376
+  stage_prefab: "DungeonR"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_day_bg"
+  stage_mark_image: "stage_dungeon_day_fire_icon"
+  substages: 97034001
+  substages: 97034004
+  substages: 97034003
+  substages: 97034006
+  substages: 97034005
+  substages: 97034008
+  substages: 97034007
+  substages: 97034010
+  substages: 97034009
+  substages: 96034007
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Tue
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 1275356263
+  stage_idx: 5
+  name: 1784253934
+  desc: 1438911436
+  stage_prefab: "DungeonB"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_day_bg"
+  stage_mark_image: "stage_dungeon_day_water_icon"
+  substages: 1700930511
+  substages: 1700930512
+  substages: 1700930513
+  substages: 1700930506
+  substages: 1700930507
+  substages: 1700930508
+  substages: 1700930509
+  substages: 1700930502
+  substages: 1700930503
+  substages: 1701930513
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Wed
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 1433012794
+  stage_idx: 6
+  name: 1917910465
+  desc: 1597349185
+  stage_prefab: "DungeonG"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_day_bg"
+  stage_mark_image: "stage_dungeon_day_tree_icon"
+  substages: 772709178
+  substages: 772709179
+  substages: 772709180
+  substages: 772709181
+  substages: 772709182
+  substages: 772709183
+  substages: 772709184
+  substages: 772709169
+  substages: 772709170
+  substages: 773709180
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Thu
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 868914246
+  stage_idx: 7
+  name: 1141811321
+  desc: 1029229481
+  stage_prefab: "DungeonW"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_day_bg"
+  stage_mark_image: "stage_dungeon_day_white_icon"
+  substages: 356690076
+  substages: 356690075
+  substages: 356690074
+  substages: 356690081
+  substages: 356690080
+  substages: 356690079
+  substages: 356690078
+  substages: 356690069
+  substages: 356690068
+  substages: 355690074
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Fri
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 86846346
+  stage_idx: 8
+  name: 1211155289
+  desc: 1487808521
+  stage_prefab: "DungeonMagic"
+  battle_type: B_AllDayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_magic_bg"
+  stage_mark_image: "stage_dungeon_allday_icon"
+  substages: 857216394
+  substages: 857216395
+  substages: 857216396
+  substages: 857216397
+  substages: 857216398
+  substages: 857216399
+  substages: 857216400
+  substages: 857216385
+  substages: 857216386
+  substages: 858216396
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_All
+    open_days: OD_All
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 159635295
+  stage_idx: 3
+  name: 1247524410
+  desc: 610350450
+  stage_prefab: "DungeonW"
+  battle_type: B_GoldDungeon
+  stage_title_image: "stage_dungeon_guardian_bg"
+  stage_mark_image: "stage_dungeon_gold_icon"
+  substages: 1830301527
+  substages: 1830301528
+  substages: 1830301529
+  substages: 1830301522
+  substages: 1830301523
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 155494016
+      difficulty: 1
+    }
+    reset_method: RM_Day
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_All
+    open_days: OD_All
+  }
+}
+dungeon_stages {
+  uid: 2017392287
+  stage_idx: 9
+  name: 1042217686
+  desc: 1042217686
+  stage_prefab: "DungeonMagic"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_magic_bg"
+  stage_mark_image: "stage_dungeon_day_special_1_icon"
+  substages: 8172775
+  substages: 8172776
+  substages: 8172777
+  substages: 8172770
+  substages: 8172771
+  substages: 8172772
+  substages: 8172773
+  substages: 8172782
+  substages: 8172783
+  substages: 9172777
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Sat
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 2005392301
+  stage_idx: 9
+  name: 1022217476
+  desc: 1022217476
+  stage_prefab: "DungeonMagic"
+  battle_type: B_DayBeyondStoneDungeon
+  stage_title_image: "stage_dungeon_magic_bg"
+  stage_mark_image: "stage_dungeon_day_special_1_icon"
+  substages: 1594576293
+  substages: 1594576290
+  substages: 1594576291
+  substages: 1594576296
+  substages: 1594576297
+  substages: 1594576294
+  substages: 1594576295
+  substages: 1594576300
+  substages: 1594576301
+  substages: 1595576303
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1036560040
+      difficulty: 1
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_Sun
+    can_retry_stage: true
+  }
+}
+dungeon_stages {
+  uid: 634274160
+  stage_idx: 10
+  name: 97861511
+  desc: 748133835
+  stage_prefab: "Dungeon2"
+  battle_type: B_ColossusDungeon
+  stage_title_image: "stage_dungeon_dragon_bg"
+  stage_mark_image: "stage_dungeon_dragon"
+  substages: 2130720442
+  substages: 2130720443
+  substages: 2130720444
+  substages: 2130720445
+  substages: 2130720446
+  substages: 2130720447
+  substages: 2130720448
+  substages: 2130720433
+  substages: 2130720434
+  substages: 2129720444
+  generalDungeonStageInfo {
+    unlockConditionClearSubStage {
+      substage_uid: 1131476991
+      difficulty: 3
+    }
+    hard_reset_price {
+      type: P_FreeGem
+    }
+    open_days: OD_All
+    open_days: OD_All
+    can_retry_stage: true
+  }
+}
