@@ -25,7 +25,7 @@
 <script src="protobuf/map.js"></script>
 <script src="protobuf/message.js"></script>
 <script src="javascripts/msg_game_data.js"></script>
-<script src="javascripts/ping_2.js"></script>
+<script src="javascripts/ping_toc.js"></script>
 <script src="javascripts/story_stage.js"></script>
 
 
@@ -35,17 +35,17 @@
 
 
 
-  function GetData(mapType, callback) {
+  function GetDataTOC(callback) {
 
-    var file = "/data/dungeon_stages.smj"
-    var file2 = "/data/dungeon_substages.smj"
-    var file3 = "/data/dungeon_monster_groups.smj"
-    var file4 = "/data/dungeon_monsters.smj"
+    var file = "/data/infinite_stages.smj"
+    var file2 = "/data/infinite_substages.smj"
+    var file3 = "/data/infinite_monster_groups.smj"
+    var file4 = "/data/infinite_monsters.smj"
     var file5 = "/data/monsters.smj"
-    var file6 = "/data/stage_monsters.smj"
+    var file6 = "/data/infinite_seasons.smj"
     // <!-- var mapType = "stage_dungeon_golem" -->
 
-    GenerateDungeon(file, file2, file3, file4, file5, file6, mapType);
+    GenerateTOCDungeon(file, file2, file3, file4, file5, file6);
 
     if (callback) {
       callback();
@@ -55,17 +55,14 @@
 
 
   $(document).ready(function() {
-    // console.log("ffff")
-    // var key = "stage_dungeon_golem";
     // var key = "B_ColossusDungeon";
-    var key = "B_AllDayRuneDungeon";
 
 
     const container = document.querySelector('#main_body');
     // console.log(container);
 
 
-    $.when(GetData(key)).then(generatePage(container));
+    $.when(GetDataTOC()).then(generatePage(container));
 
     // console.log(container);
   });
@@ -96,18 +93,13 @@
   }
 
   function generatePage(container) {
-    const MSGS = [
-      'B1',
-      'B2',
-      'B3',
-      'B4',
-      'B5',
-      'B6',
-      'B7',
-      'B8',
-      'B9',
-      'B10'
-    ];
+    MSGS = [];
+
+    for(i = 1; i <= 70; i++) {
+      MSGS.push("B" + i );
+    }
+
+
     const t = container.querySelectorAll('#floor_id');
     const toc = document.querySelector('#toc > ul');
     const t2 = toc.querySelector('template');
@@ -354,7 +346,7 @@
     <div id="container">
       <article id="main">
         <section>
-          <h2>Golem Dungeon Database</h2>
+          <h2>Colossus Dungeon Database</h2>
 
         </section>
 

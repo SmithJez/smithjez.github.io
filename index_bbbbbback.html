@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+	<meta http-equiv="Content-Type" content="text/html; charset =UTF-8"></meta>
+	<link rel="apple-touch-icon" sizes="57x57" href="fav/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="fav/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="fav/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="fav/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="fav/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="fav/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="fav/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="fav/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="fav/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="fav/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="fav/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="fav/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="fav/favicon-16x16.png">
+	<link rel="manifest" href="/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="fav/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	<title>MSL Databook by SmithJez</title>
+	<style>
+		body {
+			margin: 0;
+		}
+
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #333;
+		}
+
+		li {
+			float: left;
+		}
+
+		li a,
+		.dropbtn {
+			display: inline-block;
+			color: white;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+
+		li a:hover,
+		.dropdown:hover .dropbtn {
+			background-color: red;
+		}
+
+		span,
+		img.menu_icon {
+			width: 36px;
+
+			vertical-align: middle;
+		}
+
+		span,
+		img.drop_icon {
+			width: 36px;
+			vertical-align: middle;
+		}
+
+		img.monster_icon {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+
+
+		li.dropdown {
+			display: inline-block;
+		}
+
+		.dropdown-content {
+			display: none;
+			position: absolute;
+			background-color: #f9f9f9;
+			min-width: 160px;
+			box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+			z-index: 1;
+		}
+
+		.dropdown-content a {
+			color: black;
+			padding: 12px 16px;
+			text-decoration: none;
+			display: block;
+			text-align: left;
+		}
+
+		.dropdown-content a:hover {
+			background-color: #f1f1f1
+		}
+
+		.dropdown:hover .dropdown-content {
+			display: block;
+		}
+
+		/*.line_stage {
+			outline: dashed #000000;
+		}*/
+
+		[class*="line_sub_stage"] {
+		  border-bottom: 1px dashed #000000;
+		}
+
+		/*[id*="ping_"] {
+		  outline: 1px solid #000000;
+		}*/
+
+
+
+
+		tbody,
+		thead tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+		.td_reward_text {
+			width: 20%;
+		}
+
+		.stage_holder_parent {
+			outline: 2px solid #000000;
+		}
+
+		.line_stage {
+			font-weight: bold;
+		}
+
+		#sub_stage_text {
+			border-right: 1px solid #000000;
+			font-weight: bold;
+		}
+
+
+
+
+		th {
+			word-wrap: break-word;
+			/*border: 1px solid;*/
+		}
+
+		#page td {
+   padding:0; margin:0;
+}
+
+#page {
+   border-collapse: collapse;
+}
+
+		/** {
+			box-sizing: border-box;
+		}*/
+
+		table {
+			margin: 0 auto;
+			max-width: 1080px;
+			table-layout : fixed;
+			border-spacing: 0;
+			border-collapse: collapse;
+		}
+
+
+
+		#loader {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			z-index: 1;
+			width: 150px;
+			height: 150px;
+			margin: -75px 0 0 -75px;
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid #3498db;
+			width: 120px;
+			height: 120px;
+			-webkit-animation: spin 2s linear infinite;
+			animation: spin 2s linear infinite;
+		}
+
+		@-webkit-keyframes spin {
+			0% {
+				-webkit-transform: rotate(0deg);
+			}
+			100% {
+				-webkit-transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+
+		<!-- .animate-bottom {
+			position: relative;
+			-webkit-animation-name: animatebottom;
+			-webkit-animation-duration: 1s;
+			animation-name: animatebottom;
+			animation-duration: 1s
+		}
+
+		-->@-webkit-keyframes animatebottom {
+			from {
+				bottom: -100px;
+				opacity: 0
+			}
+			to {
+				bottom: 0px;
+				opacity: 1
+			}
+		}
+
+		@keyframes animatebottom {
+			from {
+				bottom: -100px;
+				opacity: 0
+			}
+			to {
+				bottom: 0;
+				opacity: 1
+			}
+		}
+
+		#myDiv {
+			display: none;
+			text-align: center;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="closure/goog/base.js"></script>
+	<script src="protobuf/arith.js"></script>
+	<script src="protobuf/constants.js"></script>
+	<script src="protobuf/utils.js"></script>
+	<script src="protobuf/decoder.js"></script>
+	<script src="protobuf/encoder.js"></script>
+	<script src="protobuf/reader.js"></script>
+	<script src="protobuf/writer.js"></script>
+	<script src="protobuf/map.js"></script>
+	<script src="protobuf/message.js"></script>
+	<script src="javascripts/msg_game_data.js"></script>
+	<script src="javascripts/ping.js"></script>
+	<script src="javascripts/story_stage.js">
+	</script>
+	<!-- <script src="javascripts/jquery.floatThead.js"></script> -->
+
+
+	<script>
+		var myVar;
+var dungeonHeader = ["Stage", "Astromon", "Lv", "Hp", "Atk", "Def", "Rec", "Crit Dmg", "Crit Rate", "Resist"];
+var storyHeader = ["Stage", "Detail"];
+
+
+		function loadPage() {
+			myVar = setTimeout(showPage, 0);
+		}
+
+		function showPage() {
+			document.getElementById("loader").style.display = "none";
+			document.getElementById("tableDiv").style.display = "block";
+		}
+
+		function hidePage(callback) {
+			document.getElementById("loader").style.display = "block";
+			document.getElementById("tableDiv").style.display = "none";
+			if (callback) {
+				callback();
+			}
+		}
+
+		function testDecoder(mapType, callback) {
+
+			var file = "/data/dungeon_stages.smj"
+			var file2 = "/data/dungeon_substages.smj"
+			var file3 = "/data/dungeon_monster_groups.smj"
+			var file4 = "/data/dungeon_monsters.smj"
+			var file5 = "/data/monsters.smj"
+			var file6 = "/data/stage_monsters.smj"
+			<!-- var mapType = "stage_dungeon_golem" -->
+
+
+			readUrl(file, file2, file3, file4, file5, file6, mapType);
+
+			if (callback) {
+				callback();
+			}
+
+		}
+
+		$(document).ready(function() {
+			// var currentUrl = window.location.href;
+			// var hashOnly = currentUrl.split("#");
+			// console.log(hashOnly[1]);
+			var key = "stage_dungeon_golem";
+
+
+			SetHeaderText(dungeonHeader);
+			$.when(testDecoder(key)).then(loadPage());
+		});
+
+
+
+
+		window.onload = function() {
+
+			var story_stage = document.getElementById("story_stage");
+			story_stage.onclick = function() {
+
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderTextForStoryStage(storyHeader);
+
+					hidePage(function() {
+						getStory(function() {
+							loadPage();
+						});
+					});
+
+
+				return false;
+			}
+
+
+			var dark_dungeon = document.getElementById("dark_dungeon");
+			dark_dungeon.onclick = function() {
+
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+
+				hidePage(function() {
+					testDecoder("stage_dungeon_day_dark_icon", function() {
+						loadPage();
+					});
+
+					<!-- $.when(testDecoder("stage_dungeon_day_dark_icon")).then(loadPage()); -->
+				});
+
+
+
+				return false;
+			}
+
+			var fire_dungeon = document.getElementById("fire_dungeon");
+			fire_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_day_fire_icon")).then(loadPage());
+				return false;
+			}
+
+			var water_dungeon = document.getElementById("water_dungeon");
+			water_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_day_water_icon")).then(loadPage());
+
+				return false;
+			}
+
+			var wood_dungeon = document.getElementById("wood_dungeon");
+			wood_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_day_tree_icon")).then(loadPage());
+
+				return false;
+			}
+
+
+
+			var light_dungeon = document.getElementById("light_dungeon");
+			light_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_day_white_icon")).then(loadPage());
+
+				return false;
+			}
+
+			var special_dungeon = document.getElementById("special_dungeon");
+			special_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_day_special_1_icon")).then(loadPage());
+
+				return false;
+			}
+
+			var star_dungeon = document.getElementById("star_dungeon");
+			star_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_allday_icon")).then(loadPage());
+
+				return false;
+			}
+
+			var golem_dungeon = document.getElementById("golem_dungeon");
+			golem_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_golem")).then(loadPage());
+
+				return false;
+			}
+			var gold_dungeon = document.getElementById("gold_dungeon");
+			gold_dungeon.onclick = function() {
+				hidePage();
+				var mainBody = goog.dom.getElement('mainBody');
+				goog.dom.removeNode(mainBody);
+				SetHeaderText(dungeonHeader);
+				$.when(testDecoder("stage_dungeon_gold_icon")).then(loadPage());
+
+				return false;
+			}
+
+
+		}
+
+		function SetHeaderTextForStoryStage(headerList) {
+
+			var mainHead = goog.dom.getElement('mainHead');
+
+			var oldHeadTRChild = goog.dom.getElement("trHeadDungeon");
+			var headTRChild = goog.dom.getElement("trHeadStory");
+
+			if(oldHeadTRChild != undefined) {
+				goog.dom.removeNode(oldHeadTRChild);
+			}
+
+			if(headTRChild != undefined) {
+				goog.dom.removeNode(headTRChild);
+			}
+
+			headTRChild = goog.dom.createDom('tr', {'id':'trHeadStory', 'class':'trHead'}, "");
+			goog.dom.appendChild(mainHead, headTRChild);
+
+			for (i = 0; i < headerList.length; i++) {
+				var headTD = goog.dom.createDom('th', {
+					'align': 'center'
+				}, headerList[i])
+				headTD.setAttribute('bgColor', '#FF0000');
+				if (headerList[i] == "Detail") {
+					headTD.setAttribute('colspan', 6);
+				}
+
+
+				goog.dom.appendChild(headTRChild, headTD);
+
+			}
+		}
+
+
+
+		function SetHeaderText(headerList) {
+
+
+			var mainHead = goog.dom.getElement('mainHead');
+
+			var oldHeadTRChild = goog.dom.getElement("trHeadDungeon");
+			var headTRChild = goog.dom.getElement("trHeadStory");
+
+			if(oldHeadTRChild != undefined) {
+				goog.dom.removeNode(oldHeadTRChild);
+			}
+
+			if(headTRChild != undefined) {
+				goog.dom.removeNode(headTRChild);
+			}
+
+			var headTRChild = goog.dom.createDom('tr', {'id':'trHeadDungeon', 'class':'trHead'}, "");
+			for (i = 0; i < headerList.length; i++) {
+				var headTD = goog.dom.createDom('th', {
+					'align': 'center'
+				}, headerList[i])
+				headTD.setAttribute('bgColor', '#FF0000');
+				if (headerList[i] == "Astromon") {
+					headTD.setAttribute('colspan', 2);
+				}
+
+
+				goog.dom.appendChild(headTRChild, headTD);
+
+			}
+			goog.dom.append(mainHead, headTRChild);
+
+		}
+	</script>
+
+
+
+
+</head>
+
+
+
+<body>
+
+	<div id="loader"></div>
+
+	<div class="topnav" id="myTopnav">
+		<ul>
+			<li><a id='golem_dungeon' href="#golem_dungeon"><img class='menu_icon' src="/img/rune_rainbow_all.png"><span class='menu_icon'>Golem Dungeon</span></a></li>
+			<li><a id='gold_dungeon' href="#gold_dungeon"><img class='menu_icon' src="/img/icon_gold.png"><span class='menu_icon'>Gold Dungeon</span></a></li>
+
+
+
+			<li class="dropdown">
+				<a href="javascript:void(0)" class="dropbtn"><img class='menu_icon' src="/img/beyond_stone_rgb_3.png"><span class='menu_icon'>Stone Dungeon</span></a>
+				<div class="dropdown-content">
+					<a id='star_dungeon' href="#star_dungeon"><img class='menu_icon' src="/img/beyond_stone_common_3.png"><span class='menu_icon'>Star Dungeon</span></a>
+					<a id='dark_dungeon' href="#dark_dungeon"><img class='menu_icon' src="/img/beyond_stone_dark_3.png"><span class='menu_icon'>Dark Dungeon</span></a>
+					<a id='fire_dungeon' href="#fire_dungeon"><img class='menu_icon' src="/img/beyond_stone_fire_3.png"><span class='menu_icon'>Fire Dungeon</span></a>
+					<a id='water_dungeon' href="#water_dungeon"><img class='menu_icon' src="/img/beyond_stone_water_3.png"><span class='menu_icon'>Water Dungeon</span></a>
+					<a id='wood_dungeon' href="#wood_dungeon"><img class='menu_icon' src="/img/beyond_stone_tree_3.png"><span class='menu_icon'>Wood Dungeon</span></a>
+					<a id='light_dungeon' href="#light_dungeon"><img class='menu_icon' src="/img/beyond_stone_light_3.png"><span class='menu_icon'>Light Dungeon</span></a>
+					<a id='special_dungeon' href="#special_dungeon"><img class='menu_icon' src="/img/beyond_stone_rgb_3.png"><span class='menu_icon'>Special Dungeon</span></a>
+
+				</div>
+			</li>
+
+			<li><a id='story_stage' href="#story_stage"><img class='menu_icon' src="/img/common_2_185.png"><span class='menu_icon'>Story Stage</span></a></li>
+
+
+		</ul>
+
+	</div>
+
+
+
+	<div id="tableDiv" style="display:none;">
+
+		<table class="table mainTable" id="mainTable" style="outline: solid #000000" >
+			<thead id="mainHead" style="display:block;position: sticky;top:0;; background-color: grey;display:block;">
+
+			</thead>
+
+
+		</table>
+
+	</div>
+
+	<!-- <div>
+		<p> version: 2809201701 </p>
+	</div> -->
+
+
+</body>
+
+
+</html>

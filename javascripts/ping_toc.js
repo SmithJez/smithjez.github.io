@@ -22,7 +22,7 @@ function showPage() {
   document.getElementById("loader").style.display = "none";
 }
 
-function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
+function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
 
   var req = new XMLHttpRequest();
   req.open('GET', url, false);
@@ -134,22 +134,29 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
   var dunMonGroup = new proto.msggamedata.MsgGameData.deserializeBinary(bytes3);
   var dunMon = new proto.msggamedata.MsgGameData.deserializeBinary(bytes4);
   var mon = new proto.msggamedata.MsgGameData.deserializeBinary(bytes5);
-  var monStage = new proto.msggamedata.MsgGameData.deserializeBinary(bytes6);
+  var infiniteSeason = new proto.msggamedata.MsgGameData.deserializeBinary(bytes6);
   var statusEffect = new proto.msggamedata.MsgGameData.deserializeBinary(bytesStatusEffect);
   var skill = new proto.msggamedata.MsgGameData.deserializeBinary(bytesSkill);
 
   /* console.log(stringText.array[0][100]); */
 
+  var arrayStage = monster.array[58];
+  console.log(monster);
   var arrayString = stringText.array[0];
-  var arrayDunSub = dunSubStage.array[17];
-  var arrayDunMonGroup = dunMonGroup.array[19];
-  var arrayDunMon = dunMon.array[18];
+  var arrayDunSub = dunSubStage.array[59];
+  var arrayInfiniteMonGroup = dunMonGroup.array[61];
+  var arrayInfiniteMon = dunMon.array[60];
   var arrayMon = mon.array[3];
-  var arrayMonStage = monStage.array[14];
+  var arrayInfiniteSeason = infiniteSeason.array[57];
   var arrayStatusEffect = statusEffect.array[20];
   var arraySkill = skill.array[7];
 
   /* console.log(arrayString.length); */
+
+  var stageMap = {};
+  for (var i = 0; i < arrayStage.length; i++) {
+    stageMap[arrayStage[i][0]] = arrayStage[i];
+  }
 
   var stringMap = {};
   for (var i = 0; i < arrayString.length; i++) {
@@ -162,22 +169,22 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
   }
 
   var monGroupMap = {};
-  for (var i = 0; i < arrayDunMonGroup.length; i++) {
-    monGroupMap[arrayDunMonGroup[i][0]] = arrayDunMonGroup[i];
+  for (var i = 0; i < arrayInfiniteMonGroup.length; i++) {
+    monGroupMap[arrayInfiniteMonGroup[i][0]] = arrayInfiniteMonGroup[i];
   }
 
   var dunMonMap = {};
-  for (var i = 0; i < arrayDunMon.length; i++) {
-    dunMonMap[arrayDunMon[i][0]] = arrayDunMon[i];
+  for (var i = 0; i < arrayInfiniteMon.length; i++) {
+    dunMonMap[arrayInfiniteMon[i][0]] = arrayInfiniteMon[i];
   }
   var monMap = {};
   for (var i = 0; i < arrayMon.length; i++) {
     monMap[arrayMon[i][0]] = arrayMon[i];
   }
 
-  var monStageMap = {};
-  for (var i = 0; i < arrayMonStage.length; i++) {
-    monStageMap[arrayMonStage[i][0]] = arrayMonStage[i];
+  var infiniteSeasonMap = {};
+  for (var i = 0; i < arrayInfiniteSeason.length; i++) {
+    infiniteSeasonMap[arrayInfiniteSeason[i][0]] = arrayInfiniteSeason[i];
   }
 
   var statusEffectMap = {};
@@ -199,7 +206,7 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
     })
   }
 
-  /* console.log(arrayDunMonGroup[0]); */
+  /* console.log(arrayInfiniteMonGroup[0]); */
 
   var listMon = [];
 
@@ -209,68 +216,55 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
 
   /* console.log(monster); */
 
+  var subStageList = [];
 
-  for (i = 0; i < displayArray.length; i++) {
+  // console.log(stageMap);
 
+  for (q = 0; q < arrayInfiniteSeason.length; q++) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
 
-    /* 		var newHeader = goog.dom.createDom('p', {'style': 'background-color:#EEE'},
-    			stringMap[displayArray[i][1]]); */
-
-    /* 			if(displayArray[i][8] == "stage_dungeon_golem") {
-    				golemArray = displayArray[i][11];
-    			} */
-
-    // console.log(displayArray[i][8]);
-
-    // if (displayArray[i][8] == dunType) {
-    //   golemArray = displayArray[i][11];
-    // }
-
-    var splitDun = dunType.toLowerCase().split("|");
-
-    var enumDunType = ReadEnumFromNumber(proto.msggamedata.BattleType, displayArray[i][5]).toLowerCase();
-    // console.log( enumDunType + " : "+ dunType );
-
-    if (enumDunType == splitDun[0]) {
-      if(splitDun[1] != undefined) {
-
-        var dunOpenDate =  splitDun[1].toLowerCase();
-        var currentOpenDate = ReadEnumFromNumber(proto.msggamedata.MsgGeneralDungeonStageInfo.OpenDay, displayArray[i][12][4]).toLowerCase();
-        // console.log(dunOpenDate);
-        // console.log(currentOpenDate);
-        if(currentOpenDate == dunOpenDate) {
-          golemArray = displayArray[i][11];
-        }
-
-      } else {
-        golemArray = displayArray[i][11];
-      }
-
+    if(dd<10) {
+        dd = '0'+dd
     }
 
+    if(mm<10) {
+        mm = '0'+mm
+    }
 
+    today = yyyy.toString() + mm.toString();
 
-    listMon.push({
-      Key: stringMap[displayArray[i][0]],
-      value: stringMap[displayArray[i][1]]
-    })
-
-    /* console.log (displayArray[i][1]); */
-
-    /* goog.dom.appendChild(document.body, newHeader);	 */
+    var dbSeason = arrayInfiniteSeason[q][1].substring(0,6);
+    if(dbSeason == today) {
+      subStageList = stageMap[arrayInfiniteSeason[q][2]];
+      // console.log(arrayInfiniteSeason[q][2]);
+      // console.log(subStageList);
+    }
   }
+
+
 
   var main_body = goog.dom.getElement('template_body');
 
-  for (i = 0; i < golemArray.length; i++) {
+  var golemArray =  subStageList[1];
+
+  for (i = 0; i < subStageList[1].length; i++) {
 
     // console.log("start");
 
     var mDubSubStage = dunSubStageMap[golemArray[i]][9];
     var nonBossStageSize = mDubSubStage.length - 1;
     var mMonGroup = monGroupMap[mDubSubStage[0][2]];
-    var stageMonBoss = monStageMap[mDubSubStage[nonBossStageSize][3]];
-    var monBossObj = monMap[stageMonBoss[1]];
+    var stageMonBoss = infiniteSeasonMap[mDubSubStage[nonBossStageSize][3]];
+    var monBossObj;
+    try {
+      monBossObj = monMap[stageMonBoss[1]];
+    } catch (err) {
+      console.log(stageMonBoss);
+    }
+
     var bossStat = CalStat(stageMonBoss, monBossObj);
 
     var floor_lvl = i + 1;
