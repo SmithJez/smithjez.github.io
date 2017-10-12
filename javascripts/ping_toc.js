@@ -127,6 +127,18 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
     bytesSkill[i] = this.streamString.charCodeAt(i) & 0xff;
   }
 
+  var stageMonFile = "/data/stage_monsters.smj"
+  var reqString = new XMLHttpRequest();
+  reqString.open('GET', stageMonFile, false);
+  reqString.overrideMimeType('text/plain; charset=x-user-defined');
+  reqString.send(null);
+  if (reqString.status != 200) throw '[' + reqString.status + ']' + reqString.statusText;
+  this.streamString = reqString.responseText;
+  var bytesStageMonster = [];
+  for (i = 0; i < this.streamString.length; i++) {
+    bytesStageMonster[i] = this.streamString.charCodeAt(i) & 0xff;
+  }
+
 
   var monster = new proto.msggamedata.MsgGameData.deserializeBinary(bytes);
   var stringText = new proto.msggamedata.MsgString.deserializeBinary(bytesString);
@@ -137,11 +149,11 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
   var infiniteSeason = new proto.msggamedata.MsgGameData.deserializeBinary(bytes6);
   var statusEffect = new proto.msggamedata.MsgGameData.deserializeBinary(bytesStatusEffect);
   var skill = new proto.msggamedata.MsgGameData.deserializeBinary(bytesSkill);
+  var stageMonster = new proto.msggamedata.MsgGameData.deserializeBinary(bytesStageMonster);
 
   /* console.log(stringText.array[0][100]); */
 
   var arrayStage = monster.array[58];
-  console.log(monster);
   var arrayString = stringText.array[0];
   var arrayDunSub = dunSubStage.array[59];
   var arrayInfiniteMonGroup = dunMonGroup.array[61];
@@ -150,12 +162,18 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
   var arrayInfiniteSeason = infiniteSeason.array[57];
   var arrayStatusEffect = statusEffect.array[20];
   var arraySkill = skill.array[7];
+  var arrayStageMonster = stageMonster.array[14];
 
   /* console.log(arrayString.length); */
 
   var stageMap = {};
   for (var i = 0; i < arrayStage.length; i++) {
     stageMap[arrayStage[i][0]] = arrayStage[i];
+  }
+
+  var stageMonsterMap = {};
+  for (var i = 0; i < arrayStageMonster.length; i++) {
+    stageMonsterMap[arrayStageMonster[i][0]] = arrayStageMonster[i];
   }
 
   var stringMap = {};
@@ -253,21 +271,15 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
   for (i = 0; i < subStageList[1].length; i++) {
 
     // console.log("start");
-
-    var mDubSubStage = dunSubStageMap[golemArray[i]][9];
+    var mDubSubStage = dunSubStageMap[golemArray[i]][11];
     var nonBossStageSize = mDubSubStage.length - 1;
+
+    // console.log(mDubSubStage[nonBossStageSize][3])
+    var hasBoss = mDubSubStage[nonBossStageSize][3];
+
+    // console.log ( mDubSubStage[nonBossStageSize][2]);
+
     var mMonGroup = monGroupMap[mDubSubStage[0][2]];
-    var stageMonBoss = infiniteSeasonMap[mDubSubStage[nonBossStageSize][3]];
-    var monBossObj;
-    try {
-      monBossObj = monMap[stageMonBoss[1]];
-    } catch (err) {
-      console.log(stageMonBoss);
-    }
-
-    var bossStat = CalStat(stageMonBoss, monBossObj);
-
-    var floor_lvl = i + 1;
 
     var floor_div = goog.dom.createDom('div', {"id":"floor_id", "class": "floor_div_" + floor_lvl  } , "");
 
@@ -281,226 +293,37 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
 
     goog.dom.appendChild(floor_div, container_div);
 
-    var displaySize = 1;
+    var monGroupOnBoss;
 
-    var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
-
-    goog.dom.appendChild(container_div, group_i_1);
-
-    // START SKILL
-    CreateStatDom(stringMap, group_i_1, monBossObj, stageMonBoss, bossStat, "black_2");
-    // END SKILL
-
-    // START SKILL
-    var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
-    goog.dom.appendChild(group_i_1, div_skill_col);
-
-    var skill_h4 = goog.dom.createDom('h4', "text_align_center black_2", "Skills" );
-
-    goog.dom.appendChild(div_skill_col, skill_h4);
-
-    var boss_passive_skill_effect = statusEffectMap[ monBossObj [25]];
-    var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-
-    var boss_active_skill_effect = statusEffectMap[ monBossObj [26]];
-    var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-
-    try {
-      var boss_cond_skill_effect = statusEffectMap[skillMap[monBossObj[44]][6]];
-      var boss_cond_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_cond_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-    } catch (err) {
-
-    }
-
-
-
-    var div_skill_col_holder = goog.dom.createDom('div', "w3-half padding_8", "");
-    goog.dom.appendChild(div_skill_col, div_skill_col_holder);
-
-    var passive_skill = skillMap[monBossObj [23]];
-    var active_skill = skillMap[monBossObj [24]];
-    var conditional_skill = skillMap[monBossObj [44]];
-
-    CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
-    goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
-
-    CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
-    goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
-
-    if(conditional_skill != undefined) {
-      CreateSkillTable(stringMap, div_skill_col_holder, boss_cond_skill_effect,  conditional_skill  ,  boss_cond_skill_effect_icon, "Conditional");
-    }
-    // END SKILL
-
-
-
-
-    var div_skill_col_holder = goog.dom.createDom('div', "w3-half padding_8", "");
-    goog.dom.appendChild(div_skill_col, div_skill_col_holder);
-
-
-    var boss_skill_list = stageMonBoss[26];
-    for(kk = 0; kk < boss_skill_list.length; kk++) {
-
-      var status_effect = statusEffectMap[ boss_skill_list[kk]];
-      var status_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, status_effect[4]).replace("SEST", "se").toLowerCase() ;
-      var boss_skill = skillMap[monBossObj [44]];
-
-      CreateBossSkillTable(stringMap, div_skill_col_holder, status_effect, status_effect_icon, "Boss");
-      if(kk < (boss_skill_list.length - 1)) {
-        goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
+    if(hasBoss != undefined) {
+      monGroupOnBoss = mDubSubStage[nonBossStageSize][2];
+      var stageMonBoss = stageMonsterMap[mDubSubStage[nonBossStageSize][3]];
+      var monBossObj;
+      try {
+        monBossObj = monMap[stageMonBoss[1]];
+      } catch (err) {
+        // console.log(mDubSubStage[nonBossStageSize][3]);
       }
 
 
-    }
+      // console.log(infiniteSeasonMap)
 
 
+      var bossStat = CalStat(stageMonBoss, monBossObj);
 
-    displaySize++;
+      var floor_lvl = i + 1;
 
 
-    /* 3 = requiredMon = monGroup*/
-    /* 4 = fixedMon = dunMon */
 
-    var fixedMon = mDubSubStage[nonBossStageSize][4]
-
-
-    if (fixedMon.length == 0) {
-      /* use mongroup same as boss*/
-      /* dunMonMap */
-
-      var stageMonSize = monGroupMap[mDubSubStage[nonBossStageSize][2]][1].length;
-
-      for (x = 0; x < stageMonSize; x++) {
-
-        var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
-
-        goog.dom.appendChild(container_div, group_i_1);
-
-
-        /* console.log( stageMonSize); */
-        var stageMonMinionBoss = dunMonMap[monGroupMap[mDubSubStage[nonBossStageSize][2]][1][x][0]];
-        /* console.log( stageMonMinionBoss); */
-        var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
-        /* console.log( monMinionBossObj); */
-        var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
-
-
-        CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");
-
-
-        // START SKILL
-        var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
-        goog.dom.appendChild(group_i_1, div_skill_col);
-
-        var skill_h4 = goog.dom.createDom('h4', "text_align_center black_2", "Skills" );
-
-        goog.dom.appendChild(div_skill_col, skill_h4);
-
-        var boss_passive_skill_effect = statusEffectMap[ monMinionBossObj [25]];
-        var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-
-        var boss_active_skill_effect = statusEffectMap[ monMinionBossObj [26]];
-        var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-
-
-        var div_skill_col_holder = goog.dom.createDom('div', "", "");
-        goog.dom.appendChild(div_skill_col, div_skill_col_holder);
-
-        var passive_skill = skillMap[monMinionBossObj [23]];
-        var active_skill = skillMap[monMinionBossObj [24]];
-
-
-        CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
-        goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
-
-        CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
-
-
-        // END SKILL
-
-
-        displaySize++;
-
-
-
-      }
-
-
-
-    } else {
-      /* use dunmon */
-
-      for (z = 0; z < fixedMon.length; z++) {
-
-        var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
-
-        goog.dom.appendChild(container_div, group_i_1);
-
-        var stageMonMinionBoss = dunMonMap[fixedMon[z]];
-        var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
-        var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
-
-
-        CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");
-
-        // START SKILL
-        var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
-        goog.dom.appendChild(group_i_1, div_skill_col);
-
-        var skill_h4 = goog.dom.createDom('h4', "text_align_center black_2", "Skills" );
-
-        goog.dom.appendChild(div_skill_col, skill_h4);
-
-        var boss_passive_skill_effect = statusEffectMap[ monMinionBossObj [25]];
-        var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-
-        var boss_active_skill_effect = statusEffectMap[ monMinionBossObj [26]];
-        var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
-
-
-        var div_skill_col_holder = goog.dom.createDom('div', "", "");
-        goog.dom.appendChild(div_skill_col, div_skill_col_holder);
-
-
-
-        var passive_skill = skillMap[monMinionBossObj [23]];
-        var active_skill = skillMap[monMinionBossObj [24]];
-
-
-        CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
-        goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
-
-        CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
-
-        // END SKILL
-
-
-        displaySize++;
-
-
-      }
-
-
-    }
-
-    if(nonBossStageSize != 0) {
-
-
-    var fixedMon2 = mDubSubStage[0][4]
-
-    for (z = 1; z < fixedMon2.length; z++) {
+      var displaySize = 1;
 
       var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
 
       goog.dom.appendChild(container_div, group_i_1);
 
-      var stageMonMinionBoss = dunMonMap[fixedMon2[z]];
-      var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
-      var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
-
-
-      CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");
+      // START SKILL
+      CreateStatDom(stringMap, group_i_1, monBossObj, stageMonBoss, bossStat, "black_2");
+      // END SKILL
 
       // START SKILL
       var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
@@ -510,36 +333,258 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
 
       goog.dom.appendChild(div_skill_col, skill_h4);
 
-      var boss_passive_skill_effect = statusEffectMap[ monMinionBossObj [25]];
+      var boss_passive_skill_effect = statusEffectMap[ monBossObj [25]];
       var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
 
-      var boss_active_skill_effect = statusEffectMap[ monMinionBossObj [26]];
+      var boss_active_skill_effect = statusEffectMap[ monBossObj [26]];
       var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
 
+      try {
+        var boss_cond_skill_effect = statusEffectMap[skillMap[monBossObj[44]][6]];
+        var boss_cond_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_cond_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+      } catch (err) {
 
-      var div_skill_col_holder = goog.dom.createDom('div', "", "");
+      }
+
+
+
+      var div_skill_col_holder = goog.dom.createDom('div', "w3-half padding_8", "");
       goog.dom.appendChild(div_skill_col, div_skill_col_holder);
 
-
-      var passive_skill = skillMap[monMinionBossObj [23]];
-      var active_skill = skillMap[monMinionBossObj [24]];
-
+      var passive_skill = skillMap[monBossObj [23]];
+      var active_skill = skillMap[monBossObj [24]];
+      var conditional_skill = skillMap[monBossObj [44]];
 
       CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
       goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
 
       CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
+      goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
 
+      if(conditional_skill != undefined) {
+        CreateSkillTable(stringMap, div_skill_col_holder, boss_cond_skill_effect,  conditional_skill  ,  boss_cond_skill_effect_icon, "Conditional");
+      }
       // END SKILL
+
+
+
+
+      var div_skill_col_holder = goog.dom.createDom('div', "w3-half padding_8", "");
+      goog.dom.appendChild(div_skill_col, div_skill_col_holder);
+
+
+      var boss_skill_list = stageMonBoss[26];
+      for(kk = 0; kk < boss_skill_list.length; kk++) {
+
+        var status_effect = statusEffectMap[ boss_skill_list[kk]];
+        var status_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, status_effect[4]).replace("SEST", "se").toLowerCase() ;
+        var boss_skill = skillMap[monBossObj [44]];
+
+        CreateBossSkillTable(stringMap, div_skill_col_holder, status_effect, status_effect_icon, "Boss");
+        if(kk < (boss_skill_list.length - 1)) {
+          goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
+        }
+
+
+      }
+
 
 
       displaySize++;
 
-
     }
 
+
+
+    /* 3 = requiredMon = monGroup*/
+    /* 4 = fixedMon = dunMon */
+
+    var fixedMon = mDubSubStage[nonBossStageSize][4];
+
+    var hasFixedOrReq = mDubSubStage[nonBossStageSize];
+
+    // console.log (hasFixedOrReq[3]  + " : " + hasFixedOrReq[4] )
+
+    if (hasFixedOrReq[3] != undefined || hasFixedOrReq[4] > 0) {
+      // console.log (hasFixedOrReq[3]  + " : " + hasFixedOrReq[4] )
+
+      if (fixedMon.length == 0) {
+        /* use mongroup same as boss*/
+        /* dunMonMap */
+
+        var stageMonSize = monGroupMap[mDubSubStage[nonBossStageSize][2]][1].length;
+
+        for (x = 0; x < stageMonSize; x++) {
+
+          var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
+
+          goog.dom.appendChild(container_div, group_i_1);
+
+
+          /* console.log( stageMonSize); */
+          var stageMonMinionBoss = dunMonMap[monGroupMap[mDubSubStage[nonBossStageSize][2]][1][x][0]];
+          /* console.log( stageMonMinionBoss); */
+          var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
+          /* console.log( monMinionBossObj); */
+          var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
+
+
+          CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");
+
+
+          // START SKILL
+          var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
+          goog.dom.appendChild(group_i_1, div_skill_col);
+
+          var skill_h4 = goog.dom.createDom('h4', "text_align_center black_2", "Skills" );
+
+          goog.dom.appendChild(div_skill_col, skill_h4);
+
+          var boss_passive_skill_effect = statusEffectMap[ monMinionBossObj [25]];
+          var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+
+          var boss_active_skill_effect = statusEffectMap[ monMinionBossObj [26]];
+          var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+
+
+          var div_skill_col_holder = goog.dom.createDom('div', "", "");
+          goog.dom.appendChild(div_skill_col, div_skill_col_holder);
+
+          var passive_skill = skillMap[monMinionBossObj [23]];
+          var active_skill = skillMap[monMinionBossObj [24]];
+
+
+          CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
+          goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
+
+          CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
+
+
+          // END SKILL
+
+
+          displaySize++;
+
+
+
+        }
+
+
+
+      } else {
+        /* use dunmon */
+
+        for (z = 0; z < fixedMon.length; z++) {
+
+          var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
+
+          goog.dom.appendChild(container_div, group_i_1);
+
+          var stageMonMinionBoss = dunMonMap[fixedMon[z]];
+          var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
+          var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
+
+
+          CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");
+
+          // START SKILL
+          var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
+          goog.dom.appendChild(group_i_1, div_skill_col);
+
+          var skill_h4 = goog.dom.createDom('h4', "text_align_center black_2", "Skills" );
+
+          goog.dom.appendChild(div_skill_col, skill_h4);
+
+          var boss_passive_skill_effect = statusEffectMap[ monMinionBossObj [25]];
+          var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+
+          var boss_active_skill_effect = statusEffectMap[ monMinionBossObj [26]];
+          var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+
+
+          var div_skill_col_holder = goog.dom.createDom('div', "", "");
+          goog.dom.appendChild(div_skill_col, div_skill_col_holder);
+
+
+
+          var passive_skill = skillMap[monMinionBossObj [23]];
+          var active_skill = skillMap[monMinionBossObj [24]];
+
+
+          CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
+          goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
+
+          CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
+
+          // END SKILL
+
+
+          displaySize++;
+
+
+        }
+
+
+      }
     }
 
+
+
+    if(nonBossStageSize != 0) {
+
+
+      var fixedMon2 = mDubSubStage[0][4]
+
+      for (z = 1; z < fixedMon2.length; z++) {
+
+        var group_i_1 = goog.dom.createDom('div', "group_" + floor_lvl + "_" + displaySize );
+
+        goog.dom.appendChild(container_div, group_i_1);
+
+        var stageMonMinionBoss = dunMonMap[fixedMon2[z]];
+        var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
+        var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
+
+
+        CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");
+
+        // START SKILL
+        var div_skill_col = goog.dom.createDom('div', "col black_3 width_max", "");
+        goog.dom.appendChild(group_i_1, div_skill_col);
+
+        var skill_h4 = goog.dom.createDom('h4', "text_align_center black_2", "Skills" );
+
+        goog.dom.appendChild(div_skill_col, skill_h4);
+
+        var boss_passive_skill_effect = statusEffectMap[ monMinionBossObj [25]];
+        var boss_passive_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+
+        var boss_active_skill_effect = statusEffectMap[ monMinionBossObj [26]];
+        var boss_active_skill_effect_icon = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase() ;
+
+
+        var div_skill_col_holder = goog.dom.createDom('div', "", "");
+        goog.dom.appendChild(div_skill_col, div_skill_col_holder);
+
+
+        var passive_skill = skillMap[monMinionBossObj [23]];
+        var active_skill = skillMap[monMinionBossObj [24]];
+
+
+        CreateSkillTable(stringMap, div_skill_col_holder, boss_passive_skill_effect,  passive_skill  ,  boss_passive_skill_effect_icon, "Passive");
+        goog.dom.appendChild(div_skill_col_holder, goog.dom.createDom('br',""));
+
+        CreateSkillTable(stringMap, div_skill_col_holder, boss_active_skill_effect,  active_skill  ,  boss_active_skill_effect_icon, "Active");
+
+        // END SKILL
+
+
+        displaySize++;
+
+
+      }
+
+    }
 
 
 // dunSubStageMap[golemArray[i]][9]
@@ -548,7 +593,11 @@ function GenerateTOCDungeon(url, url2, url3, url4, url5, url6) {
     // console.log(maxSize);
     // console.log(fixedSize.length);
 
-    if(maxSize > fixedSize.length) {
+
+    // console.log(mMonGroup[0]);
+    // console.log(monGroupOnBoss);
+
+    if(maxSize > fixedSize.length && monGroupOnBoss != mMonGroup[0]) {
       for (j = 0; j < mMonGroup[1].length; j++) {
 
 
