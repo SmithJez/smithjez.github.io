@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>SmithJez's Databook: Golem Data</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/base.css">
+<script src="closure/goog/base.js"></script>
+<script src="protobuf/arith.js"></script>
+<script src="protobuf/constants.js"></script>
+<script src="protobuf/utils.js"></script>
+<script src="protobuf/decoder.js"></script>
+<script src="protobuf/encoder.js"></script>
+<script src="protobuf/reader.js"></script>
+<script src="protobuf/writer.js"></script>
+<script src="protobuf/map.js"></script>
+<script src="protobuf/message.js"></script>
+<script src="javascripts/msg_game_data.js"></script>
+<script src="javascripts/msl_calculator.js"></script>
+
+
+<script>
+  // var monListUniq;
+
+
+  function GetData(mapType, callback) {
+
+    var file = "/data/monster_dict.smj"
+    var file2 = "/data/monsters.smj"
+
+    GetAstromonUniqueList(file, file2);
+
+    UpdateStage();
+
+    if (callback) {
+      callback();
+    }
+
+  }
+
+
+  $(document).ready(function() {
+
+    const container = document.querySelector('#main_body');
+    // console.log(container);
+    GetData();
+    // $.when(GetData()).then(generatePage(container));
+
+  });
+
+  function activate_dropdown_stage() {
+    document.getElementById("dropdown_stage").classList.toggle("show");
+
+  }
+
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+
+  $(document).ready(function() {
+    $(window).keydown(function(event) {
+      if (event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+    });
+  });
+</script>
+
+
+
+<style>
+</style>
+
+<body bgcolor=black>
+
+  <!-- <div id="loader"></div> -->
+
+  <header class="header eqWrap">
+
+    <h1><a id="nav_toggle" href="#" class="w3-xxxlarge fa fa-bars"></a>
+            SmithJez's Databook</h1>
+
+    <nav>
+      <div id="my_sidenav_golem" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn">&times;</a>
+        <a id="nav_a" href="index.html">Home</a>
+        <a id="nav_a" href="msl_dragon_dungeon.html">Monster Super League</a>
+
+        <a id="nav_a" href="#">About</a>
+
+        <a>
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="T2MB3BR876D7E">
+            <input type="image" src="https://raw.githubusercontent.com/SmithJez/smithjez.github.io/master/img/donate_pizza.png" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
+            <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+          </form>
+        </a>
+
+      </div>
+
+    </nav>
+  </header>
+
+
+
+
+
+
+
+  <section class="always_show_top">
+    <nav>
+      <div class="main">
+        <ul class="mainnav">
+          <li><a href="#">Astromon DB</a></li>
+          <li class="hassubs">
+            <a href="#">Dungeon DB
+                  <svg width="12" height="12" viewBox="0 0 12 12">
+                    <path class="tab_path" d="M 2 4 L 10 4 L 6 8 Z" fill-rule="evenodd" fill="white">
+                    </path>
+                  </svg>
+                </a>
+
+
+            <ul class="dropdown">
+              <li class="subs"><a id='' href="msl_dragon_dungeon.html"><img class='menu_icon' src="/img/BossDragonW.png">
+                      <span class='menu_icon'>Dragon Dungeon</span></a>
+              </li>
+
+              <li class="subs"><a id='' href="msl_golem_dungeon.html"><img class='menu_icon' src="/img/BossGolemD.png">
+                      <span class='menu_icon'>Golem Dungeon</span></a>
+              </li>
+
+              <li class="subs"><a id='' href="msl_colossus_dungeon.html"><img class='menu_icon' src="/img/BossColossusR.png">
+                      <span class='menu_icon'>Colossus Dungeon</span></a>
+              </li>
+
+
+              <li class="subs hassubs"><a id=''><img class='menu_icon' src="/img/BossOverlord.png">
+                      <span class='menu_icon'>Stone Dungeon</span> <svg width="12" height="12" viewBox="0 0 12 12">
+                        <path class="sub_path" d="M 4 2 L 10 6 L 4 10 " fill-rule="evenodd" fill="white">
+                        </path>
+                      </svg> </a>
+                <ul class="dropdown">
+                  <li class="subs"><a id='' href="msl_star_dungeon.html"><img class='menu_icon' src="/img/BossOverlordMagic.png">
+                                <span class='menu_icon'>Star Dungeon</span></a></li>
+                  <li class="subs"><a id='' href="msl_dark_dungeon.html"><img class='menu_icon' src="/img/BossOverlordD.png">
+                                <span class='menu_icon'>Dark Dungeon</span></a></li>
+                  <li class="subs"><a id='' href="msl_fire_dungeon.html"><img class='menu_icon' src="/img/BossOverlord.png">
+                                <span class='menu_icon'>Fire Dungeon</span></a></li>
+                  <li class="subs"><a id='' href="msl_water_dungeon.html"><img class='menu_icon' src="/img/BossOverlordB.png">
+                                <span class='menu_icon'>Water Dungeon</span></a></li>
+                  <li class="subs"><a id='' href="msl_wood_dungeon.html"><img class='menu_icon' src="/img/BossOverlordG.png">
+                                <span class='menu_icon'>Wood Dungeon</span></a></li>
+                  <li class="subs"><a id='' href="msl_light_dungeon.html"><img class='menu_icon' src="/img/BossOverlordW.png">
+                                <span class='menu_icon'>Light Dungeon</span></a></li>
+                  <li class="subs"><a id='' href="msl_special_dungeon.html"><img class='menu_icon' src="/img/BossOverlordMagic.png">
+                                <span class='menu_icon'>Special Dungeon</span></a></li>
+                </ul>
+              </li>
+
+              <li class="subs"><a id='' href="msl_gold_dungeon.html"><img class='menu_icon' src="/img/BossGoldmick.png">
+                      <span class='menu_icon'>Gold Dungeon</span></a>
+              </li>
+            </ul>
+          </li>
+
+          <li><a href="msl_toc.html">Towere of Chaos DB</a></li>
+
+          <li class="hassubs">
+            <a href="#">Story Stage DB
+                  <svg width="12" height="12" viewBox="0 0 12 12">
+                    <path class="tab_path" d="M 2 4 L 10 4 L 6 8 Z" fill-rule="evenodd" fill="white">
+                    </path>
+                  </svg>
+                </a>
+
+            <ul class="dropdown">
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/Cocomaru.png">
+                  <span class='menu_icon'>Phantom Forest</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/Candla.png">
+                  <span class='menu_icon'>Lunar Valley</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/Seiren.png">
+                      <span class='menu_icon'>Aria Lake</span></a>
+              </li>
+
+              <li class="subs divider_bot"><a id='' href="#"><img class='menu_icon' src="/img/Flang.png">
+                  <span class='menu_icon'>Mirage Ruins</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/MonaB.png">
+                  <span class='menu_icon'>Pagos Coast</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/BethG.png">
+                  <span class='menu_icon'>Seabed Caves</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/MandragoraR.png">
+                  <span class='menu_icon'>Magma Crags</span>
+                </a>
+              </li>
+
+              <li class="subs divider_bot"><a id='' href="#"><img class='menu_icon' src="/img/Starkid.png">
+                  <span class='menu_icon'>Star Sanctuary</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/Shellpy.png">
+                  <span class='menu_icon'>Sky Falls</span>
+                </a>
+              </li>
+
+              <li class="subs divider_bot"><a id='' href="#"><img class='menu_icon' src="/img/Monk.png">
+                  <span class='menu_icon'>Slumbering City</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/Wendigo.png">
+                  <span class='menu_icon'>Glacial Plains</span>
+                </a>
+              </li>
+
+              <li class="subs"><a id='' href="#"><img class='menu_icon' src="/img/RadisG.png">
+                  <span class='menu_icon'>Aurora Plateau</span>
+                </a>
+              </li>
+            </ul>
+
+          </li>
+        </ul>
+        <br style="clear: both;">
+      </div>
+
+    </nav>
+
+  </section>
+
+
+
+  <main>
+    <div id="container">
+      <article id="main">
+        <section>
+          <h2>MSL Calculator</h2>
+
+
+        </section>
+
+        <div class="w3-row width_max">
+          <section id="main_body" class="w3-col width_max">
+            <form class="w3-col width_max">
+
+              <table class="w3-half " table-layout=fixed>
+                <tbody>
+                  <tr>
+                    <td rowspan="3">
+                      <div id="div_astromon_icon">
+                        <img id="img_mon_icon" class="img_1" src="img/Brotree.png">
+                        <img id="img_mon_grade" class="img_3" src="img/s6_.png">
+                        <img id="img_mon_element" class="monster_icon img_2" src="img/frame_evo2_tree.png">
+                      </div>
+                    </td>
+                    <td>
+
+                      <label>Astromon</label>
+                    </td>
+                    <td>
+
+                      <input id="input_astromon_name" list="astromon_unique_list" name="input_astromon_name" placeholder="Name" onchange="ChangeAstromonEvent(true)">
+                      <datalist id="astromon_unique_list">
+                      </datalist>
+
+                    </td>
+
+                    <td>
+
+                      <label>Lv</label>
+                    </td>
+                    <td>
+
+                      <select id="lvl_list" name="lvl_list" onchange="UpdateMonStat()">
+
+                      </select>
+
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>Element</label>
+
+                    </td>
+                    <td>
+
+                      <select id="element_list" name="element_list" onchange="ChangeAstromonEvent(false)">
+
+                      </select>
+
+                    </td>
+
+                    <td>
+
+                      <label>Awaken</label>
+                    </td>
+                    <td>
+
+                      <select id="awaken_list" name="awaken_list" onchange="UpdateMonStat()">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                      </select>
+
+                    </td>
+
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <label>Grade★</label>
+
+                    </td>
+                    <td>
+                      <select id="grade_list" name="grade" onchange="ChangeAstromonEvent(false)">
+                        <option value="6">★6</option>
+                        <option value="5">★5</option>
+                        <option value="4">★4</option>
+                        <option value="3">★3</option>
+                        <option value="2">★2</option>
+                        <option value="1">★1</option>
+                      </select>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+<!-- Enemy info -->
+              <table class="w3-half" table-layout=fixed border="1">
+                <tbody>
+                  <tr>
+
+                    <td>
+
+                      <div>Lv</idv>
+                    </td>
+                    <td>
+
+                      <div id="div_enemy_lv">
+                        99
+                      </div>
+
+                    </td>
+
+                    <td>
+
+                      <label>Stage</label>
+                    </td>
+                    <td>
+
+                      <select id="stage_list" name="stage_list" onchange="UpdateStage()">
+                        <option value="dun_dragon">Dragon Dungeon</option>
+                        <option value="dun_golem">Golem Dungeon</option>
+                        <option value="dun_colos">Colossus Dungeon</option>
+                        <option value="dun_toc">Tower of Chaos</option>
+                        <option value="dun_clan">Clan Defense</option>
+                      </select>
+
+                    </td>
+
+                    <td rowspan="3">
+                      <div id="div_enemy_icon">
+                        <img id="img_enemy_icon" class="img_1_right" src="img/BossDragonW.png">
+                        <img id="img_enemy_grade" class="img_3_right" src="img/s5_.png">
+                        <img id="img_enemy_element" class="monster_icon img_2_right" src="img/frame_evo1_light.png">
+                      </div>
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+
+
+                    </td>
+                    <td>
+
+
+
+                    </td>
+
+                    <td>
+
+                      <label>Floor</label>
+                    </td>
+                    <td>
+
+                      <select id="floor_list" name="floor_list" onchange="GenerateEnemy()">
+
+                      </select>
+
+                    </td>
+
+                  </tr>
+
+                  <tr>
+                    <td>
+
+
+                    </td>
+                    <td>
+
+
+                    </td>
+
+
+                    <td>
+
+                      <label>Enemy</label>
+                    </td>
+                    <td>
+
+                      <select id="enemy_list" name="enemy_list" onchange="UpdateEnemyStat()">
+
+                      </select>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+
+
+
+
+
+
+              <!-- <input type="submit"> -->
+            </form>
+
+
+          </section>
+
+        </div>
+
+
+        <div class="w3-row">
+
+          <table class="w3-third" table-layout=fixed>
+            <tbody>
+              <tr>
+                <td>
+                  <div>
+                    Stat
+                  </div>
+                </td>
+                <td>
+                  Original Value
+                </td>
+                <td>
+
+                </td>
+
+
+              </tr>
+
+
+
+              <tr>
+                <td>
+                  <div>
+                    Hp
+                  </div>
+                </td>
+                <td>
+                  <div id="div_hp">
+
+                  </div>
+                </td>
+                <td>
+
+
+                </td>
+
+
+              </tr>
+              <tr>
+                <td>
+                  Attack
+
+                </td>
+                <td>
+
+                  <div id="div_atk">
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Defense
+                </td>
+                <td>
+                  <div id="div_def">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Recovery
+                </td>
+                <td>
+                  <div id="div_heal">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Crit Dmg
+                </td>
+                <td>
+                  <div id="div_crit_dmg">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Crit Rate
+                </td>
+                <td>
+                  <div id="div_crit_rate">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Resist
+                </td>
+                <td>
+                  <div id="div_resist">
+                  </div>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+          <!-- Battle Stat -->
+
+          <table class="w3-third" table-layout=fixed>
+            <tbody>
+              <tr>
+                <td>
+                  <div>
+                    Stat
+                  </div>
+                </td>
+                <td>
+                  Battle Stat
+                </td>
+                <td>
+
+                </td>
+
+
+              </tr>
+
+
+
+              <tr>
+                <td>
+                  <div>
+                    9999
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    Normal Dmg
+                  </div>
+                </td>
+                <td>
+                  9999
+                </td>
+
+
+              </tr>
+              <tr>
+                <td>
+                  9999
+
+                </td>
+                <td>
+
+                  <div>
+                    Crit Dmg
+                  </div>
+
+                </td>
+
+                <td>
+                  9999
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Recovery
+                </td>
+                <td>
+                  <div id="div_heal">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Crit Dmg
+                </td>
+                <td>
+                  <div id="div_crit_dmg">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Crit Rate
+                </td>
+                <td>
+                  <div id="div_crit_rate">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Resist
+                </td>
+                <td>
+                  <div id="div_resist">
+                  </div>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+
+          <!-- Enemy Stat -->
+
+          <table class="w3-third" table-layout=fixed>
+            <tbody>
+              <tr>
+                <td>
+                  <div>
+                    Stat
+                  </div>
+                </td>
+                <td>
+                  Original Value
+                </td>
+                <td>
+
+                </td>
+
+
+              </tr>
+
+
+
+              <tr>
+                <td>
+                  <div>
+                    Hp
+                  </div>
+                </td>
+                <td>
+                  <div id="div_enemy_hp">
+
+                  </div>
+                </td>
+                <td>
+
+
+                </td>
+
+
+              </tr>
+              <tr>
+                <td>
+                  Attack
+
+                </td>
+                <td>
+
+                  <div id="div_enemy_atk">
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Defense
+                </td>
+                <td>
+                  <div id="div_enemy_def">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Recovery
+                </td>
+                <td>
+                  <div id="div_enemy_heal">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Crit Dmg
+                </td>
+                <td>
+                  <div id="div_enemy_crit_dmg">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Crit Rate
+                </td>
+                <td>
+                  <div id="div_enemy_crit_rate">
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr>
+                <td>
+                  Resist
+                </td>
+                <td>
+                  <div id="div_enemy_resist">
+                  </div>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        <div id="div_skill" class="w3-row">
+
+
+        </div>
+
+
+      </article>
+    </div>
+
+
+
+
+
+  </main>
+
+
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+
+
+
+
+  <!-- <footer>
+    <p>&copy; All resources used in this website are owned by respectative owners.</p>
+  </footer> -->
+
+</body>
+
+
+<script>
+  $('#nav_toggle').click(function(e) {
+    e.stopPropagation();
+    $(".sidenav").toggleClass('bar')
+  });
+  $('body').click(function(e) {
+    if ($('.sidenav').hasClass('bar')) {
+      $(".sidenav").toggleClass('bar')
+    }
+  })
+
+  $(window).click(function() {
+    var mySideNavSize = document.getElementById("my_sidenav_golem").style.width;
+
+    if (mySideNavSize > 0) {
+      document.getElementById("my_sidenav_golem").style.width = "0";
+      document.body.style.backgroundColor = "white";
+    }
+
+
+  });
+
+  window.onscroll = function() {
+    scrollFunction()
+  };
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      document.getElementById("myBtn").style.display = "block";
+    } else {
+      document.getElementById("myBtn").style.display = "none";
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+</script>
+
+
+
+
+</html>

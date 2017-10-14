@@ -211,21 +211,6 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
 
 
   for (i = 0; i < displayArray.length; i++) {
-
-
-    /* 		var newHeader = goog.dom.createDom('p', {'style': 'background-color:#EEE'},
-    			stringMap[displayArray[i][1]]); */
-
-    /* 			if(displayArray[i][8] == "stage_dungeon_golem") {
-    				golemArray = displayArray[i][11];
-    			} */
-
-    // console.log(displayArray[i][8]);
-
-    // if (displayArray[i][8] == dunType) {
-    //   golemArray = displayArray[i][11];
-    // }
-
     var splitDun = dunType.toLowerCase().split("|");
 
     var enumDunType = ReadEnumFromNumber(proto.msggamedata.BattleType, displayArray[i][5]).toLowerCase();
@@ -255,9 +240,6 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
       value: stringMap[displayArray[i][1]]
     })
 
-    /* console.log (displayArray[i][1]); */
-
-    /* goog.dom.appendChild(document.body, newHeader);	 */
   }
 
   var main_body = goog.dom.getElement('template_body');
