@@ -786,3 +786,21 @@ label{color:white}
 /*#div_astromon_icon {
   left: 0;
 }*/
+
+#main {
+  overflow: hidden;
+}
+
+.rune_size {
+  width: 40px;
+  height: auto;
+}
+
+select {
+  font-family: monospace;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 20px;
+}

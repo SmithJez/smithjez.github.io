@@ -255,6 +255,8 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
     var monBossObj = monMap[stageMonBoss[1]];
     var bossStat = CalStat(stageMonBoss, monBossObj);
 
+
+
     var floor_lvl = i + 1;
 
     var floor_div = goog.dom.createDom('div', {"id":"floor_id", "class": "floor_div_" + floor_lvl  } , "");
@@ -486,6 +488,7 @@ function GenerateDungeon(url, url2, url3, url4, url5, url6, dunType) {
       var stageMonMinionBoss = dunMonMap[fixedMon2[z]];
       var monMinionBossObj = monMap[dunMonMap[stageMonMinionBoss[0]][1]];
       var minionBossStat = CalStat(stageMonMinionBoss, monMinionBossObj);
+    console.log(stringMap[monMinionBossObj[1]] + " : " +monMinionBossObj[39])
 
 
       CreateStatDom(stringMap, group_i_1, monMinionBossObj, stageMonMinionBoss, minionBossStat, "black_2");

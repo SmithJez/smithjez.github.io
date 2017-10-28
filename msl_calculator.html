@@ -258,6 +258,7 @@
 
 
 
+
   <main>
     <div id="container">
       <article id="main">
@@ -267,315 +268,739 @@
 
         </section>
 
-        <div class="w3-row width_max">
-          <section id="main_body" class="w3-col width_max">
-            <form class="w3-col width_max">
+        <div id="left_zone" class="w3-half">
+          <table class="width_max " table-layout=fixed>
+            <tbody>
+              <tr>
+                <td rowspan="3">
+                  <div id="div_astromon_icon">
+                    <img id="img_mon_icon" class="img_1" src="img/Brotree.png">
+                    <img id="img_mon_grade" class="img_3" src="img/s6_.png">
+                    <img id="img_mon_element" class="monster_icon img_2" src="img/frame_evo2_tree.png">
+                  </div>
+                </td>
+                <td>
 
-              <table class="w3-half " table-layout=fixed>
-                <tbody>
-                  <tr>
-                    <td rowspan="3">
-                      <div id="div_astromon_icon">
-                        <img id="img_mon_icon" class="img_1" src="img/Brotree.png">
-                        <img id="img_mon_grade" class="img_3" src="img/s6_.png">
-                        <img id="img_mon_element" class="monster_icon img_2" src="img/frame_evo2_tree.png">
-                      </div>
-                    </td>
-                    <td>
+                  <label>Astromon</label>
+                </td>
+                <td>
 
-                      <label>Astromon</label>
-                    </td>
-                    <td>
+                  <input id="input_astromon_name" list="astromon_unique_list" name="input_astromon_name" placeholder="Name" onchange="ChangeAstromonEvent(true)" onfocus="ClearAstromonName()" onblur="GetCahcedName()">
+                  <datalist id="astromon_unique_list">
+                  </datalist>
 
-                      <input id="input_astromon_name" list="astromon_unique_list" name="input_astromon_name" placeholder="Name" onchange="ChangeAstromonEvent(true)">
-                      <datalist id="astromon_unique_list">
-                      </datalist>
+                </td>
 
-                    </td>
+                <td>
 
-                    <td>
+                  <label>Lv</label>
+                </td>
+                <td>
 
-                      <label>Lv</label>
-                    </td>
-                    <td>
+                  <select id="lvl_list" name="lvl_list" onchange="UpdateMonStat()">
 
-                      <select id="lvl_list" name="lvl_list" onchange="UpdateMonStat()">
+                  </select>
 
-                      </select>
+                </td>
 
-                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Element</label>
 
-                  </tr>
-                  <tr>
-                    <td>
-                      <label>Element</label>
+                </td>
+                <td>
 
-                    </td>
-                    <td>
+                  <select id="element_list" name="element_list" onchange="ChangeAstromonEvent(false)">
 
-                      <select id="element_list" name="element_list" onchange="ChangeAstromonEvent(false)">
+                  </select>
 
-                      </select>
+                </td>
 
-                    </td>
+                <td>
 
-                    <td>
+                  <label>Awaken</label>
+                </td>
+                <td>
 
-                      <label>Awaken</label>
-                    </td>
-                    <td>
+                  <select id="awaken_list" name="awaken_list" onchange="UpdateMonStat()">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
 
-                      <select id="awaken_list" name="awaken_list" onchange="UpdateMonStat()">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </select>
+                </td>
 
-                    </td>
+              </tr>
 
-                  </tr>
+              <tr>
+                <td>
+                  <label>Grade★</label>
 
-                  <tr>
-                    <td>
-                      <label>Grade★</label>
+                </td>
+                <td>
+                  <select id="grade_list" name="grade" onchange="ChangeAstromonEvent(false)">
+                    <option value="6">★6</option>
+                    <option value="5">★5</option>
+                    <option value="4">★4</option>
+                    <option value="3">★3</option>
+                    <option value="2">★2</option>
+                    <option value="1">★1</option>
+                  </select>
 
-                    </td>
-                    <td>
-                      <select id="grade_list" name="grade" onchange="ChangeAstromonEvent(false)">
-                        <option value="6">★6</option>
-                        <option value="5">★5</option>
-                        <option value="4">★4</option>
-                        <option value="3">★3</option>
-                        <option value="2">★2</option>
-                        <option value="1">★1</option>
-                      </select>
+                </td>
 
-                    </td>
+              </tr>
 
-                  </tr>
+            </tbody>
 
-                </tbody>
+          </table>
 
-              </table>
+          <div class="w3-col">
+            <table class="w3-half max-width" table-layout=fixed>
+              <caption>Stat</caption>
+              <tbody>
+                <tr>
+                  <td>
+                    <div>
 
-<!-- Enemy info -->
-              <table class="w3-half" table-layout=fixed border="1">
-                <tbody>
-                  <tr>
+                    </div>
+                  </td>
+                  <td>
+                    Original Value
+                  </td>
+                  <td>
+                    Gem Value
+                  </td>
 
-                    <td>
 
-                      <div>Lv</idv>
-                    </td>
-                    <td>
+                </tr>
 
-                      <div id="div_enemy_lv">
-                        99
-                      </div>
 
-                    </td>
 
-                    <td>
+                <tr>
+                  <td>
+                    <div>
+                      Hp
+                    </div>
+                  </td>
+                  <td>
+                    <div id="div_hp">
 
-                      <label>Stage</label>
-                    </td>
-                    <td>
+                    </div>
+                  </td>
+                  <td>
 
-                      <select id="stage_list" name="stage_list" onchange="UpdateStage()">
-                        <option value="dun_dragon">Dragon Dungeon</option>
-                        <option value="dun_golem">Golem Dungeon</option>
-                        <option value="dun_colos">Colossus Dungeon</option>
-                        <option value="dun_toc">Tower of Chaos</option>
-                        <option value="dun_clan">Clan Defense</option>
-                      </select>
 
-                    </td>
+                  </td>
 
-                    <td rowspan="3">
-                      <div id="div_enemy_icon">
-                        <img id="img_enemy_icon" class="img_1_right" src="img/BossDragonW.png">
-                        <img id="img_enemy_grade" class="img_3_right" src="img/s5_.png">
-                        <img id="img_enemy_element" class="monster_icon img_2_right" src="img/frame_evo1_light.png">
-                      </div>
-                    </td>
 
-                  </tr>
-                  <tr>
-                    <td>
+                </tr>
+                <tr>
+                  <td>
+                    Attack
 
+                  </td>
+                  <td>
 
-                    </td>
-                    <td>
+                    <div id="div_atk">
 
+                    </div>
 
+                  </td>
 
-                    </td>
+                  <td>
+                    <div id="div_gem_atk">
 
-                    <td>
+                    </div>
 
-                      <label>Floor</label>
-                    </td>
-                    <td>
 
-                      <select id="floor_list" name="floor_list" onchange="GenerateEnemy()">
+                  </td>
 
-                      </select>
+                </tr>
 
-                    </td>
+                <tr>
+                  <td>
+                    Defense
+                  </td>
+                  <td>
+                    <div id="div_def">
+                    </div>
+                  </td>
 
-                  </tr>
+                </tr>
 
-                  <tr>
-                    <td>
+                <tr>
+                  <td>
+                    Recovery
+                  </td>
+                  <td>
+                    <div id="div_heal">
+                    </div>
+                  </td>
 
+                </tr>
 
-                    </td>
-                    <td>
+                <tr>
+                  <td>
+                    Crit Dmg
+                  </td>
+                  <td>
+                    <div id="div_crit_dmg">
+                    </div>
+                  </td>
 
+                </tr>
 
-                    </td>
+                <tr>
+                  <td>
+                    Crit Rate
+                  </td>
+                  <td>
+                    <div id="div_crit_rate">
+                    </div>
+                  </td>
 
+                </tr>
 
-                    <td>
+                <tr>
+                  <td>
+                    Resist
+                  </td>
+                  <td>
+                    <div id="div_resist">
+                    </div>
+                  </td>
 
-                      <label>Enemy</label>
-                    </td>
-                    <td>
+                </tr>
 
-                      <select id="enemy_list" name="enemy_list" onchange="UpdateEnemyStat()">
+                <tr>
+                  <td>
+                    Sp
+                  </td>
+                  <td>
+                    <div id="div_sp">
+                    </div>
+                  </td>
 
-                      </select>
+                </tr>
 
-                    </td>
+              </tbody>
 
-                  </tr>
+            </table>
+            <table class="w3-half max-width" table-layout=fixed>
+              <caption>Battle's Stat</caption>
+              <tbody>
+                <tr>
+                  <td>
+                    Type
+                  </td>
+                  <td>
+                    Value
+                  </td>
 
-                </tbody>
+                </tr>
 
-              </table>
 
 
+                <tr>
+                  <td>
+                    <div>
+                      Passive Damage
+                    </div>
+                  </td>
+                  <td>
+                    <div id="div_hp">
 
+                    </div>
+                  </td>
+                  <td>
 
 
+                  </td>
 
 
-              <!-- <input type="submit"> -->
-            </form>
+                </tr>
 
+                <tr>
+                  <td>
+                    Passive Dmg/Hp
+                  </td>
+                  <td>
+                    <div id="div_def">
+                    </div>
+                  </td>
 
-          </section>
+                </tr>
+                <tr>
+                  <td>
+                    Passive Crit Dmg
+
+                  </td>
+                  <td>
+
+                    <div id="div_atk">
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Passive Crit Rate
+                  </td>
+                  <td>
+                    <div id="div_def">
+                    </div>
+                  </td>
+
+                </tr>
+
+
+
+                <tr>
+                  <td>
+                    Passive Crit Dmg/Hp
+                  </td>
+                  <td>
+                    <div id="div_def">
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Active Damage
+                  </td>
+                  <td>
+                    <div id="div_heal">
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Active Crit Dmg
+                  </td>
+                  <td>
+                    <div id="div_crit_dmg">
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Active Crit Rate
+                  </td>
+                  <td>
+                    <div id="div_crit_rate">
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Super Damage
+                  </td>
+                  <td>
+                    <div id="div_resist">
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Super Crit Dmg
+                  </td>
+                  <td>
+                    <div id="div_resist">
+                    </div>
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Super Crit Rate
+                  </td>
+                  <td>
+                    <div id="div_resist">
+                    </div>
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+
+
+          </div>
+
+          <div class="gem_div">
+            <table class="gem_table max-width" >
+              <tbody>
+                <tr>
+                  <td >
+
+                    <img id="gem_icon" class="rune_size" src="img/rune_icon_blue_diamond_1.png" />
+
+                  </td>
+                  <td colspan="5">
+                    <select id="gem_set_list" name="gem_set_list" onchange="ChangeGemSet()">
+
+                    </select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+                    Gem#1
+                  </td>
+                  <td>
+                    <select id="gem_1_grade_list" name="gem_1_grade_list" onchange="ChangeGemStat()">
+                      <option value="6">★6</option>
+                      <option value="5">★5</option>
+                      <option value="4">★4</option>
+                      <option value="3">★3</option>
+                      <option value="2">★2</option>
+                      <option value="1">★1</option>
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem_1_type_list" name="gem_1_type_list" onchange="ChangeGemStat()">
+                      <option value="RET_ADDHPPERCENT">Hp%</option>
+                      <option value="RET_ADDHP">Hp</option>
+                      <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                      <option value="RET_ADDATTACK">Atk</option>
+                      <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                      <option value="RET_ADDDEFENCE">Def</option>
+                      <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                      <option value="RET_ADDHEAL">Recovery</option>
+                      <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                      <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                      <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                    </select>
+                  </td>
+
+                  <td>
+                    <select id="gem1_upgrade_list" name="gem1_upgrade_list" onchange="ChangeGemStat()">
+                      <option value="15">+15</option>
+                      <option value="14">+14</option>
+                      <option value="13">+13</option>
+                      <option value="12">+12</option>
+                      <option value="11">+11</option>
+                      <option value="10">+10</option>
+                      <option value="9">+9</option>
+                      <option value="8">+8</option>
+                      <option value="7">+7</option>
+                      <option value="6">+6</option>
+                      <option value="5">+5</option>
+                      <option value="4">+4</option>
+                      <option value="3">+3</option>
+                      <option value="2">+2</option>
+                      <option value="1">+1</option>
+                      <option value="0">+0</option>
+                    </select>
+
+                  </td>
+
+
+
+                  <td id="gem_1">
+                    +68%
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                    Sub Stat#1
+                  </td>
+
+                  <td>
+                    <select id="gem_1_sub_stat_type_list" name="gem_1_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_1_sub_stat_type_list, gem1_sub_stat_upgrade_list, gem_1_sub_stat_1_list )">
+                      <option label=" "></option>
+                      <option value="RET_ADDHPPERCENT">Hp%</option>
+                      <option value="RET_ADDHP">Hp</option>
+                      <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                      <option value="RET_ADDATTACK">Atk</option>
+                      <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                      <option value="RET_ADDDEFENCE">Def</option>
+                      <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                      <option value="RET_ADDHEAL">Recovery</option>
+                      <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                      <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                      <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem1_sub_stat_upgrade_list" name="gem1_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_1_sub_stat_type_list, gem1_sub_stat_upgrade_list, gem_1_sub_stat_1_list)">
+
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem_1_sub_stat_1_list" name="gem_1_sub_stat_1_list" onchange="ChangeGemStat()">
+
+                    </select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                    Sub Stat#2
+                  </td>
+
+                  <td>
+                    <select id="gem_2_sub_stat_type_list" name="gem_2_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_2_sub_stat_type_list, gem2_sub_stat_upgrade_list, gem_2_sub_stat_2_list )">
+                      <option label=" "></option>
+                      <option value="RET_ADDHPPERCENT">Hp%</option>
+                      <option value="RET_ADDHP">Hp</option>
+                      <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                      <option value="RET_ADDATTACK">Atk</option>
+                      <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                      <option value="RET_ADDDEFENCE">Def</option>
+                      <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                      <option value="RET_ADDHEAL">Recovery</option>
+                      <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                      <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                      <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem2_sub_stat_upgrade_list" name="gem2_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_2_sub_stat_type_list, gem2_sub_stat_upgrade_list, gem_2_sub_stat_2_list)">
+
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem_2_sub_stat_2_list" name="gem_2_sub_stat_2_list" onchange="ChangeGemStat()">
+
+                    </select>
+
+                  </td>
+
+                </tr>
+
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                    Sub Stat#3
+                  </td>
+
+                  <td>
+                    <select id="gem_3_sub_stat_type_list" name="gem_3_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_3_sub_stat_type_list, gem3_sub_stat_upgrade_list, gem_3_sub_stat_3_list )">
+                      <option label=" "></option>
+                      <option value="RET_ADDHPPERCENT">Hp%</option>
+                      <option value="RET_ADDHP">Hp</option>
+                      <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                      <option value="RET_ADDATTACK">Atk</option>
+                      <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                      <option value="RET_ADDDEFENCE">Def</option>
+                      <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                      <option value="RET_ADDHEAL">Recovery</option>
+                      <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                      <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                      <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem3_sub_stat_upgrade_list" name="gem3_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_3_sub_stat_type_list, gem3_sub_stat_upgrade_list, gem_3_sub_stat_3_list)">
+
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem_3_sub_stat_3_list" name="gem_3_sub_stat_3_list" onchange="ChangeGemStat()">
+
+                    </select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                    Sub Stat#4
+                  </td>
+
+                  <td>
+                    <select id="gem_4_sub_stat_type_list" name="gem_4_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_4_sub_stat_type_list, gem4_sub_stat_upgrade_list, gem_4_sub_stat_4_list )">
+                      <option label=" "></option>
+                      <option value="RET_ADDHPPERCENT">Hp%</option>
+                      <option value="RET_ADDHP">Hp</option>
+                      <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                      <option value="RET_ADDATTACK">Atk</option>
+                      <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                      <option value="RET_ADDDEFENCE">Def</option>
+                      <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                      <option value="RET_ADDHEAL">Recovery</option>
+                      <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                      <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                      <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem4_sub_stat_upgrade_list" name="gem4_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_4_sub_stat_type_list, gem4_sub_stat_upgrade_list, gem_4_sub_stat_4_list)">
+
+                    </select>
+
+                  </td>
+
+                  <td>
+                    <select id="gem_4_sub_stat_4_list" name="gem_4_sub_stat_4_list" onchange="ChangeGemStat()">
+
+                    </select>
+
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </table>
+
+
+          </div>
+
+
+          <div id="div_skill" class="w3-row">
+
+
+          </div>
 
         </div>
 
-
-        <div class="w3-row">
-
-          <table class="w3-third" table-layout=fixed>
+        <div id="right_zone" class="w3-half">
+          <table class="width_max" table-layout=fixed border="1">
             <tbody>
               <tr>
+
                 <td>
-                  <div>
-                    Stat
-                  </div>
-                </td>
-                <td>
-                  Original Value
+
+                  <div>Lv</div>
                 </td>
                 <td>
 
-                </td>
-
-
-              </tr>
-
-
-
-              <tr>
-                <td>
-                  <div>
-                    Hp
-                  </div>
-                </td>
-                <td>
-                  <div id="div_hp">
-
-                  </div>
-                </td>
-                <td>
-
-
-                </td>
-
-
-              </tr>
-              <tr>
-                <td>
-                  Attack
-
-                </td>
-                <td>
-
-                  <div id="div_atk">
-
+                  <div id="div_enemy_lv">
+                    99
                   </div>
 
                 </td>
 
-              </tr>
-
-              <tr>
                 <td>
-                  Defense
+
+                  <label>Stage</label>
                 </td>
                 <td>
-                  <div id="div_def">
+
+                  <select id="stage_list" name="stage_list" onchange="UpdateStage()">
+                    <option value="dun_dragon">Dragon Dungeon</option>
+                    <option value="dun_golem">Golem Dungeon</option>
+                    <option value="dun_colos">Colossus Dungeon</option>
+                    <option value="dun_toc">Tower of Chaos</option>
+                    <option value="dun_clan">Clan Defense</option>
+                  </select>
+
+                </td>
+
+                <td rowspan="3">
+                  <div id="div_enemy_icon">
+                    <img id="img_enemy_icon" class="img_1_right" src="img/BossDragonW.png">
+                    <img id="img_enemy_grade" class="img_3_right" src="img/s5_.png">
+                    <img id="img_enemy_element" class="monster_icon img_2_right" src="img/frame_evo1_light.png">
                   </div>
                 </td>
 
               </tr>
-
               <tr>
                 <td>
-                  Recovery
+
+
                 </td>
                 <td>
-                  <div id="div_heal">
-                  </div>
+
+
+
+                </td>
+
+                <td>
+
+                  <label>Floor</label>
+                </td>
+                <td>
+
+                  <select id="floor_list" name="floor_list" onchange="GenerateEnemy()">
+
+                  </select>
+
                 </td>
 
               </tr>
 
               <tr>
                 <td>
-                  Crit Dmg
+
+
                 </td>
                 <td>
-                  <div id="div_crit_dmg">
-                  </div>
+
+
                 </td>
 
-              </tr>
 
-              <tr>
                 <td>
-                  Crit Rate
+
+                  <label>Enemy</label>
                 </td>
                 <td>
-                  <div id="div_crit_rate">
-                  </div>
-                </td>
 
-              </tr>
+                  <select id="enemy_list" name="enemy_list" onchange="UpdateEnemyStat()">
 
-              <tr>
-                <td>
-                  Resist
-                </td>
-                <td>
-                  <div id="div_resist">
-                  </div>
+                  </select>
+
                 </td>
 
               </tr>
@@ -583,125 +1008,6 @@
             </tbody>
 
           </table>
-
-          <!-- Battle Stat -->
-
-          <table class="w3-third" table-layout=fixed>
-            <tbody>
-              <tr>
-                <td>
-                  <div>
-                    Stat
-                  </div>
-                </td>
-                <td>
-                  Battle Stat
-                </td>
-                <td>
-
-                </td>
-
-
-              </tr>
-
-
-
-              <tr>
-                <td>
-                  <div>
-                    9999
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    Normal Dmg
-                  </div>
-                </td>
-                <td>
-                  9999
-                </td>
-
-
-              </tr>
-              <tr>
-                <td>
-                  9999
-
-                </td>
-                <td>
-
-                  <div>
-                    Crit Dmg
-                  </div>
-
-                </td>
-
-                <td>
-                  9999
-                </td>
-
-              </tr>
-
-              <tr>
-                <td>
-
-                </td>
-                <td>
-
-                </td>
-
-              </tr>
-
-              <tr>
-                <td>
-                  Recovery
-                </td>
-                <td>
-                  <div id="div_heal">
-                  </div>
-                </td>
-
-              </tr>
-
-              <tr>
-                <td>
-                  Crit Dmg
-                </td>
-                <td>
-                  <div id="div_crit_dmg">
-                  </div>
-                </td>
-
-              </tr>
-
-              <tr>
-                <td>
-                  Crit Rate
-                </td>
-                <td>
-                  <div id="div_crit_rate">
-                  </div>
-                </td>
-
-              </tr>
-
-              <tr>
-                <td>
-                  Resist
-                </td>
-                <td>
-                  <div id="div_resist">
-                  </div>
-                </td>
-
-              </tr>
-
-            </tbody>
-
-          </table>
-
-
-          <!-- Enemy Stat -->
 
           <table class="w3-third" table-layout=fixed>
             <tbody>
@@ -817,10 +1123,10 @@
 
         </div>
 
-        <div id="div_skill" class="w3-row">
 
 
-        </div>
+
+
 
 
       </article>
@@ -883,6 +1189,8 @@
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   }
+
+
 </script>
 
 
