@@ -391,7 +391,9 @@
                     </div>
                   </td>
                   <td>
+                    <div id="div_gem_hp">
 
+                    </div>
 
                   </td>
 
@@ -429,6 +431,14 @@
                     </div>
                   </td>
 
+                  <td>
+                    <div id="div_gem_def">
+
+                    </div>
+
+
+                  </td>
+
                 </tr>
 
                 <tr>
@@ -438,6 +448,14 @@
                   <td>
                     <div id="div_heal">
                     </div>
+                  </td>
+
+                  <td>
+                    <div id="div_gem_heal">
+
+                    </div>
+
+
                   </td>
 
                 </tr>
@@ -451,6 +469,14 @@
                     </div>
                   </td>
 
+                  <td>
+                    <div id="div_gem_crit_dmg">
+
+                    </div>
+
+
+                  </td>
+
                 </tr>
 
                 <tr>
@@ -462,6 +488,14 @@
                     </div>
                   </td>
 
+                  <td>
+                    <div id="div_gem_crit_rate">
+
+                    </div>
+
+
+                  </td>
+
                 </tr>
 
                 <tr>
@@ -471,6 +505,14 @@
                   <td>
                     <div id="div_resist">
                     </div>
+                  </td>
+
+                  <td>
+                    <div id="div_gem_resist">
+
+                    </div>
+
+
                   </td>
 
                 </tr>
@@ -668,7 +710,8 @@
                     Gem#1
                   </td>
                   <td>
-                    <select id="gem_1_grade_list" name="gem_1_grade_list" onchange="ChangeGemStat()">
+                    <select id="gem_1_grade_list" name="gem_1_grade_list" onchange="ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
+                      <option value="" label=" "></option>
                       <option value="6">★6</option>
                       <option value="5">★5</option>
                       <option value="4">★4</option>
@@ -680,47 +723,22 @@
                   </td>
 
                   <td>
-                    <select id="gem_1_type_list" name="gem_1_type_list" onchange="ChangeGemStat()">
-                      <option value="RET_ADDHPPERCENT">Hp%</option>
-                      <option value="RET_ADDHP">Hp</option>
-                      <option value="RET_ADDATTACKPERCENT">Atk%</option>
-                      <option value="RET_ADDATTACK">Atk</option>
-                      <option value="RET_ADDDEFENCEPERCENT">Def%</option>
-                      <option value="RET_ADDDEFENCE">Def</option>
-                      <option value="RET_ADDHEALPERCENT">Recovery%</option>
-                      <option value="RET_ADDHEAL">Recovery</option>
-                      <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
-                      <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
-                      <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                    <select class="gem_main_type" id="gem_1_type_list" name="gem_1_type_list" onchange="ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
+
                     </select>
                   </td>
 
                   <td>
-                    <select id="gem1_upgrade_list" name="gem1_upgrade_list" onchange="ChangeGemStat()">
-                      <option value="15">+15</option>
-                      <option value="14">+14</option>
-                      <option value="13">+13</option>
-                      <option value="12">+12</option>
-                      <option value="11">+11</option>
-                      <option value="10">+10</option>
-                      <option value="9">+9</option>
-                      <option value="8">+8</option>
-                      <option value="7">+7</option>
-                      <option value="6">+6</option>
-                      <option value="5">+5</option>
-                      <option value="4">+4</option>
-                      <option value="3">+3</option>
-                      <option value="2">+2</option>
-                      <option value="1">+1</option>
-                      <option value="0">+0</option>
+                    <select id="gem_1_upgrade_list" name="gem_1_upgrade_list" onchange="ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
+
                     </select>
 
                   </td>
 
 
 
-                  <td id="gem_1">
-                    +68%
+                  <td id="gem_1_list">
+                    +0
                   </td>
 
                 </tr>
@@ -735,8 +753,8 @@
                   </td>
 
                   <td>
-                    <select id="gem_1_sub_stat_type_list" name="gem_1_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_1_sub_stat_type_list, gem1_sub_stat_upgrade_list, gem_1_sub_stat_1_list )">
-                      <option label=" "></option>
+                    <select class="gem_type gem_1_sub_stat_type" id="gem_1_sub_stat_type_1_list" name="gem_1_sub_stat_type_1_list" onchange="ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list )">
+                      <option value="blank" label=" "></option>
                       <option value="RET_ADDHPPERCENT">Hp%</option>
                       <option value="RET_ADDHP">Hp</option>
                       <option value="RET_ADDATTACKPERCENT">Atk%</option>
@@ -753,14 +771,14 @@
                   </td>
 
                   <td>
-                    <select id="gem1_sub_stat_upgrade_list" name="gem1_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_1_sub_stat_type_list, gem1_sub_stat_upgrade_list, gem_1_sub_stat_1_list)">
+                    <select class="gem_1_sub_stat_upgrade" id="gem1_sub_stat_upgrade_1_list" name="gem1_sub_stat_upgrade_1_list" onchange="ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list)">
 
                     </select>
 
                   </td>
 
                   <td>
-                    <select id="gem_1_sub_stat_1_list" name="gem_1_sub_stat_1_list" onchange="ChangeGemStat()">
+                    <select class="gem_1_sub_stat_value" id="gem_1_sub_stat_1_list" name="gem_1_sub_stat_1_list" onchange="ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
 
                     </select>
 
@@ -778,8 +796,8 @@
                   </td>
 
                   <td>
-                    <select id="gem_2_sub_stat_type_list" name="gem_2_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_2_sub_stat_type_list, gem2_sub_stat_upgrade_list, gem_2_sub_stat_2_list )">
-                      <option label=" "></option>
+                    <select class="gem_type gem_1_sub_stat_type" id="gem_1_sub_stat_type_2_list" name="gem_1_sub_stat_type_2_list" onchange="ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list )">
+                      <option value="blank" label=" "></option>
                       <option value="RET_ADDHPPERCENT">Hp%</option>
                       <option value="RET_ADDHP">Hp</option>
                       <option value="RET_ADDATTACKPERCENT">Atk%</option>
@@ -796,14 +814,14 @@
                   </td>
 
                   <td>
-                    <select id="gem2_sub_stat_upgrade_list" name="gem2_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_2_sub_stat_type_list, gem2_sub_stat_upgrade_list, gem_2_sub_stat_2_list)">
+                    <select class="gem_1_sub_stat_upgrade" id="gem1_sub_stat_upgrade_2_list" name="gem1_sub_stat_upgrade_2_list" onchange="ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list)">
 
                     </select>
 
                   </td>
 
                   <td>
-                    <select id="gem_2_sub_stat_2_list" name="gem_2_sub_stat_2_list" onchange="ChangeGemStat()">
+                    <select class="gem_1_sub_stat_value" id="gem_1_sub_stat_2_list" name="gem_1_sub_stat_2_list" onchange="ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
 
                     </select>
 
@@ -822,8 +840,8 @@
                   </td>
 
                   <td>
-                    <select id="gem_3_sub_stat_type_list" name="gem_3_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_3_sub_stat_type_list, gem3_sub_stat_upgrade_list, gem_3_sub_stat_3_list )">
-                      <option label=" "></option>
+                    <select class="gem_type gem_1_sub_stat_type" id="gem_1_sub_stat_type_3_list" name="gem_1_sub_stat_type_3_list" onchange="ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list )">
+                      <option value="blank" label=" "></option>
                       <option value="RET_ADDHPPERCENT">Hp%</option>
                       <option value="RET_ADDHP">Hp</option>
                       <option value="RET_ADDATTACKPERCENT">Atk%</option>
@@ -840,14 +858,14 @@
                   </td>
 
                   <td>
-                    <select id="gem3_sub_stat_upgrade_list" name="gem3_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_3_sub_stat_type_list, gem3_sub_stat_upgrade_list, gem_3_sub_stat_3_list)">
+                    <select class="gem_1_sub_stat_upgrade" id="gem1_sub_stat_upgrade_3_list" name="gem1_sub_stat_upgrade_3_list" onchange="ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list)">
 
                     </select>
 
                   </td>
 
                   <td>
-                    <select id="gem_3_sub_stat_3_list" name="gem_3_sub_stat_3_list" onchange="ChangeGemStat()">
+                    <select class="gem_1_sub_stat_value" id="gem_1_sub_stat_3_list" name="gem_1_sub_stat_3_list" onchange="ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
 
                     </select>
 
@@ -865,8 +883,8 @@
                   </td>
 
                   <td>
-                    <select id="gem_4_sub_stat_type_list" name="gem_4_sub_stat_type_list" onchange="ChangeGemSubStatType(gem_4_sub_stat_type_list, gem4_sub_stat_upgrade_list, gem_4_sub_stat_4_list )">
-                      <option label=" "></option>
+                    <select class="gem_type gem_1_sub_stat_type" id="gem_1_sub_stat_type_4_list" name="gem_1_sub_stat_type_4_list" onchange="ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list )">
+                      <option value="blank" label=" "></option>
                       <option value="RET_ADDHPPERCENT">Hp%</option>
                       <option value="RET_ADDHP">Hp</option>
                       <option value="RET_ADDATTACKPERCENT">Atk%</option>
@@ -883,20 +901,446 @@
                   </td>
 
                   <td>
-                    <select id="gem4_sub_stat_upgrade_list" name="gem4_sub_stat_upgrade_list" onchange="ChangeGemSubStatUpgrade(gem_4_sub_stat_type_list, gem4_sub_stat_upgrade_list, gem_4_sub_stat_4_list)">
+                    <select class="gem_1_sub_stat_upgrade" id="gem1_sub_stat_upgrade_4_list" name="gem1_sub_stat_upgrade_4_list" onchange="ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list)">
 
                     </select>
 
                   </td>
 
                   <td>
-                    <select id="gem_4_sub_stat_4_list" name="gem_4_sub_stat_4_list" onchange="ChangeGemStat()">
+                    <select class="gem_1_sub_stat_value" id="gem_1_sub_stat_4_list" name="gem_1_sub_stat_4_list" onchange="ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list)">
 
                     </select>
 
                   </td>
 
                 </tr>
+
+                <tr>
+                  <td>
+                	Gem#2
+                  </td>
+                  <td>
+                	<select id="gem_2_grade_list" name="gem_2_grade_list" onchange="ChangeGemMainGrade(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+                	  <option value="" label=" "></option>
+                	  <option value="6">★6</option>
+                	  <option value="5">★5</option>
+                	  <option value="4">★4</option>
+                	  <option value="3">★3</option>
+                	  <option value="2">★2</option>
+                	  <option value="1">★1</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_main_type" id="gem_2_type_list" name="gem_2_type_list" onchange="ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+
+                	</select>
+                  </td>
+
+                  <td>
+                	<select id="gem_2_upgrade_list" name="gem_2_upgrade_list" onchange="ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+
+                	</select>
+
+                  </td>
+
+
+
+                  <td id="gem_2_list">
+                	+0
+                  </td>
+
+                </tr>
+
+                <tr>
+
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#1
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_2_sub_stat_type" id="gem_2_sub_stat_type_1_list" name="gem_2_sub_stat_type_1_list" onchange="ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_upgrade" id="gem2_sub_stat_upgrade_1_list" name="gem2_sub_stat_upgrade_1_list" onchange="ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_value" id="gem_2_sub_stat_1_list" name="gem_2_sub_stat_1_list" onchange="ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#2
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_2_sub_stat_type" id="gem_2_sub_stat_type_2_list" name="gem_2_sub_stat_type_2_list" onchange="ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_upgrade" id="gem2_sub_stat_upgrade_2_list" name="gem2_sub_stat_upgrade_2_list" onchange="ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_value" id="gem_2_sub_stat_2_list" name="gem_2_sub_stat_2_list" onchange="ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#3
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_2_sub_stat_type" id="gem_2_sub_stat_type_3_list" name="gem_2_sub_stat_type_3_list" onchange="ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_upgrade" id="gem2_sub_stat_upgrade_3_list" name="gem2_sub_stat_upgrade_3_list" onchange="ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_value" id="gem_2_sub_stat_3_list" name="gem_2_sub_stat_3_list" onchange="ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#4
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_2_sub_stat_type" id="gem_2_sub_stat_type_4_list" name="gem_2_sub_stat_type_4_list" onchange="ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_upgrade" id="gem2_sub_stat_upgrade_4_list" name="gem2_sub_stat_upgrade_4_list" onchange="ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_2_sub_stat_value" id="gem_2_sub_stat_4_list" name="gem_2_sub_stat_4_list" onchange="ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+
+                <tr>
+                  <td>
+                	Gem#3
+                  </td>
+                  <td>
+                	<select id="gem_3_grade_list" name="gem_3_grade_list" onchange="ChangeGemMainGrade(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+                	  <option value="" label=" "></option>
+                	  <option value="6">★6</option>
+                	  <option value="5">★5</option>
+                	  <option value="4">★4</option>
+                	  <option value="3">★3</option>
+                	  <option value="2">★2</option>
+                	  <option value="1">★1</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_main_type" id="gem_3_type_list" name="gem_3_type_list" onchange="ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+
+                	</select>
+                  </td>
+
+                  <td>
+                	<select id="gem_3_upgrade_list" name="gem_3_upgrade_list" onchange="ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+
+                	</select>
+
+                  </td>
+
+
+
+                  <td id="gem_3_list">
+                	+0
+                  </td>
+
+                </tr>
+
+                <tr>
+
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#1
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_3_sub_stat_type" id="gem_3_sub_stat_type_1_list" name="gem_3_sub_stat_type_1_list" onchange="ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_upgrade" id="gem3_sub_stat_upgrade_1_list" name="gem3_sub_stat_upgrade_1_list" onchange="ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_value" id="gem_3_sub_stat_1_list" name="gem_3_sub_stat_1_list" onchange="ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#2
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_3_sub_stat_type" id="gem_3_sub_stat_type_2_list" name="gem_3_sub_stat_type_2_list" onchange="ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_upgrade" id="gem3_sub_stat_upgrade_2_list" name="gem3_sub_stat_upgrade_2_list" onchange="ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_value" id="gem_3_sub_stat_2_list" name="gem_3_sub_stat_2_list" onchange="ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#3
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_3_sub_stat_type" id="gem_3_sub_stat_type_3_list" name="gem_3_sub_stat_type_3_list" onchange="ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_upgrade" id="gem3_sub_stat_upgrade_3_list" name="gem3_sub_stat_upgrade_3_list" onchange="ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_value" id="gem_3_sub_stat_3_list" name="gem_3_sub_stat_3_list" onchange="ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
+                <tr>
+                  <td>
+
+                  </td>
+
+                  <td>
+                	Sub Stat#4
+                  </td>
+
+                  <td>
+                	<select class="gem_type gem_3_sub_stat_type" id="gem_3_sub_stat_type_4_list" name="gem_3_sub_stat_type_4_list" onchange="ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list )">
+                	  <option value="blank" label=" "></option>
+                	  <option value="RET_ADDHPPERCENT">Hp%</option>
+                	  <option value="RET_ADDHP">Hp</option>
+                	  <option value="RET_ADDATTACKPERCENT">Atk%</option>
+                	  <option value="RET_ADDATTACK">Atk</option>
+                	  <option value="RET_ADDDEFENCEPERCENT">Def%</option>
+                	  <option value="RET_ADDDEFENCE">Def</option>
+                	  <option value="RET_ADDHEALPERCENT">Recovery%</option>
+                	  <option value="RET_ADDHEAL">Recovery</option>
+                	  <option value="RET_ADDCRITICALDAMAGEPERCENT">Crit Dmg</option>
+                	  <option value="RET_ADDCRITICALPROBPERCENT">Crit Rate</option>
+                	  <option value="RET_ADDSTATUSEFFECTRESISTANCEPERCENT">Resist</option>
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_upgrade" id="gem3_sub_stat_upgrade_4_list" name="gem3_sub_stat_upgrade_4_list" onchange="ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list)">
+
+                	</select>
+
+                  </td>
+
+                  <td>
+                	<select class="gem_3_sub_stat_value" id="gem_3_sub_stat_4_list" name="gem_3_sub_stat_4_list" onchange="ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list)">
+
+                	</select>
+
+                  </td>
+
+                </tr>
+
 
               </tbody>
 

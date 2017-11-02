@@ -21,6 +21,10 @@ var playerRealAtk;
 var playerRealDef;
 var playerRealHeal;
 
+var playerRealCritDmg;
+var playerRealCritRate;
+var playerRealResist;
+
 var enemyRealHp;
 var enemyRealAtk;
 var enemyRealDef;
@@ -141,6 +145,8 @@ function ChangeAstromonEvent(needToClearElement) {
 
 
   UpdateMonStat(grade);
+
+  SumGem();
 }
 
 function CalculateBattleStat() {
@@ -678,6 +684,8 @@ function UpdateMonStat(grade, selectedLv) {
   playerRealDef = defence;
   playerRealHeal = heal;
 
+
+
   var displayHp = Math.round(hp);
   var displayAttack = Math.round(attack);
   var displayDefence = Math.round(defence);
@@ -720,6 +728,10 @@ function UpdateMonStat(grade, selectedLv) {
 
   var divSp = goog.dom.getElement("div_sp")
   divSp.innerHTML = selectedMon[17];
+
+  playerRealCritDmg = ((selectedMon[33] - 1) * 100);
+  playerRealCritRate = critRate;
+  playerRealResist = resist;
 
 
   ChangeGemSet();
@@ -1089,7 +1101,7 @@ function GetAstromonUniqueList(file1, file2) {
     runeOptionalEffectMap[key] = eee;
   }
 
-  console.log(runeOptionalEffectMap)
+  // console.log(runeOptionalEffectMap)
 
 
   runeOptionalEffectMapRefined = {};
@@ -1222,7 +1234,7 @@ function GetAstromonUniqueList(file1, file2) {
     runeEffectUniqueMap[splited[0]] = splited[1];
   }
 
-  console.log(runeEffectUniqueMap);
+  // console.log(runeEffectUniqueMap);
 
   // console.log(runeEffectUnique);
 
@@ -1884,27 +1896,88 @@ function ChangeGemSet() {
 }
 
 
-function ApplyGemValue() {
+// var gemTypeList = { RET_ADDHPPERCENT:"Hp%", RET_ADDHP:"Hp", RET_ADDATTACKPERCENT:"Atk%", RET_ADDATTACK:"Atk", RET_ADDDEFENCEPERCENT:"Def%", RET_ADDDEFENCE:"Def", RET_ADDHEALPERCENT:"Recovery%"        }
 
 
+
+
+function ChangeGemMainGrade(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list) {
+  goog.dom.removeChildren(gem_type_list);
+  goog.dom.removeChildren(gem_upgrade_list);
+
+  var gemTypeList = { RET_ADDHPPERCENT:strHp + "%", RET_ADDHP:strHp, RET_ADDATTACKPERCENT:strAtk + "%", RET_ADDATTACK:strAtk, RET_ADDDEFENCEPERCENT:strDef + "%", RET_ADDDEFENCE:strDef,
+  RET_ADDHEALPERCENT:strHeal + "%", RET_ADDHEAL:strHeal, RET_ADDCRITICALDAMAGEPERCENT:strCritDmg, RET_ADDCRITICALPROBPERCENT:strCritRate, RET_ADDSTATUSEFFECTRESISTANCEPERCENT:strResist }
+
+  var gem_grade_selected = gem_grade_list.options[gem_grade_list.selectedIndex].value;
+
+  if(gem_grade_selected != "") {
+    Object.entries(gemTypeList).forEach(function( item, index, obj)  {
+      var key = item[0];
+      var val = item[1];
+
+      var option = goog.dom.createDom('option', {
+        "value": key
+      }, val);
+      goog.dom.appendChild(gem_type_list, option);
+      gem_type_list.add(option);
+    });
+
+
+
+    for(j = 15; j >= 0; j--) {
+      var option = goog.dom.createDom('option', {
+        "value": j
+      }, "+" + j);
+      goog.dom.appendChild(gem_upgrade_list, option);
+      gem_upgrade_list.add(option);
+    }
+
+    ChangeGemStat(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list);
+
+    // console.log();
+
+    var key = gem_upgrade_list.name;
+
+    var keySubStatType = key.replace("_upgrade_list", "_sub_stat_type");
+    var keySubStatUpgrade = key.replace("_upgrade_list", "_sub_stat_upgrade");
+    var keySubStatValue = key.replace("_upgrade_list", "_sub_stat_value");
+
+    var gem_sub_stat_type = goog.dom.getElementsByClass(keySubStatType);
+    var gem_sub_stat_upgrade = goog.dom.getElementsByClass(keySubStatUpgrade);
+    var gem_sub_stat_value = goog.dom.getElementsByClass(keySubStatValue);
+
+    var gem_sub_stat_size = gem_sub_stat_value.length;
+
+    // if(gem_sub_stat_size > 0) {
+    ChangeGemSubStatUpgrade(gem_grade_list, gem_sub_stat_type[0], gem_sub_stat_upgrade[0], gem_sub_stat_value[0]);
+    ChangeGemSubStatUpgrade(gem_grade_list, gem_sub_stat_type[1], gem_sub_stat_upgrade[1], gem_sub_stat_value[1]);
+    ChangeGemSubStatUpgrade(gem_grade_list, gem_sub_stat_type[2], gem_sub_stat_upgrade[2], gem_sub_stat_value[2]);
+    ChangeGemSubStatUpgrade(gem_grade_list, gem_sub_stat_type[3], gem_sub_stat_upgrade[3], gem_sub_stat_value[3]);
+
+
+
+
+  }
+
+  ChangeGemStat(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list);
 
 }
 
 
-function ChangeGemStat() {
-  var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list");
-  var gem1_upgrade_list = goog.dom.getElement("gem1_upgrade_list");
-  var gem_1_type_list = goog.dom.getElement("gem_1_type_list");
-  var gem_1 = goog.dom.getElement("gem_1");
+function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem_1) {
 
-  var gem_1_type_selected = gem_1_type_list.options[gem_1_type_list.selectedIndex].value;
-  var gem_1_grade_selected = gem_1_grade_list.options[gem_1_grade_list.selectedIndex].value;
-  var tier = gem1_upgrade_list.options[gem1_upgrade_list.selectedIndex].value;
+  var value = 0;
+  if(gem_1_type_list.options.length > 0) {
+    var gem_1_type_selected = gem_1_type_list.options[gem_1_type_list.selectedIndex].value;
+    var gem_1_grade_selected = gem_1_grade_list.options[gem_1_grade_list.selectedIndex].value;
+    var tier = gem1_upgrade_list.options[gem1_upgrade_list.selectedIndex].value;
 
-  // runeUnique
-  var value = runeEffectUniqueMap[gem_1_type_selected];
+    value = runeEffectUniqueMap[gem_1_type_selected];
 
-  // console.log(runeRareMap)
+    // console.log(value)
+  }
+
+
 
   var rr = runeRareMap[gem_1_grade_selected];
 
@@ -2068,23 +2141,26 @@ function ChangeGemStat() {
 
 
     default:
-
+      num3 = 0;
 
 
 
   }
 
   var ret = 0;
+  var shownValue = 0;
 
-  if (isFloat) {
-    ret = value * (rr.getValue() + 1) + num3;
-    var shownValue = Math.round(ret * 100) + "%";
-  } else {
-    ret = value * (rr.getValue() + 1) + num3;
-    var shownValue = ret;
+  if(num3 != 0) {
+    if (isFloat) {
+      ret = value * (rr.getValue() + 1) + num3;
+      shownValue = Math.round(ret * 100) + "%";
+    } else {
+      ret = value * (rr.getValue() + 1) + num3;
+      shownValue = ret;
+    }
   }
 
-  gem_1.innerHTML = shownValue;
+  gem_1.innerHTML = "+" + shownValue;
 
   // var gg = runeOptionalEffectMap["RET_ADDATTACK|5|"]
 
@@ -2093,135 +2169,394 @@ function ChangeGemStat() {
 
 
 
-  var step1 = 4;
-  var step2 = 7;
-  var step3 = 10;
-  var step4 = 13;
-  var step5 = 16;
-
-
-
-  var listOfRuneOptionStat = runeOptionalEffectMap["RET_ADDATTACKPERCENT|6"];
-  var listOfRuneOptionStatSize = listOfRuneOptionStat.length;
-
-  var val1 = Math.round( listOfRuneOptionStat[1].getVFloat()  * 1000) / 1000   ;
-  if(val1 == 0) {
-    val1 = listOfRuneOptionStat[1].getVInt();
-  }
-
-  var val0 = Math.round( listOfRuneOptionStat[0].getVFloat()  * 1000) / 1000   ;
-  if(val0 == 0) {
-    val0 = listOfRuneOptionStat[0].getVInt();
-  }
-
-  var dif = val1 - val0
-
-
-
-  for(i = 0; i < step1; i++) {
-    var cal1 = (val0 * 0) + val0 + (i * dif)
-    cal1 = Math.round(  cal1 * 1000  ) / 1000
-    console.log(cal1 );
-  }
-
-  for(i = 0; i < step2; i++) {
-    var cal1 = (val0 * 1) + val0 + (i * dif)
-    cal1 = Math.round(  cal1 * 1000  ) / 1000
-    console.log(cal1 );
-  }
-
-  for(i = 0; i < step3; i++) {
-    var cal1 = (val0 * 2) + val0 + (i * dif)
-    cal1 = Math.round(  cal1 * 1000  ) / 1000
-    console.log(cal1 );
-  }
-
-  for(i = 0; i < step4; i++) {
-    var cal1 = (val0 * 3) + val0 + (i * dif)
-    cal1 = Math.round(  cal1 * 1000  ) / 1000
-    console.log(cal1 );
-  }
-
-  for(i = 0; i < step5; i++) {
-    var cal1 = (val0 * 4) + val0 + (i * dif)
-    cal1 = Math.round(  cal1 * 1000  ) / 1000
-    console.log(cal1 );
-  }
-  // (listOfRuneOptionStat[0] * 0) + listOfRuneOptionStat[0] +
-
-
-  // var key = arrayRuneOptionalEffect[i].getType() + "_" + arrayRuneOptionalEffect[i].getRare();
-  // runeOptionalEffectMap
-
-
-}
-
-function ChangeGemSubStatUpgrade (div_type, div_upgrade, div_upgrade_value) {
-
-  goog.dom.removeChildren(div_upgrade_value);
-
-  var selectedType = div_type.options[div_type.selectedIndex].value;
-  var selectedUpgrade = div_upgrade.options[div_upgrade.selectedIndex].value;
-
-  var splitedValue = runeOptionalEffectMapRefined[selectedType + "|" + selectedUpgrade].split("|")
-
-  var value = parseFloat( splitedValue[0]   ).toFixed(3)
-
-  var arrayOfVal = JSON.parse("[" + splitedValue[1] + "]" );
-  var uniqueValSize = arrayOfVal.length;
-  console.log(arrayOfVal)
-
-  var upgradeVal = selectedUpgrade - 1;
-
-  // var step = ((( upgradeVal + 1) * 2)  + 2) + upgradeVal  ;
-
-  var step = (uniqueValSize - 1);
-
-  // for(i = 0; i < 5; i++) {
-    var loopSize = (step * upgradeVal) + uniqueValSize;
-    // var mul = i * value;
-
-    console.log(loopSize)
-
+  // var step1 = 4;
+  // var step2 = 7;
+  // var step3 = 10;
+  // var step4 = 13;
+  // var step5 = 16;
+  //
+  //
+  //
+  // var listOfRuneOptionStat = runeOptionalEffectMap["RET_ADDATTACKPERCENT|6"];
+  // var listOfRuneOptionStatSize = listOfRuneOptionStat.length;
+  //
+  // var val1 = Math.round( listOfRuneOptionStat[1].getVFloat()  * 1000) / 1000   ;
+  // if(val1 == 0) {
+  //   val1 = listOfRuneOptionStat[1].getVInt();
+  // }
+  //
+  // var val0 = Math.round( listOfRuneOptionStat[0].getVFloat()  * 1000) / 1000   ;
+  // if(val0 == 0) {
+  //   val0 = listOfRuneOptionStat[0].getVInt();
+  // }
+  //
+  // var dif = val1 - val0
+  //
+  //
+  //
+  // for(i = 0; i < step1; i++) {
+  //   var cal1 = (val0 * 0) + val0 + (i * dif)
+  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
+  //
+  // }
+  //
+  // for(i = 0; i < step2; i++) {
+  //   var cal1 = (val0 * 1) + val0 + (i * dif)
+  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
+  //
+  // }
+  //
+  // for(i = 0; i < step3; i++) {
+  //   var cal1 = (val0 * 2) + val0 + (i * dif)
+  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
+  //
+  // }
+  //
+  // for(i = 0; i < step4; i++) {
+  //   var cal1 = (val0 * 3) + val0 + (i * dif)
+  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
+  //
+  // }
+  //
+  // for(i = 0; i < step5; i++) {
+  //   var cal1 = (val0 * 4) + val0 + (i * dif)
+  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
+  //
   // }
 
 
-  for (i = loopSize - 1; i >= 0; i--) {
-    var valval = (arrayOfVal[0] * upgradeVal) + arrayOfVal[0] + ( value * i  )
-    if(valval > 1)  {
+  SumGem();
 
-      var option = goog.dom.createDom('option', {
-        "value": valval
-      }, "+" + valval.toLocaleString());
-      goog.dom.appendChild(div_upgrade_value, option);
-      div_upgrade_value.add(option);
 
-      // console.log( displayVal   )
-    } else {
-      var displayVal = parseFloat((valval * 100).toFixed(2)) + "%";
-      var option = goog.dom.createDom('option', {
-        "value": valval
-      }, "+" + displayVal);
-      goog.dom.appendChild(div_upgrade_value, option);
-      div_upgrade_value.add(option);
+}
 
-      // console.log( (displayVal * 100).toFixed(2)   )
+function ChangeGemSubStatUpgrade (div_parent_upgrade, div_type, div_upgrade, div_upgrade_value) {
+
+  goog.dom.removeChildren(div_upgrade_value);
+
+
+  var selectedType = div_type.options[div_type.selectedIndex].value;
+  console.log(selectedType);
+  if(selectedType != "blank") {
+    var selectedUpgrade = div_parent_upgrade.options[div_parent_upgrade.selectedIndex].value;
+    var selectedChildUpgrade = div_upgrade.options[div_upgrade.selectedIndex].value;
+
+    var splitedValue = runeOptionalEffectMapRefined[selectedType + "|" + selectedUpgrade].split("|")
+
+    var value = parseFloat( splitedValue[0]   ).toFixed(3);
+
+    var arrayOfVal = JSON.parse("[" + splitedValue[1] + "]" );
+    var uniqueValSize = arrayOfVal.length;
+    // console.log(arrayOfVal)
+
+    var upgradeVal = selectedChildUpgrade - 1;
+
+    var step = (uniqueValSize - 1);
+
+    var loopSize = (step * upgradeVal) + uniqueValSize;
+
+
+
+    for (i = loopSize - 1; i >= 0; i--) {
+      var valval = (arrayOfVal[0] * upgradeVal) + arrayOfVal[0] + ( value * i  )
+
+      if(valval > 1)  {
+
+        var option = goog.dom.createDom('option', {
+          "value": valval
+        }, "+" + valval.toLocaleString());
+        goog.dom.appendChild(div_upgrade_value, option);
+        div_upgrade_value.add(option);
+
+        // console.log( displayVal   )
+      } else {
+        var displayVal = parseFloat((valval * 100).toFixed(2)) + "%";
+        var option = goog.dom.createDom('option', {
+          "value": valval
+        }, "+" + displayVal);
+        goog.dom.appendChild(div_upgrade_value, option);
+        div_upgrade_value.add(option);
+
+        // console.log( (displayVal * 100).toFixed(2)   )
+      }
+
+
     }
+  }
 
+
+
+
+  SumGem();
+
+}
+
+function SumGem () {
+
+
+
+  var totalPercentHp = 0;
+  var totalHp = 0;
+
+  var totalPercentAtk = 0;
+  var totalAtk = 0;
+
+  var totalPercentDef = 0;
+  var totalDef = 0;
+
+  var totalPercentHeal = 0;
+  var totalHeal = 0;
+
+  var totalPercentCritDmg = 0;
+
+  var totalPercentCritRate = 0;
+
+  var totalPercentResist = 0;
+
+
+  var gem_main_types = goog.dom.getElementsByClass("gem_main_type");
+  var gem_main_size = gem_main_types.length;
+
+  if(gem_main_size > 0) {
+
+    for(j = 0; j < gem_main_size; j++) {
+      var optionJSize = gem_main_types[j].options.length;
+      if(optionJSize > 0) {
+        var selectedMainValue = gem_main_types[j].options[gem_main_types[j].selectedIndex].value;
+        var selectMainId = gem_main_types[j].id;
+        var valueMainId = selectMainId.replace("type_", "");
+
+        var valueMainDom = goog.dom.getElement(valueMainId);
+
+        var selectedMainValueDom = valueMainDom.innerText;
+        var mainToCalValue = selectedMainValueDom.replace("+","");
+        if(mainToCalValue.includes("%")) {
+          mainToCalValue = parseFloat(mainToCalValue) / 100;
+        } else {
+          mainToCalValue = parseInt(mainToCalValue);
+        }
+
+        // console.log(selectedMainValue);
+        switch (selectedMainValue) {
+
+          case "RET_ADDHPPERCENT":
+            totalPercentHp += mainToCalValue;
+
+            break;
+          case "RET_ADDHP":
+            totalHp += mainToCalValue;
+
+            break;
+
+          case "RET_ADDATTACKPERCENT":
+            totalPercentAtk += mainToCalValue;
+            break;
+
+          case "RET_ADDATTACK":
+            totalAtk += mainToCalValue;
+            break;
+
+          case "RET_ADDDEFENCEPERCENT":
+            totalPercentDef += mainToCalValue;
+            break;
+          case "RET_ADDDEFENCE":
+            totalDef += mainToCalValue;
+            break;
+
+          case "RET_ADDHEALPERCENT":
+            totalPercentHeal += mainToCalValue;
+            break;
+
+          case "RET_ADDHEAL":
+            totalHeal += mainToCalValue;
+            break;
+
+          case "RET_ADDCRITICALDAMAGEPERCENT":
+            totalPercentCritDmg += mainToCalValue;
+            break;
+
+          case "RET_ADDCRITICALPROBPERCENT":
+            totalPercentCritRate += mainToCalValue;
+            break;
+
+          case "RET_ADDSTATUSEFFECTRESISTANCEPERCENT":
+            totalPercentResist += mainToCalValue;
+            break;
+
+
+
+          default:
+
+
+        }
+      }
+
+    }
 
   }
 
 
 
 
-  // console.log(step);
 
 
-  // console.log(value)
+
+
+
+
+  var gem_types = goog.dom.getElementsByClass("gem_type");
+  var gem_type_size = gem_types.length;
+
+
+  for(i = 0; i < gem_type_size; i++) {
+    var selectedValue = gem_types[i].options[gem_types[i].selectedIndex].value;
+    var selectId = gem_types[i].id;
+
+    var valueId = selectId.replace("type_", "");
+
+    var valueDom = goog.dom.getElement(valueId);
+    // console.log(valueDom.options.length )
+
+    var sizeOfValue = valueDom.options.length;
+
+    if(sizeOfValue > 0) {
+      var  selectedValueDom = parseFloat(valueDom.options[valueDom.selectedIndex].value)   ;
+      switch (selectedValue) {
+
+        case "RET_ADDHPPERCENT":
+          totalPercentHp += selectedValueDom;
+
+          break;
+        case "RET_ADDHP":
+          totalHp += selectedValueDom;
+
+          break;
+
+        case "RET_ADDATTACKPERCENT":
+          totalPercentAtk += selectedValueDom;
+          break;
+
+        case "RET_ADDATTACK":
+          totalAtk += selectedValueDom;
+          break;
+
+        case "RET_ADDDEFENCEPERCENT":
+          totalPercentDef += selectedValueDom;
+          break;
+        case "RET_ADDDEFENCE":
+          totalDef += selectedValueDom;
+          break;
+
+        case "RET_ADDHEALPERCENT":
+          totalPercentHeal += selectedValueDom;
+          break;
+
+        case "RET_ADDHEAL":
+          totalHeal += selectedValueDom;
+          break;
+
+        case "RET_ADDCRITICALDAMAGEPERCENT":
+          totalPercentCritDmg += selectedValueDom;
+          break;
+
+        case "RET_ADDCRITICALPROBPERCENT":
+          totalPercentCritRate += selectedValueDom;
+          break;
+
+        case "RET_ADDSTATUSEFFECTRESISTANCEPERCENT":
+          totalPercentResist += selectedValueDom;
+          break;
+
+
+
+        default:
+
+
+      }
+    }
+  }
+
+
+  // console.log(totalHp);
+
+
+   var div_gem_hp = goog.dom.getElement("div_gem_hp");
+   var div_gem_atk = goog.dom.getElement("div_gem_atk");
+   var div_gem_def = goog.dom.getElement("div_gem_def");
+   var div_gem_heal = goog.dom.getElement("div_gem_heal");
+   var div_gem_crit_dmg = goog.dom.getElement("div_gem_crit_dmg");
+   var div_gem_crit_rate = goog.dom.getElement("div_gem_crit_rate");
+   var div_gem_resist = goog.dom.getElement("div_gem_resist");
+
+  var displayHp = playerRealHp * totalPercentHp + totalHp ;
+  var prefixHp;
+  if(displayHp >= 0) {
+   prefixHp = "+";
+  } else {
+   prefixHp = "-";
+  }
+  div_gem_hp.innerHTML = prefixHp + Math.round( displayHp).toLocaleString();
+
+  var displayAtk = playerRealAtk * totalPercentAtk + totalAtk ;
+  var prefixAtk;
+  if(displayAtk >= 0) {
+    prefixAtk = "+";
+  } else {
+    prefixAtk = "-";
+  }
+  div_gem_atk.innerHTML = prefixAtk + Math.round( displayAtk).toLocaleString();
+
+  var displayDef = playerRealDef * totalPercentDef + totalDef ;
+  var prefixDef;
+  if(displayDef >= 0) {
+    prefixDef = "+";
+  } else {
+    prefixDef = "-";
+  }
+  div_gem_def.innerHTML = prefixDef + Math.round( displayDef).toLocaleString();
+
+  var displayHeal = playerRealHeal * totalPercentHeal + totalHeal ;
+  var prefixHeal;
+  if(displayHeal >= 0) {
+    prefixHeal = "+";
+  } else {
+    prefixHeal = "-";
+  }
+  div_gem_heal.innerHTML = prefixHeal + Math.round( displayHeal).toLocaleString();
+
+  var displayCritDmg = (totalPercentCritDmg * 100) ;
+  var prefixCritDmg;
+  if(displayCritDmg >= 0) {
+    prefixCritDmg = "+";
+  } else {
+    prefixCritDmg = "-";
+  }
+  div_gem_crit_dmg.innerHTML = prefixCritDmg + Math.round( displayCritDmg).toLocaleString() + "%";
+
+  var displayCritRate = (totalPercentCritRate * 100) ;
+  var prefixCritRate;
+  if(displayCritRate >= 0) {
+    prefixCritRate = "+";
+  } else {
+    prefixCritRate = "-";
+  }
+  div_gem_crit_rate.innerHTML = prefixCritRate + Math.round( displayCritRate).toLocaleString() + "%";
+
+  var displayResist = (totalPercentResist * 100) ;
+  var prefixResist;
+  if(displayResist >= 0) {
+    prefixResist = "+";
+  } else {
+    prefixResist = "-";
+  }
+  div_gem_resist.innerHTML = prefixResist + Math.round( displayResist).toLocaleString() + "%";
+
 }
 
-function ChangeGemSubStatType (div_type, div_upgrade, div_upgrade_value) {
-  console.log(runeOptionalEffectMapRefined)
+
+
+function ChangeGemSubStatType (div_parent_grade, div_type, div_upgrade, div_upgrade_value) {
+  // console.log(runeOptionalEffectMapRefined)
   // var div_type = goog.dom.getElement("div_type");
   // var div_upgrade = goog.dom.getElement("div_upgrade");
   goog.dom.removeChildren(div_upgrade);
@@ -2229,7 +2564,7 @@ function ChangeGemSubStatType (div_type, div_upgrade, div_upgrade_value) {
   var div_type_selected = div_type.options[div_type.selectedIndex].value;
   if(div_type_selected != "") {
 
-    console.log(div_type_selected)
+    // console.log(div_type_selected)
 
     for(j = 5; j >= 1; j--) {
       var option = goog.dom.createDom('option', {
@@ -2241,12 +2576,12 @@ function ChangeGemSubStatType (div_type, div_upgrade, div_upgrade_value) {
 
 
   } else {
-    console.log("blank")
+    // console.log("blank")
 
   }
 
 
-  ChangeGemSubStatUpgrade(div_type, div_upgrade, div_upgrade_value)
+  ChangeGemSubStatUpgrade(div_parent_grade, div_type, div_upgrade, div_upgrade_value);
 
 }
 
