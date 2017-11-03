@@ -41,6 +41,8 @@
 
     UpdateStage();
 
+
+
     if (callback) {
       callback();
     }
@@ -267,6 +269,10 @@
 
 
         </section>
+
+        <form id="main_form" action="" method="post" enctype="text/plain" >
+
+
 
         <div id="left_zone" class="w3-half">
           <table class="width_max " table-layout=fixed>
@@ -697,7 +703,7 @@
 
                   </td>
                   <td colspan="5">
-                    <select id="gem_set_list" name="gem_set_list" onchange="ChangeGemSet()">
+                    <select id="gem_set_list" name="gem_set_list" onchange="SumGem()">
 
                     </select>
 
@@ -1567,9 +1573,9 @@
 
         </div>
 
+        <input type="submit" value="Submit">
 
-
-
+        </form>
 
 
 

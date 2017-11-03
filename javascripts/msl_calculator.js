@@ -25,6 +25,15 @@ var playerRealCritDmg;
 var playerRealCritRate;
 var playerRealResist;
 
+var playerRealGemHp;
+var playerRealGemAtk;
+var playerRealGemDef;
+var playerRealGemHeal;
+
+var playerRealGemCritDmg;
+var playerRealGemCritRate;
+var playerRealGemResist;
+
 var enemyRealHp;
 var enemyRealAtk;
 var enemyRealDef;
@@ -105,13 +114,6 @@ function ChangeAstromonEvent(needToClearElement) {
   }
 
 
-
-
-
-
-  // console.log(monElementMap);
-
-
   // SetElement
   imgIcon.setAttribute('src', 'img/' + monElementMap[currentElement][29] + '.png');
 
@@ -132,28 +134,16 @@ function ChangeAstromonEvent(needToClearElement) {
   // SetMOnGrade
   imgGrade.setAttribute('src', 'img/s' + grade + '_.png');
 
-  // var lvlList = goog.dom.getElement("lvl_list");
-  // var selectedLv = lvlList.value;
-
   selectedMonUid = monElementMap[currentElement];
   SetSkill(selectedMonUid);
 
   UpdateLvlSelect(grade);
-
-  // console.log(monElementMap[currentElement]);
-
-
 
   UpdateMonStat(grade);
 
   SumGem();
 }
 
-function CalculateBattleStat() {
-
-
-
-}
 
 
 
@@ -733,8 +723,9 @@ function UpdateMonStat(grade, selectedLv) {
   playerRealCritRate = critRate;
   playerRealResist = resist;
 
+  SumGem();
 
-  ChangeGemSet();
+  // ChangeGemSet();
 
 }
 
@@ -1461,6 +1452,7 @@ function GetAstromonUniqueList(file1, file2) {
     var option = goog.dom.createDom('option', "", item);
     if (isFirst) {
       firstItem = option;
+      console.log(option);
     }
 
     goog.dom.appendChild(domAstromonList, option);
@@ -1471,6 +1463,8 @@ function GetAstromonUniqueList(file1, file2) {
   dataListAstromon.value = firstItem.value;
   ChangeAstromonEvent(firstItem);
 
+
+  ReadUrlParams();
 
 }
 
@@ -1817,41 +1811,59 @@ function ChangeGemSet() {
 
   var setEffectTextArray = [];
 
+  var displayNum;
+
+  var ret = {};
+
   setEffectObjEffectList.forEach(function(effectItem) {
     var effectType = ReadEnumFromNumber(proto.msggamedata.RuneSetEffectType, effectItem.getType())
     var stringKey = "";
     var value = effectItem.getValue();
     var positive = "";
 
-    // console.log(value)
+    // console.log(effectItem);
+    // console.log(effectType);
     switch (effectItem.getType()) {
       case proto.msggamedata.RuneSetEffectType.RSET_ADDATTACKPERCENT:
       case proto.msggamedata.RuneSetEffectType.RSET_ADDATTACK:
         stringKey = strAtk;
-        var displayNum = CalculateGemStat(playerRealAtk, value);
-        div_gem_atk.innerHTML = CalculateGemStat(playerRealAtk, value);
+        displayNum = CalculateGemStat(playerRealAtk, value);
+        ret[effectType.replace("RSET","RET")] = value;
         break;
       case proto.msggamedata.RuneSetEffectType.RSET_ADDDEFENCEPERCENT:
       case proto.msggamedata.RuneSetEffectType.RSET_ADDDEFENCE:
         stringKey = strDef;
+        displayNum = CalculateGemStat(playerRealDef, value);
+        ret[effectType.replace("RSET","RET")] = value;
 
         break;
       case proto.msggamedata.RuneSetEffectType.RSET_ADDHEALPERCENT:
       case proto.msggamedata.RuneSetEffectType.RSET_ADDHEAL:
         stringKey = strHeal;
+        displayNum = CalculateGemStat(playerRealHeal, value);
+        ret[effectType.replace("RSET","RET")] = value;
         break;
       case proto.msggamedata.RuneSetEffectType.RSET_ADDHPPERCENT:
       case proto.msggamedata.RuneSetEffectType.RSET_ADDHP:
         stringKey = strHp;
+        displayNum = CalculateGemStat(playerRealHp, value);
+        ret[effectType.replace("RSET","RET")] = value;
         break;
       case proto.msggamedata.RuneSetEffectType.RSET_ADDCRITICALDAMAGEPERCENT:
         stringKey = strCritDmg;
+        displayNum = CalculateGemStat(playerRealCritDmg, value);
+        ret[effectType.replace("RSET","RET")] = value;
         break;
       case proto.msggamedata.RuneSetEffectType.RSET_ADDCRITICALPROBPERCENT:
         stringKey = strCritRate;
+
+        displayNum = CalculateGemStat(playerRealCritRate, value);
+        ret[effectType.replace("RSET","RET")] = value;
         break;
       case proto.msggamedata.RuneSetEffectType.RSET_ADDSTATUSEFFECTRESISTANCEPERCENT:
         stringKey = strResist;
+        displayNum = CalculateGemStat(playerRealResist, value);
+        ret[effectType.replace("RSET","RET")] = value;
         break;
 
       case proto.msggamedata.RuneSetEffectType.RSET_HEALMYHP:
@@ -1884,13 +1896,7 @@ function ChangeGemSet() {
   var gem_icon = goog.dom.getElement("gem_icon");
   gem_icon.setAttribute("src", "img/" + selectedGemSetValue.replace("_1", "") + "_diamond_1.png");
 
-
-  // console.log(gem_icon);
-
-
-
-
-
+  return ret;
 
 
 }
@@ -1974,10 +1980,7 @@ function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem
 
     value = runeEffectUniqueMap[gem_1_type_selected];
 
-    // console.log(value)
   }
-
-
 
   var rr = runeRareMap[gem_1_grade_selected];
 
@@ -2141,7 +2144,7 @@ function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem
 
 
     default:
-      num3 = 0;
+      num3 = -999999;
 
 
 
@@ -2150,10 +2153,10 @@ function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem
   var ret = 0;
   var shownValue = 0;
 
-  if(num3 != 0) {
+  if(num3 != -999999) {
     if (isFloat) {
       ret = value * (rr.getValue() + 1) + num3;
-      shownValue = Math.round(ret * 100) + "%";
+      shownValue = (Math.round(ret * 10000)/ 100) + "%";
     } else {
       ret = value * (rr.getValue() + 1) + num3;
       shownValue = ret;
@@ -2162,67 +2165,6 @@ function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem
 
   gem_1.innerHTML = "+" + shownValue;
 
-  // var gg = runeOptionalEffectMap["RET_ADDATTACK|5|"]
-
-  // console.log(gg);
-
-
-
-
-  // var step1 = 4;
-  // var step2 = 7;
-  // var step3 = 10;
-  // var step4 = 13;
-  // var step5 = 16;
-  //
-  //
-  //
-  // var listOfRuneOptionStat = runeOptionalEffectMap["RET_ADDATTACKPERCENT|6"];
-  // var listOfRuneOptionStatSize = listOfRuneOptionStat.length;
-  //
-  // var val1 = Math.round( listOfRuneOptionStat[1].getVFloat()  * 1000) / 1000   ;
-  // if(val1 == 0) {
-  //   val1 = listOfRuneOptionStat[1].getVInt();
-  // }
-  //
-  // var val0 = Math.round( listOfRuneOptionStat[0].getVFloat()  * 1000) / 1000   ;
-  // if(val0 == 0) {
-  //   val0 = listOfRuneOptionStat[0].getVInt();
-  // }
-  //
-  // var dif = val1 - val0
-  //
-  //
-  //
-  // for(i = 0; i < step1; i++) {
-  //   var cal1 = (val0 * 0) + val0 + (i * dif)
-  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
-  //
-  // }
-  //
-  // for(i = 0; i < step2; i++) {
-  //   var cal1 = (val0 * 1) + val0 + (i * dif)
-  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
-  //
-  // }
-  //
-  // for(i = 0; i < step3; i++) {
-  //   var cal1 = (val0 * 2) + val0 + (i * dif)
-  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
-  //
-  // }
-  //
-  // for(i = 0; i < step4; i++) {
-  //   var cal1 = (val0 * 3) + val0 + (i * dif)
-  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
-  //
-  // }
-  //
-  // for(i = 0; i < step5; i++) {
-  //   var cal1 = (val0 * 4) + val0 + (i * dif)
-  //   cal1 = Math.round(  cal1 * 1000  ) / 1000
-  //
-  // }
 
 
   SumGem();
@@ -2236,7 +2178,7 @@ function ChangeGemSubStatUpgrade (div_parent_upgrade, div_type, div_upgrade, div
 
 
   var selectedType = div_type.options[div_type.selectedIndex].value;
-  console.log(selectedType);
+  // console.log(selectedType);
   if(selectedType != "blank") {
     var selectedUpgrade = div_parent_upgrade.options[div_parent_upgrade.selectedIndex].value;
     var selectedChildUpgrade = div_upgrade.options[div_upgrade.selectedIndex].value;
@@ -2312,6 +2254,75 @@ function SumGem () {
   var totalPercentCritRate = 0;
 
   var totalPercentResist = 0;
+
+  var gem_set_list = goog.dom.getElement("gem_set_list");
+
+  var gemSet = ChangeGemSet();
+
+  var gemSetKeys = Object.keys(gemSet);
+  var gemSetValues = Object.values(gemSet);
+  // console.log( gemSetKeys);
+  // console.log( gemSetValues);
+
+
+  for(z = 0; z < gemSetKeys.length; z++) {
+    switch (gemSetKeys[z]) {
+
+      case "RET_ADDHPPERCENT":
+        totalPercentHp += gemSetValues[z];
+
+        break;
+      case "RET_ADDHP":
+        totalHp += gemSetValues[z];
+
+        break;
+
+      case "RET_ADDATTACKPERCENT":
+        totalPercentAtk += gemSetValues[z];
+        break;
+
+      case "RET_ADDATTACK":
+        totalAtk += gemSetValues[z];
+        break;
+
+      case "RET_ADDDEFENCEPERCENT":
+        totalPercentDef += gemSetValues[z];
+        break;
+      case "RET_ADDDEFENCE":
+        totalDef += gemSetValues[z];
+        break;
+
+      case "RET_ADDHEALPERCENT":
+        totalPercentHeal += gemSetValues[z];
+        break;
+
+      case "RET_ADDHEAL":
+        totalHeal += gemSetValues[z];
+        break;
+
+      case "RET_ADDCRITICALDAMAGEPERCENT":
+        totalPercentCritDmg += gemSetValues[z];
+        break;
+
+      case "RET_ADDCRITICALPROBPERCENT":
+        totalPercentCritRate += gemSetValues[z];
+        break;
+
+      case "RET_ADDSTATUSEFFECTRESISTANCEPERCENT":
+        totalPercentResist += gemSetValues[z];
+        break;
+
+
+
+      default:
+
+
+    }
+  }
+
+
+
+
 
 
   var gem_main_types = goog.dom.getElementsByClass("gem_main_type");
@@ -2489,66 +2500,75 @@ function SumGem () {
    var div_gem_resist = goog.dom.getElement("div_gem_resist");
 
   var displayHp = playerRealHp * totalPercentHp + totalHp ;
-  var prefixHp;
+  var prefixHp = "";
   if(displayHp >= 0) {
    prefixHp = "+";
-  } else {
-   prefixHp = "-";
   }
+  //  else {
+  //  prefixHp = "-";
+  // }
+  playerRealGemHp = displayHp;
+
   div_gem_hp.innerHTML = prefixHp + Math.round( displayHp).toLocaleString();
 
   var displayAtk = playerRealAtk * totalPercentAtk + totalAtk ;
-  var prefixAtk;
+  var prefixAtk = "";
   if(displayAtk >= 0) {
     prefixAtk = "+";
-  } else {
-    prefixAtk = "-";
   }
+  // else {
+  //   prefixAtk = "-";
+  // }
   div_gem_atk.innerHTML = prefixAtk + Math.round( displayAtk).toLocaleString();
 
   var displayDef = playerRealDef * totalPercentDef + totalDef ;
-  var prefixDef;
+  var prefixDef = "";
   if(displayDef >= 0) {
     prefixDef = "+";
-  } else {
-    prefixDef = "-";
   }
+  // else {
+  //   prefixDef = "-";
+  // }
   div_gem_def.innerHTML = prefixDef + Math.round( displayDef).toLocaleString();
 
   var displayHeal = playerRealHeal * totalPercentHeal + totalHeal ;
-  var prefixHeal;
+  var prefixHeal = "";
   if(displayHeal >= 0) {
     prefixHeal = "+";
-  } else {
-    prefixHeal = "-";
   }
+  // else {
+  //   prefixHeal = "-";
+  // }
   div_gem_heal.innerHTML = prefixHeal + Math.round( displayHeal).toLocaleString();
 
   var displayCritDmg = (totalPercentCritDmg * 100) ;
-  var prefixCritDmg;
+  var prefixCritDmg = "";
   if(displayCritDmg >= 0) {
     prefixCritDmg = "+";
-  } else {
-    prefixCritDmg = "-";
   }
+  // else {
+  //   prefixCritDmg = "-";
+  // }
   div_gem_crit_dmg.innerHTML = prefixCritDmg + Math.round( displayCritDmg).toLocaleString() + "%";
 
   var displayCritRate = (totalPercentCritRate * 100) ;
-  var prefixCritRate;
+  var prefixCritRate = "";
   if(displayCritRate >= 0) {
     prefixCritRate = "+";
-  } else {
-    prefixCritRate = "-";
   }
+  // else {
+  //   prefixCritRate = "-";
+  // }
   div_gem_crit_rate.innerHTML = prefixCritRate + Math.round( displayCritRate).toLocaleString() + "%";
 
   var displayResist = (totalPercentResist * 100) ;
-  var prefixResist;
+  var prefixResist = "";
   if(displayResist >= 0) {
     prefixResist = "+";
-  } else {
-    prefixResist = "-";
   }
+  // else {
+  //   prefixResist = "-";
+  // }
   div_gem_resist.innerHTML = prefixResist + Math.round( displayResist).toLocaleString() + "%";
 
 }
@@ -2594,6 +2614,9 @@ function countUnique(iterable) {
 
 function CalculateGemStat(oriValue, gemValue) {
   var ret = 0;
+  // console.log(oriValue);
+  // console.log(gemValue);
+
   if (gemValue > 1) {
     //flatNumber
     ret = gemValue;
@@ -2601,5 +2624,141 @@ function CalculateGemStat(oriValue, gemValue) {
     //percentage
     ret = oriValue * gemValue;
   }
+  // console.log(ret);
   return ret;
+}
+
+function ReadUrlParams() {
+  var playerMon = getUrlParameter("input_astromon_name");
+  var playerElement = getUrlParameter("element_list");
+  SetDataFromUrl(playerMon, playerElement);
+  // console.log(playerElement);
+
+}
+
+function SetDataFromUrl(playerMon, playerElement) {
+
+
+
+  // var domElementList = goog.dom.getElement("element_list");
+  // var currentElement = playerElement.value;
+  // currentElement = playerElement;
+  if(playerMon != undefined) {
+    var dataListAstromon = goog.dom.getElement("input_astromon_name");
+    dataListAstromon.value = playerMon;
+      ChangeMonFromUrl(true, playerMon, playerElement);
+  }
+
+}
+
+var getUrlParameter = function getUrlParameter(sParam) {
+  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+      }
+  }
+};
+
+
+
+function ChangeMonFromUrl(needToClearElement, playerMon, playerElement) {
+  // console.log(input_astromon);
+  var imgIcon = goog.dom.getElement("img_mon_icon");
+
+  var input_astromon = goog.dom.getElement("input_astromon_name");
+  // console.log(monName.value);
+
+  var monElementMap = {};
+
+  for (i = 2; i <= 6; i++) {
+    var tempKey = monsterNameMap[input_astromon.value + "|" + i];
+    if (tempKey != undefined) {
+      var elementName = toTitleCase(ReadEnumFromNumber(proto.msggamedata.MonsterElementType, tempKey[21]).replace("ME_", "").replace("TREE", "Wood"));
+      monElementMap[elementName] = tempKey;
+    }
+  }
+
+  cachedName = input_astromon.value;
+
+
+  var domElementList = goog.dom.getElement("element_list");
+
+
+  var currentElement = domElementList.value;
+
+  if (needToClearElement) {
+    goog.dom.removeChildren(domElementList);
+
+    for (var key in monElementMap) {
+      var option = goog.dom.createDom('option', "", key);
+      goog.dom.appendChild(domElementList, option);
+      if (currentElement == "") {
+        option.text = key;
+        domElementList.add(option);
+        currentElement = key;
+      } else {
+        currentElement = domElementList.value;
+      }
+    }
+  }
+
+  domElementList.value = playerElement;
+
+  currentElement = playerElement;
+
+  // console.log(playerElement);
+
+
+
+  // SetElement
+  imgIcon.setAttribute('src', 'img/' + monElementMap[currentElement][29] + '.png');
+
+  var imgElement = goog.dom.getElement("img_mon_element");
+
+  var evoStage = monElementMap[currentElement][28];
+  var oriElement = currentElement.replace("Wood", "Tree").toLowerCase();
+
+  // SetMonIcon
+  imgElement.setAttribute('src', 'img/frame_evo' + evoStage + "_" + oriElement + '.png');
+
+  var imgGrade = goog.dom.getElement("img_mon_grade");
+  var gradeList = goog.dom.getElement("grade_list");
+
+
+
+  var grade = gradeList.options[gradeList.selectedIndex].value;
+  // SetMOnGrade
+  imgGrade.setAttribute('src', 'img/s' + grade + '_.png');
+
+  selectedMonUid = monElementMap[currentElement];
+  SetSkill(selectedMonUid);
+
+  UpdateLvlSelect(grade);
+
+  UpdateMonStat(grade);
+
+  SumGem();
+}
+
+function processForm(e) {
+    if (e.preventDefault) e.preventDefault();
+    console.log(e);
+    /* do what you want with the form */
+
+    // You must return false to prevent the default form behavior
+    return false;
+}
+
+var form = document.getElementById('main_form');
+if (form.attachEvent) {
+    form.attachEvent("submit", processForm);
+} else {
+    form.addEventListener("submit", processForm);
 }
