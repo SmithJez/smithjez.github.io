@@ -723,7 +723,7 @@ function UpdateMonStat(grade, selectedLv) {
   playerRealCritRate = critRate;
   playerRealResist = resist;
 
-  SumGem();
+  SumGem("");
 
   // ChangeGemSet();
 
@@ -1158,6 +1158,8 @@ function GetAstromonUniqueList(file1, file2) {
 
   }
 
+  runeSetEffectMap["blank"] = "blank";
+
   // console.log(runeSetEffectMap);
 
   for (var i = 0; i < arrayRune.length; i++) {
@@ -1206,8 +1208,16 @@ function GetAstromonUniqueList(file1, file2) {
 
 
   var domGemSetList = goog.dom.getElement("gem_set_list");
+  var domGemSetListB = goog.dom.getElement("gem_set_list_b");
+  var domGemSetListC = goog.dom.getElement("gem_set_list_c");
+  // console.log(domGemSetList);
+  // console.log(domGemSetListB);
   var firstGem;
   var gemFirstItem = true;
+  var firstGemB;
+  var gemFirstItemB = true;
+  var firstGemC;
+  var gemFirstItemC = true;
 
   var runeObj = {};
 
@@ -1228,6 +1238,29 @@ function GetAstromonUniqueList(file1, file2) {
   // console.log(runeEffectUniqueMap);
 
   // console.log(runeEffectUnique);
+
+  var optionNoSet = goog.dom.createDom('option', {
+    "value": "blank"
+  }, "No Set");
+  // if (gemFirstItem) {
+  //   firstGem = option;
+  //   gemFirstItem = false;
+  // }
+  goog.dom.appendChild(domGemSetList, optionNoSet);
+
+
+  var optionNoSet2 = goog.dom.createDom('option', {
+    "value": "blank"
+  }, "No Set");
+  goog.dom.appendChild(domGemSetListB, optionNoSet2);
+
+  var optionNoSet3 = goog.dom.createDom('option', {
+    "value": "blank"
+  }, "No Set");
+  goog.dom.appendChild(domGemSetListC, optionNoSet3);
+  // console.log(firstGem)
+
+
 
   runeUnique.forEach(function(item) {
     var splitedItem = item.split("|");
@@ -1319,35 +1352,71 @@ function GetAstromonUniqueList(file1, file2) {
     if (gemFirstItem) {
 
       firstGem = option;
+      domGemSetList.value = firstGem;
     }
     goog.dom.appendChild(domGemSetList, option);
+
     gemFirstItem = false;
-  });
 
 
-  var spacesToAdd = -23;
-  var biggestLength = 0;
-  $("#gem_set_list option").each(function() {
-    var len = $(this).text().length;
-    if (len > biggestLength) {
-      biggestLength = len;
+    var optionB = goog.dom.createDom('option', {
+      "value": splitedItem[0]
+    }, displayText);
+    if (gemFirstItemB) {
+
+      firstGemB = optionB;
+
+      domGemSetListB.value = firstGemB;
     }
-  });
-  var padLength = biggestLength + spacesToAdd;
-  $("#gem_set_list option").each(function() {
-    var parts = $(this).text().split(' (');
-    var strLength = parts[0].length;
-    // console.log(padLength-strLength)
-    for (var x = 0; x < (padLength - strLength); x++) {
-      parts[0] = parts[0] + ' ';
+    goog.dom.appendChild(domGemSetListB, optionB);
+
+    gemFirstItemB = false;
+
+
+    var optionC = goog.dom.createDom('option', {
+      "value": splitedItem[0]
+    }, displayText);
+    if (gemFirstItemC) {
+
+      firstGemC = optionC;
+
+      domGemSetListC.value = firstGemC;
     }
-    $(this).text(parts[0].replace(/ /g, '\u00a0') + '(' + parts[1]).text;
+    goog.dom.appendChild(domGemSetListC, optionC);
+
+    gemFirstItemC = false;
   });
 
 
 
 
-  // console.log(runeUnique);
+  // var spacesToAdd = -23;
+  // var biggestLength = 0;
+  // $("#gem_set_list option").each(function() {
+  //   var len = $(this).text().length;
+  //   if (len > biggestLength) {
+  //     biggestLength = len;
+  //   }
+  // });
+  // var padLength = biggestLength + spacesToAdd;
+  // $("#gem_set_list option").each(function() {
+  //   var parts = $(this).text().split(' (');
+  //
+  //   var strLength = parts[0].length;
+  //   // console.log(parts.length)
+  //   if(parts.length > 1) {
+  //     for (var x = 0; x < (padLength - strLength); x++) {
+  //       parts[0] = parts[0] + ' ';
+  //     }
+  //     $(this).text(parts[0].replace(/ /g, '\u00a0') + '(' + parts[1]).text;
+  //   }
+  //
+  // });
+
+
+
+
+
 
   var dunSubStage = new proto.msggamedata.MsgGameData.deserializeBinary(bytes2);
   var dunMonGroup = new proto.msggamedata.MsgGameData.deserializeBinary(bytes3);
@@ -1452,7 +1521,7 @@ function GetAstromonUniqueList(file1, file2) {
     var option = goog.dom.createDom('option', "", item);
     if (isFirst) {
       firstItem = option;
-      console.log(option);
+      // console.log(option);
     }
 
     goog.dom.appendChild(domAstromonList, option);
@@ -1465,6 +1534,12 @@ function GetAstromonUniqueList(file1, file2) {
 
 
   ReadUrlParams();
+
+  // var fixedUrlGemB = goog.dom.getElement("fixedUrlGemB");
+
+  ReadGemFromUrl("_b");
+  ReadGemFromUrl("_c");
+
 
 }
 
@@ -1798,8 +1873,14 @@ function SetSkillDesc(ori_desc, m) {
 
 }
 
-function ChangeGemSet() {
-  var gemSetDom = goog.dom.getElement("gem_set_list");
+function ChangeGemSet(gemSlot) {
+  if(gemSlot == undefined) {
+    gemSlot = "";
+  }
+  var gemSetDom = goog.dom.getElement("gem_set_list" + gemSlot);
+  // var gemSetDomB = goog.dom.getElement("gem_set_list_b");
+  // console.log(gemSetDom);
+  // console.log(gemSetDomB);
   var selectedGemSetValue = gemSetDom.options[gemSetDom.selectedIndex].value;
 
   var div_gem_atk = goog.dom.getElement("div_gem_atk");
@@ -1807,94 +1888,100 @@ function ChangeGemSet() {
   var gemColor = selectedGemSetValue.replace("rune_icon_", "").replace("_1", "");
 
   var setEffectObj = runeSetEffectMap[gemColor];
-  var setEffectObjEffectList = setEffectObj.getEffectsList();
+  // console.log(selectedGemSetValue);
+  if(setEffectObj != "blank") {
+    var setEffectObjEffectList = setEffectObj.getEffectsList();
+    var setEffectTextArray = [];
 
-  var setEffectTextArray = [];
+    var displayNum;
 
-  var displayNum;
+    var ret = {};
 
-  var ret = {};
+    setEffectObjEffectList.forEach(function(effectItem) {
+      var effectType = ReadEnumFromNumber(proto.msggamedata.RuneSetEffectType, effectItem.getType())
+      var stringKey = "";
+      var value = effectItem.getValue();
+      var positive = "";
 
-  setEffectObjEffectList.forEach(function(effectItem) {
-    var effectType = ReadEnumFromNumber(proto.msggamedata.RuneSetEffectType, effectItem.getType())
-    var stringKey = "";
-    var value = effectItem.getValue();
-    var positive = "";
+      // console.log(effectItem);
+      // console.log(effectType);
+      switch (effectItem.getType()) {
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDATTACKPERCENT:
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDATTACK:
+          stringKey = strAtk;
+          displayNum = CalculateGemStat(playerRealAtk, value);
+          ret[effectType.replace("RSET","RET")] = value;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDDEFENCEPERCENT:
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDDEFENCE:
+          stringKey = strDef;
+          displayNum = CalculateGemStat(playerRealDef, value);
+          ret[effectType.replace("RSET","RET")] = value;
 
-    // console.log(effectItem);
-    // console.log(effectType);
-    switch (effectItem.getType()) {
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDATTACKPERCENT:
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDATTACK:
-        stringKey = strAtk;
-        displayNum = CalculateGemStat(playerRealAtk, value);
-        ret[effectType.replace("RSET","RET")] = value;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDDEFENCEPERCENT:
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDDEFENCE:
-        stringKey = strDef;
-        displayNum = CalculateGemStat(playerRealDef, value);
-        ret[effectType.replace("RSET","RET")] = value;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDHEALPERCENT:
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDHEAL:
+          stringKey = strHeal;
+          displayNum = CalculateGemStat(playerRealHeal, value);
+          ret[effectType.replace("RSET","RET")] = value;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDHPPERCENT:
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDHP:
+          stringKey = strHp;
+          displayNum = CalculateGemStat(playerRealHp, value);
+          ret[effectType.replace("RSET","RET")] = value;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDCRITICALDAMAGEPERCENT:
+          stringKey = strCritDmg;
+          displayNum = CalculateGemStat(playerRealCritDmg, value);
+          ret[effectType.replace("RSET","RET")] = value;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDCRITICALPROBPERCENT:
+          stringKey = strCritRate;
 
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDHEALPERCENT:
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDHEAL:
-        stringKey = strHeal;
-        displayNum = CalculateGemStat(playerRealHeal, value);
-        ret[effectType.replace("RSET","RET")] = value;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDHPPERCENT:
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDHP:
-        stringKey = strHp;
-        displayNum = CalculateGemStat(playerRealHp, value);
-        ret[effectType.replace("RSET","RET")] = value;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDCRITICALDAMAGEPERCENT:
-        stringKey = strCritDmg;
-        displayNum = CalculateGemStat(playerRealCritDmg, value);
-        ret[effectType.replace("RSET","RET")] = value;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDCRITICALPROBPERCENT:
-        stringKey = strCritRate;
+          displayNum = CalculateGemStat(playerRealCritRate, value);
+          ret[effectType.replace("RSET","RET")] = value;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_ADDSTATUSEFFECTRESISTANCEPERCENT:
+          stringKey = strResist;
+          displayNum = CalculateGemStat(playerRealResist, value);
+          ret[effectType.replace("RSET","RET")] = value;
+          break;
 
-        displayNum = CalculateGemStat(playerRealCritRate, value);
-        ret[effectType.replace("RSET","RET")] = value;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_ADDSTATUSEFFECTRESISTANCEPERCENT:
-        stringKey = strResist;
-        displayNum = CalculateGemStat(playerRealResist, value);
-        ret[effectType.replace("RSET","RET")] = value;
-        break;
+        case proto.msggamedata.RuneSetEffectType.RSET_HEALMYHP:
+          stringKey = strHealMyHp;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_HEALMYMP:
+          stringKey = strHealMyMp;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_INCHP:
+          stringKey = strIncHp;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_INCMP:
+          stringKey = strIncMp;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_SHIELD:
+          stringKey = strShield;
+          break;
+        case proto.msggamedata.RuneSetEffectType.RSET_STUN:
+          stringKey = strStun;
+          break;
+        default:
+          stringKey = "unknown";
 
-      case proto.msggamedata.RuneSetEffectType.RSET_HEALMYHP:
-        stringKey = strHealMyHp;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_HEALMYMP:
-        stringKey = strHealMyMp;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_INCHP:
-        stringKey = strIncHp;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_INCMP:
-        stringKey = strIncMp;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_SHIELD:
-        stringKey = strShield;
-        break;
-      case proto.msggamedata.RuneSetEffectType.RSET_STUN:
-        stringKey = strStun;
-        break;
-      default:
-        stringKey = "unknown";
-
-    }
+      }
 
 
 
-  });
+    });
+  }
 
-  var gem_icon = goog.dom.getElement("gem_icon");
+  // gemSlot
+
+
+  var gem_icon = goog.dom.getElement("gem_icon" + gemSlot);
   gem_icon.setAttribute("src", "img/" + selectedGemSetValue.replace("_1", "") + "_diamond_1.png");
+
 
   return ret;
 
@@ -1907,8 +1994,12 @@ function ChangeGemSet() {
 
 
 
-function ChangeGemMainGrade(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list) {
+function ChangeGemMainGrade(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list, gemSlot) {
+  if(gemSlot == undefined) {
+    gemSlot = "";
+  }
   goog.dom.removeChildren(gem_type_list);
+  // console.log(gem_upgrade_list);
   goog.dom.removeChildren(gem_upgrade_list);
 
   var gemTypeList = { RET_ADDHPPERCENT:strHp + "%", RET_ADDHP:strHp, RET_ADDATTACKPERCENT:strAtk + "%", RET_ADDATTACK:strAtk, RET_ADDDEFENCEPERCENT:strDef + "%", RET_ADDDEFENCE:strDef,
@@ -1916,7 +2007,7 @@ function ChangeGemMainGrade(gem_grade_list, gem_type_list, gem_upgrade_list, gem
 
   var gem_grade_selected = gem_grade_list.options[gem_grade_list.selectedIndex].value;
 
-  if(gem_grade_selected != "") {
+  if(gem_grade_selected != "blank") {
     Object.entries(gemTypeList).forEach(function( item, index, obj)  {
       var key = item[0];
       var val = item[1];
@@ -1938,7 +2029,7 @@ function ChangeGemMainGrade(gem_grade_list, gem_type_list, gem_upgrade_list, gem
       gem_upgrade_list.add(option);
     }
 
-    ChangeGemStat(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list);
+    ChangeGemStat(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list, gemSlot);
 
     // console.log();
 
@@ -1965,12 +2056,15 @@ function ChangeGemMainGrade(gem_grade_list, gem_type_list, gem_upgrade_list, gem
 
   }
 
-  ChangeGemStat(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list);
+  ChangeGemStat(gem_grade_list, gem_type_list, gem_upgrade_list, gem_list, gemSlot);
 
 }
 
 
-function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem_1) {
+function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem_1, gemSlot) {
+  if(gemSlot == undefined) {
+    gemSlot = "";
+  }
 
   var value = 0;
   if(gem_1_type_list.options.length > 0) {
@@ -2167,7 +2261,7 @@ function ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem1_upgrade_list, gem
 
 
 
-  SumGem();
+  SumGem(gemSlot);
 
 
 }
@@ -2233,8 +2327,10 @@ function ChangeGemSubStatUpgrade (div_parent_upgrade, div_type, div_upgrade, div
 
 }
 
-function SumGem () {
-
+function SumGem (gemSlot) {
+  if(gemSlot == undefined) {
+    gemSlot = "";
+  }
 
 
   var totalPercentHp = 0;
@@ -2255,77 +2351,80 @@ function SumGem () {
 
   var totalPercentResist = 0;
 
-  var gem_set_list = goog.dom.getElement("gem_set_list");
+  var gem_set_list = goog.dom.getElement("gem_set_list" + gemSlot);
 
-  var gemSet = ChangeGemSet();
+  var gemSet = ChangeGemSet(gemSlot);
+ // console.log( gemSet);
+  if(gemSet != undefined) {
+    var gemSetKeys = Object.keys(gemSet);
+    var gemSetValues = Object.values(gemSet);
 
-  var gemSetKeys = Object.keys(gemSet);
-  var gemSetValues = Object.values(gemSet);
-  // console.log( gemSetKeys);
-  // console.log( gemSetValues);
-
-
-  for(z = 0; z < gemSetKeys.length; z++) {
-    switch (gemSetKeys[z]) {
-
-      case "RET_ADDHPPERCENT":
-        totalPercentHp += gemSetValues[z];
-
-        break;
-      case "RET_ADDHP":
-        totalHp += gemSetValues[z];
-
-        break;
-
-      case "RET_ADDATTACKPERCENT":
-        totalPercentAtk += gemSetValues[z];
-        break;
-
-      case "RET_ADDATTACK":
-        totalAtk += gemSetValues[z];
-        break;
-
-      case "RET_ADDDEFENCEPERCENT":
-        totalPercentDef += gemSetValues[z];
-        break;
-      case "RET_ADDDEFENCE":
-        totalDef += gemSetValues[z];
-        break;
-
-      case "RET_ADDHEALPERCENT":
-        totalPercentHeal += gemSetValues[z];
-        break;
-
-      case "RET_ADDHEAL":
-        totalHeal += gemSetValues[z];
-        break;
-
-      case "RET_ADDCRITICALDAMAGEPERCENT":
-        totalPercentCritDmg += gemSetValues[z];
-        break;
-
-      case "RET_ADDCRITICALPROBPERCENT":
-        totalPercentCritRate += gemSetValues[z];
-        break;
-
-      case "RET_ADDSTATUSEFFECTRESISTANCEPERCENT":
-        totalPercentResist += gemSetValues[z];
-        break;
+    // console.log( gemSetValues);
 
 
+    for(z = 0; z < gemSetKeys.length; z++) {
+      switch (gemSetKeys[z]) {
 
-      default:
+        case "RET_ADDHPPERCENT":
+          totalPercentHp += gemSetValues[z];
+
+          break;
+        case "RET_ADDHP":
+          totalHp += gemSetValues[z];
+
+          break;
+
+        case "RET_ADDATTACKPERCENT":
+          totalPercentAtk += gemSetValues[z];
+          break;
+
+        case "RET_ADDATTACK":
+          totalAtk += gemSetValues[z];
+          break;
+
+        case "RET_ADDDEFENCEPERCENT":
+          totalPercentDef += gemSetValues[z];
+          break;
+        case "RET_ADDDEFENCE":
+          totalDef += gemSetValues[z];
+          break;
+
+        case "RET_ADDHEALPERCENT":
+          totalPercentHeal += gemSetValues[z];
+          break;
+
+        case "RET_ADDHEAL":
+          totalHeal += gemSetValues[z];
+          break;
+
+        case "RET_ADDCRITICALDAMAGEPERCENT":
+          totalPercentCritDmg += gemSetValues[z];
+          break;
+
+        case "RET_ADDCRITICALPROBPERCENT":
+          totalPercentCritRate += gemSetValues[z];
+          break;
+
+        case "RET_ADDSTATUSEFFECTRESISTANCEPERCENT":
+          totalPercentResist += gemSetValues[z];
+          break;
 
 
+
+        default:
+
+
+      }
     }
+
+
   }
 
 
 
 
 
-
-  var gem_main_types = goog.dom.getElementsByClass("gem_main_type");
+  var gem_main_types = goog.dom.getElementsByClass("gem_main_type" + gemSlot);
   var gem_main_size = gem_main_types.length;
 
   if(gem_main_size > 0) {
@@ -2412,12 +2511,12 @@ function SumGem () {
 
 
 
+  // console.log(gemSlot);
 
 
-
-  var gem_types = goog.dom.getElementsByClass("gem_type");
+  var gem_types = goog.dom.getElementsByClass("gem_type" + gemSlot);
   var gem_type_size = gem_types.length;
-
+  // console.log(gem_types);
 
   for(i = 0; i < gem_type_size; i++) {
     var selectedValue = gem_types[i].options[gem_types[i].selectedIndex].value;
@@ -2426,7 +2525,8 @@ function SumGem () {
     var valueId = selectId.replace("type_", "");
 
     var valueDom = goog.dom.getElement(valueId);
-    // console.log(valueDom.options.length )
+    // console.log(valueId);
+    // console.log(valueDom);
 
     var sizeOfValue = valueDom.options.length;
 
@@ -2491,85 +2591,112 @@ function SumGem () {
   // console.log(totalHp);
 
 
-   var div_gem_hp = goog.dom.getElement("div_gem_hp");
-   var div_gem_atk = goog.dom.getElement("div_gem_atk");
-   var div_gem_def = goog.dom.getElement("div_gem_def");
-   var div_gem_heal = goog.dom.getElement("div_gem_heal");
-   var div_gem_crit_dmg = goog.dom.getElement("div_gem_crit_dmg");
-   var div_gem_crit_rate = goog.dom.getElement("div_gem_crit_rate");
-   var div_gem_resist = goog.dom.getElement("div_gem_resist");
+   var div_gem_hp = goog.dom.getElement("div_gem_hp" + gemSlot);
+   var div_gem_atk = goog.dom.getElement("div_gem_atk" + gemSlot);
+   var div_gem_def = goog.dom.getElement("div_gem_def" + gemSlot);
+   var div_gem_heal = goog.dom.getElement("div_gem_heal" + gemSlot);
+   var div_gem_crit_dmg = goog.dom.getElement("div_gem_crit_dmg" + gemSlot);
+   var div_gem_crit_rate = goog.dom.getElement("div_gem_crit_rate" + gemSlot);
+   var div_gem_resist = goog.dom.getElement("div_gem_resist" + gemSlot);
+
 
   var displayHp = playerRealHp * totalPercentHp + totalHp ;
   var prefixHp = "";
+  var colorSpanHp = " (<span style='color:#00FF00'>";
   if(displayHp >= 0) {
    prefixHp = "+";
   }
-  //  else {
-  //  prefixHp = "-";
-  // }
+  else {
+   colorSpanHp = " (<span style='color:#FF0000'>";
+  }
   playerRealGemHp = displayHp;
+  var finalHp = playerRealHp + playerRealGemHp;
 
-  div_gem_hp.innerHTML = prefixHp + Math.round( displayHp).toLocaleString();
+  div_gem_hp.innerHTML = Math.round(finalHp).toLocaleString() + colorSpanHp + prefixHp + Math.round( displayHp).toLocaleString() +  "</span>)";
 
   var displayAtk = playerRealAtk * totalPercentAtk + totalAtk ;
   var prefixAtk = "";
+  var colorSpanAtk = " (<span style='color:#00FF00'>";
   if(displayAtk >= 0) {
     prefixAtk = "+";
   }
-  // else {
-  //   prefixAtk = "-";
-  // }
-  div_gem_atk.innerHTML = prefixAtk + Math.round( displayAtk).toLocaleString();
+  else {
+    colorSpanAtk = " (<span style='color:#FF0000'>";
+  }
+  playerRealGemAtk = displayAtk;
+  var finalAtk = playerRealAtk + playerRealGemAtk;
+
+  div_gem_atk.innerHTML = Math.round(finalAtk).toLocaleString() + colorSpanAtk + prefixAtk + Math.round( displayAtk).toLocaleString() +  "</span>)";
 
   var displayDef = playerRealDef * totalPercentDef + totalDef ;
   var prefixDef = "";
+  var colorSpanDef = " (<span style='color:#00FF00'>";
   if(displayDef >= 0) {
     prefixDef = "+";
   }
-  // else {
-  //   prefixDef = "-";
-  // }
-  div_gem_def.innerHTML = prefixDef + Math.round( displayDef).toLocaleString();
+  else {
+    colorSpanDef = " (<span style='color:#FF0000'>";
+  }
+  playerRealGemDef = displayDef;
+  var finalDef = playerRealDef + playerRealGemDef;
+  div_gem_def.innerHTML = Math.round(finalDef).toLocaleString() + colorSpanDef + prefixDef + Math.round( displayDef).toLocaleString() +  "</span>)";
 
   var displayHeal = playerRealHeal * totalPercentHeal + totalHeal ;
   var prefixHeal = "";
+  var colorSpanHeal = " (<span style='color:#00FF00'>";
   if(displayHeal >= 0) {
     prefixHeal = "+";
   }
-  // else {
-  //   prefixHeal = "-";
-  // }
-  div_gem_heal.innerHTML = prefixHeal + Math.round( displayHeal).toLocaleString();
+  else {
+    colorSpanHeal = " (<span style='color:#FF0000'>";
+  }
+  playerRealGemHeal = displayHeal;
+  var finalHeal = playerRealHeal + playerRealGemHeal;
+  div_gem_heal.innerHTML = Math.round(finalHeal).toLocaleString() + colorSpanHeal + prefixHeal + Math.round( displayHeal).toLocaleString() +  "</span>)";
 
   var displayCritDmg = (totalPercentCritDmg * 100) ;
   var prefixCritDmg = "";
+  var colorSpanCritDmg = " (<span style='color:#00FF00'>";
   if(displayCritDmg >= 0) {
     prefixCritDmg = "+";
   }
-  // else {
-  //   prefixCritDmg = "-";
-  // }
-  div_gem_crit_dmg.innerHTML = prefixCritDmg + Math.round( displayCritDmg).toLocaleString() + "%";
+  else {
+    colorSpanCritDmg = " (<span style='color:#FF0000'>";
+  }
+  playerRealGemCritDmg = displayCritDmg;
+  var finalCritDmg = playerRealCritDmg + playerRealGemCritDmg;
+  div_gem_crit_dmg.innerHTML = Math.round(finalCritDmg).toLocaleString() + colorSpanCritDmg + prefixCritDmg + Math.round( displayCritDmg).toLocaleString() +  "</span>)";
 
   var displayCritRate = (totalPercentCritRate * 100) ;
   var prefixCritRate = "";
+  var colorSpanCritRate = " (<span style='color:#00FF00'>";
   if(displayCritRate >= 0) {
     prefixCritRate = "+";
   }
-  // else {
-  //   prefixCritRate = "-";
-  // }
-  div_gem_crit_rate.innerHTML = prefixCritRate + Math.round( displayCritRate).toLocaleString() + "%";
+  else {
+    colorSpanCritRate = " (<span style='color:#FF0000'>";
+  }
+  playerRealGemCritRate = displayCritRate;
+  var finalCritRate = playerRealCritRate + playerRealGemCritRate;
+  div_gem_crit_rate.innerHTML = Math.round(finalCritRate).toLocaleString() + colorSpanCritRate + prefixCritRate + Math.round( displayCritRate).toLocaleString() +  "</span>)";
 
   var displayResist = (totalPercentResist * 100) ;
   var prefixResist = "";
+  var colorSpanResist = " (<span style='color:#00FF00'>";
   if(displayResist >= 0) {
     prefixResist = "+";
   }
-  // else {
-  //   prefixResist = "-";
-  // }
-  div_gem_resist.innerHTML = prefixResist + Math.round( displayResist).toLocaleString() + "%";
+  else {
+    colorSpanResist = " (<span style='color:#FF0000'>";
+  }
+  playerRealGemResist = displayResist;
+  var finalResist = playerRealResist + playerRealGemResist;
+  div_gem_resist.innerHTML = Math.round(finalResist).toLocaleString() + colorSpanResist + prefixResist + Math.round( displayResist).toLocaleString() +  "</span>)";
+
+  // google.charts.load('current', {'packages':['bar']});
+  // google.charts.setOnLoadCallback(drawChart);
+  google.charts.load("current", {packages:["corechart"]});
+  google.charts.setOnLoadCallback(drawChart);
 
 }
 
@@ -2628,48 +2755,1228 @@ function CalculateGemStat(oriValue, gemValue) {
   return ret;
 }
 
-function ReadUrlParams() {
-  var playerMon = getUrlParameter("input_astromon_name");
-  var playerElement = getUrlParameter("element_list");
-  SetDataFromUrl(playerMon, playerElement);
-  // console.log(playerElement);
+// function ReadPost() {
 
-}
-
-function SetDataFromUrl(playerMon, playerElement) {
+// }
 
 
+function ReadGemUrl (inputBox, gemSlot) {
+  if(gemSlot == undefined) {
+    gemSlot = "";
+  }
+  var gem_set_list = goog.dom.getElement("gem_set_list" + gemSlot);
+  var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list" + gemSlot);
+  var gem_1_type_list = goog.dom.getElement("gem_1_type_list" + gemSlot);
+  var gem_1_upgrade_list = goog.dom.getElement("gem_1_upgrade_list" + gemSlot);
+  // console.log("gem_1_upgrade_list" + gemSlot);
+  // console.log(gem_1_upgrade_list);
+  var gem_1_list = goog.dom.getElement("gem_1_list" + gemSlot);
 
-  // var domElementList = goog.dom.getElement("element_list");
-  // var currentElement = playerElement.value;
-  // currentElement = playerElement;
-  if(playerMon != undefined) {
-    var dataListAstromon = goog.dom.getElement("input_astromon_name");
-    dataListAstromon.value = playerMon;
-      ChangeMonFromUrl(true, playerMon, playerElement);
+  var gem_2_grade_list = goog.dom.getElement("gem_2_grade_list" + gemSlot);
+  var gem_2_type_list = goog.dom.getElement("gem_2_type_list" + gemSlot);
+  var gem_2_upgrade_list = goog.dom.getElement("gem_2_upgrade_list" + gemSlot);
+  var gem_2_list = goog.dom.getElement("gem_2_list" + gemSlot);
+
+  var gem_3_grade_list = goog.dom.getElement("gem_3_grade_list" + gemSlot);
+  var gem_3_type_list = goog.dom.getElement("gem_3_type_list" + gemSlot);
+  var gem_3_upgrade_list = goog.dom.getElement("gem_3_upgrade_list" + gemSlot);
+  var gem_3_list = goog.dom.getElement("gem_3_list" + gemSlot);
+
+
+  var gem_1_sub_stat_type_1_list = goog.dom.getElement("gem_1_sub_stat_type_1_list" + gemSlot);
+  var gem1_sub_stat_upgrade_1_list = goog.dom.getElement("gem1_sub_stat_upgrade_1_list" + gemSlot);
+  var gem_1_sub_stat_1_list = goog.dom.getElement("gem_1_sub_stat_1_list" + gemSlot);
+  var gem_1_sub_stat_type_2_list = goog.dom.getElement("gem_1_sub_stat_type_2_list" + gemSlot);
+  var gem1_sub_stat_upgrade_2_list = goog.dom.getElement("gem1_sub_stat_upgrade_2_list" + gemSlot);
+  var gem_1_sub_stat_2_list = goog.dom.getElement("gem_1_sub_stat_2_list" + gemSlot);
+  var gem_1_sub_stat_type_3_list = goog.dom.getElement("gem_1_sub_stat_type_3_list" + gemSlot);
+  var gem1_sub_stat_upgrade_3_list = goog.dom.getElement("gem1_sub_stat_upgrade_3_list" + gemSlot);
+  var gem_1_sub_stat_3_list = goog.dom.getElement("gem_1_sub_stat_3_list" + gemSlot);
+  var gem_1_sub_stat_type_4_list = goog.dom.getElement("gem_1_sub_stat_type_4_list" + gemSlot);
+  var gem1_sub_stat_upgrade_4_list = goog.dom.getElement("gem1_sub_stat_upgrade_4_list" + gemSlot);
+  var gem_1_sub_stat_4_list = goog.dom.getElement("gem_1_sub_stat_4_list" + gemSlot);
+
+  var gem_2_sub_stat_type_1_list = goog.dom.getElement("gem_2_sub_stat_type_1_list" + gemSlot);
+  var gem2_sub_stat_upgrade_1_list = goog.dom.getElement("gem2_sub_stat_upgrade_1_list" + gemSlot);
+  var gem_2_sub_stat_1_list = goog.dom.getElement("gem_2_sub_stat_1_list" + gemSlot);
+  var gem_2_sub_stat_type_2_list = goog.dom.getElement("gem_2_sub_stat_type_2_list" + gemSlot);
+  var gem2_sub_stat_upgrade_2_list = goog.dom.getElement("gem2_sub_stat_upgrade_2_list" + gemSlot);
+  var gem_2_sub_stat_2_list = goog.dom.getElement("gem_2_sub_stat_2_list" + gemSlot);
+  var gem_2_sub_stat_type_3_list = goog.dom.getElement("gem_2_sub_stat_type_3_list" + gemSlot);
+  var gem2_sub_stat_upgrade_3_list = goog.dom.getElement("gem2_sub_stat_upgrade_3_list" + gemSlot);
+  var gem_2_sub_stat_3_list = goog.dom.getElement("gem_2_sub_stat_3_list" + gemSlot);
+  var gem_2_sub_stat_type_4_list = goog.dom.getElement("gem_2_sub_stat_type_4_list" + gemSlot);
+  var gem2_sub_stat_upgrade_4_list = goog.dom.getElement("gem2_sub_stat_upgrade_4_list" + gemSlot);
+  var gem_2_sub_stat_4_list = goog.dom.getElement("gem_2_sub_stat_4_list" + gemSlot);
+
+  var gem_3_sub_stat_type_1_list = goog.dom.getElement("gem_3_sub_stat_type_1_list" + gemSlot);
+  var gem3_sub_stat_upgrade_1_list = goog.dom.getElement("gem3_sub_stat_upgrade_1_list" + gemSlot);
+  var gem_3_sub_stat_1_list = goog.dom.getElement("gem_3_sub_stat_1_list" + gemSlot);
+  var gem_3_sub_stat_type_2_list = goog.dom.getElement("gem_3_sub_stat_type_2_list" + gemSlot);
+  var gem3_sub_stat_upgrade_2_list = goog.dom.getElement("gem3_sub_stat_upgrade_2_list" + gemSlot);
+  var gem_3_sub_stat_2_list = goog.dom.getElement("gem_3_sub_stat_2_list" + gemSlot);
+  var gem_3_sub_stat_type_3_list = goog.dom.getElement("gem_3_sub_stat_type_3_list" + gemSlot);
+  var gem3_sub_stat_upgrade_3_list = goog.dom.getElement("gem3_sub_stat_upgrade_3_list" + gemSlot);
+  var gem_3_sub_stat_3_list = goog.dom.getElement("gem_3_sub_stat_3_list" + gemSlot);
+  var gem_3_sub_stat_type_4_list = goog.dom.getElement("gem_3_sub_stat_type_4_list" + gemSlot);
+  var gem3_sub_stat_upgrade_4_list = goog.dom.getElement("gem3_sub_stat_upgrade_4_list" + gemSlot);
+  var gem_3_sub_stat_4_list = goog.dom.getElement("gem_3_sub_stat_4_list" + gemSlot);
+
+
+  var gemSet = getGemParameter(inputBox, "gem_set_list" + gemSlot);
+  // console.log(gemSet);
+  if(gemSet != undefined && gemSet != "") {
+
+    gem_set_list.value = gemSet;
+    SumGem(gemSlot);
   }
 
+  var gem1GradeList = getGemParameter(inputBox, "gem_1_grade_list" + gemSlot);
+  if(gem1GradeList != undefined && gem1GradeList != "") {
+
+    gem_1_grade_list.value = gem1GradeList;
+    ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem1GradeList = getGemParameter(inputBox, "gem_1_grade_list" + gemSlot);
+  if(gem1GradeList != undefined && gem1GradeList != "") {
+    // var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list" + gemSlot);
+    gem_1_grade_list.value = gem1GradeList;
+    ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem2GradeList = getGemParameter(inputBox, "gem_2_grade_list" + gemSlot);
+  if(gem2GradeList != undefined && gem2GradeList != "") {
+
+    gem_2_grade_list.value = gem2GradeList;
+    ChangeGemMainGrade(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+  var gem3GradeList = getGemParameter(inputBox, "gem_3_grade_list" + gemSlot);
+  if(gem3GradeList != undefined && gem3GradeList != "") {
+
+    gem_3_grade_list.value = gem3GradeList;
+    ChangeGemMainGrade(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  var gem1TypeList = getGemParameter(inputBox, "gem_1_type_list" + gemSlot);
+  if(gem1TypeList != undefined && gem1TypeList != "blank") {
+
+    gem_1_type_list.value = gem1TypeList;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem2TypeList = getGemParameter(inputBox, "gem_2_type_list" + gemSlot);
+  if(gem2TypeList != undefined && gem1TypeList != "blank") {
+    gem_2_type_list.value = gem2TypeList;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+  var gem3TypeList = getGemParameter(inputBox, "gem_3_type_list" + gemSlot);
+  if(gem3TypeList != undefined && gem1TypeList != "blank") {
+    gem_3_type_list.value = gem3TypeList;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+  var gem1UpgradeList = getGemParameter(inputBox, "gem_1_upgrade_list" + gemSlot);
+  if(gem1UpgradeList != undefined && gem1UpgradeList != "blank") {
+    gem_1_upgrade_list.value = gem1UpgradeList;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem2UpgradeList = getGemParameter(inputBox, "gem_2_upgrade_list" + gemSlot);
+  if(gem2UpgradeList != undefined && gem2UpgradeList != "blank") {
+    gem_2_upgrade_list.value = gem2UpgradeList;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+  var gem3UpgradeList = getGemParameter(inputBox, "gem_3_upgrade_list" + gemSlot);
+  if(gem3UpgradeList != undefined && gem3UpgradeList != "blank") {
+    gem_3_upgrade_list.value = gem3UpgradeList;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  var gem_1_sub_stat_type_1_list_value = getGemParameter(inputBox, "gem_1_sub_stat_type_1_list" + gemSlot);
+  if(gem_1_sub_stat_type_1_list_value != undefined && gem_1_sub_stat_type_1_list_value != "blank") {
+    gem_1_sub_stat_type_1_list.value = gem_1_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list );
+  }
+
+  var gem1_sub_stat_upgrade_1_list_value = getGemParameter(inputBox, "gem1_sub_stat_upgrade_1_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_1_list_value != undefined && gem1_sub_stat_upgrade_1_list_value != "blank") {
+    gem1_sub_stat_upgrade_1_list.value = gem1_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list);
+  }
+
+  var gem_1_sub_stat_1_list_value = getGemParameter(inputBox, "gem_1_sub_stat_1_list" + gemSlot);
+  if(gem_1_sub_stat_1_list_value != undefined && gem_1_sub_stat_1_list_value != "blank") {
+    gem_1_sub_stat_1_list.value = gem_1_sub_stat_1_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+
+
+  var gem_1_sub_stat_type_2_list_value = getGemParameter(inputBox, "gem_1_sub_stat_type_2_list" + gemSlot);
+  if(gem_1_sub_stat_type_2_list_value != undefined && gem_1_sub_stat_type_2_list_value != "blank") {
+    gem_1_sub_stat_type_2_list.value = gem_1_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list );
+  }
+
+  var gem1_sub_stat_upgrade_2_list_value = getGemParameter(inputBox, "gem1_sub_stat_upgrade_2_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_2_list_value != undefined && gem1_sub_stat_upgrade_2_list_value != "blank") {
+    gem1_sub_stat_upgrade_2_list.value = gem1_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list);
+  }
+
+  var gem_1_sub_stat_2_list_value = getGemParameter(inputBox, "gem_1_sub_stat_2_list" + gemSlot);
+  if(gem_1_sub_stat_2_list_value != undefined && gem_1_sub_stat_2_list_value != "blank") {
+    gem_1_sub_stat_2_list.value = gem_1_sub_stat_2_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+
+  var gem_1_sub_stat_type_3_list_value = getGemParameter(inputBox, "gem_1_sub_stat_type_3_list" + gemSlot);
+  if(gem_1_sub_stat_type_3_list_value != undefined && gem_1_sub_stat_type_3_list_value != "blank") {
+    gem_1_sub_stat_type_3_list.value = gem_1_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list );
+  }
+
+  var gem1_sub_stat_upgrade_3_list_value = getGemParameter(inputBox, "gem1_sub_stat_upgrade_3_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_3_list_value != undefined && gem1_sub_stat_upgrade_3_list_value != "blank") {
+    gem1_sub_stat_upgrade_3_list.value = gem1_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list);
+  }
+
+  var gem_1_sub_stat_3_list_value = getGemParameter(inputBox, "gem_1_sub_stat_3_list" + gemSlot);
+  if(gem_1_sub_stat_3_list_value != undefined && gem_1_sub_stat_3_list_value != "blank") {
+    gem_1_sub_stat_3_list.value = gem_1_sub_stat_3_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem_1_sub_stat_type_4_list_value = getGemParameter(inputBox, "gem_1_sub_stat_type_4_list" + gemSlot);
+  if(gem_1_sub_stat_type_4_list_value != undefined && gem_1_sub_stat_type_4_list_value != "blank") {
+    gem_1_sub_stat_type_4_list.value = gem_1_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list );
+  }
+
+  var gem1_sub_stat_upgrade_4_list_value = getGemParameter(inputBox, "gem1_sub_stat_upgrade_4_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_4_list_value != undefined && gem1_sub_stat_upgrade_4_list_value != "blank") {
+    gem1_sub_stat_upgrade_4_list.value = gem1_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list);
+  }
+
+  var gem_1_sub_stat_4_list_value = getGemParameter(inputBox, "gem_1_sub_stat_4_list" + gemSlot);
+  if(gem_1_sub_stat_4_list_value != undefined && gem_1_sub_stat_4_list_value != "blank") {
+    gem_1_sub_stat_4_list.value = gem_1_sub_stat_4_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+
+
+
+  var gem_2_sub_stat_type_1_list_value = getGemParameter(inputBox, "gem_2_sub_stat_type_1_list" + gemSlot);
+  if(gem_2_sub_stat_type_1_list_value != undefined && gem_2_sub_stat_type_1_list_value != "blank") {
+    gem_2_sub_stat_type_1_list.value = gem_2_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list );
+  }
+
+  var gem2_sub_stat_upgrade_1_list_value = getGemParameter(inputBox, "gem2_sub_stat_upgrade_1_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_1_list_value != undefined && gem2_sub_stat_upgrade_1_list_value != "blank") {
+    gem2_sub_stat_upgrade_1_list.value = gem2_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list);
+  }
+
+  var gem_2_sub_stat_1_list_value = getGemParameter(inputBox, "gem_2_sub_stat_1_list" + gemSlot);
+  if(gem_2_sub_stat_1_list_value != undefined && gem_2_sub_stat_1_list_value != "blank") {
+    gem_2_sub_stat_1_list.value = gem_2_sub_stat_1_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+
+  var gem_2_sub_stat_type_2_list_value = getGemParameter(inputBox, "gem_2_sub_stat_type_2_list" + gemSlot);
+  if(gem_2_sub_stat_type_2_list_value != undefined && gem_2_sub_stat_type_2_list_value != "blank") {
+    gem_2_sub_stat_type_2_list.value = gem_2_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list );
+  }
+
+  var gem2_sub_stat_upgrade_2_list_value = getGemParameter(inputBox, "gem2_sub_stat_upgrade_2_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_2_list_value != undefined && gem2_sub_stat_upgrade_2_list_value != "blank") {
+    gem2_sub_stat_upgrade_2_list.value = gem2_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list);
+  }
+
+  var gem_2_sub_stat_2_list_value = getGemParameter(inputBox, "gem_2_sub_stat_2_list" + gemSlot);
+  if(gem_2_sub_stat_2_list_value != undefined && gem_2_sub_stat_2_list_value != "blank") {
+    gem_2_sub_stat_2_list.value = gem_2_sub_stat_2_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+  var gem_2_sub_stat_type_3_list_value = getGemParameter(inputBox, "gem_2_sub_stat_type_3_list" + gemSlot);
+  if(gem_2_sub_stat_type_3_list_value != undefined && gem_2_sub_stat_type_3_list_value != "blank") {
+    gem_2_sub_stat_type_3_list.value = gem_2_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list );
+  }
+
+  var gem2_sub_stat_upgrade_3_list_value = getGemParameter(inputBox, "gem2_sub_stat_upgrade_3_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_3_list_value != undefined && gem2_sub_stat_upgrade_3_list_value != "blank") {
+    gem2_sub_stat_upgrade_3_list.value = gem2_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list);
+  }
+
+  var gem_2_sub_stat_3_list_value = getGemParameter(inputBox, "gem_2_sub_stat_3_list" + gemSlot);
+  if(gem_2_sub_stat_3_list_value != undefined && gem_2_sub_stat_3_list_value != "blank") {
+    gem_2_sub_stat_3_list.value = gem_2_sub_stat_3_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+  var gem_2_sub_stat_type_4_list_value = getGemParameter(inputBox, "gem_2_sub_stat_type_4_list" + gemSlot);
+  if(gem_2_sub_stat_type_4_list_value != undefined && gem_2_sub_stat_type_4_list_value != "blank") {
+    gem_2_sub_stat_type_4_list.value = gem_2_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list );
+  }
+
+  var gem2_sub_stat_upgrade_4_list_value = getGemParameter(inputBox, "gem2_sub_stat_upgrade_4_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_4_list_value != undefined && gem2_sub_stat_upgrade_4_list_value != "blank") {
+    gem2_sub_stat_upgrade_4_list.value = gem2_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list);
+  }
+
+  var gem_2_sub_stat_4_list_value = getGemParameter(inputBox, "gem_2_sub_stat_4_list" + gemSlot);
+  if(gem_2_sub_stat_4_list_value != undefined && gem_2_sub_stat_4_list_value != "blank") {
+    gem_2_sub_stat_4_list.value = gem_2_sub_stat_4_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+
+  var gem_3_sub_stat_type_1_list_value = getGemParameter(inputBox, "gem_3_sub_stat_type_1_list" + gemSlot);
+  if(gem_3_sub_stat_type_1_list_value != undefined && gem_3_sub_stat_type_1_list_value != "blank") {
+    gem_3_sub_stat_type_1_list.value = gem_3_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list );
+  }
+
+  var gem3_sub_stat_upgrade_1_list_value = getGemParameter(inputBox, "gem3_sub_stat_upgrade_1_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_1_list_value != undefined && gem3_sub_stat_upgrade_1_list_value != "blank") {
+    gem3_sub_stat_upgrade_1_list.value = gem3_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list);
+  }
+
+  var gem_3_sub_stat_1_list_value = getGemParameter(inputBox, "gem_3_sub_stat_1_list" + gemSlot);
+  if(gem_3_sub_stat_1_list_value != undefined && gem_3_sub_stat_1_list_value != "blank") {
+    gem_3_sub_stat_1_list.value = gem_3_sub_stat_1_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+
+  var gem_3_sub_stat_type_2_list_value = getGemParameter(inputBox, "gem_3_sub_stat_type_2_list" + gemSlot);
+  if(gem_3_sub_stat_type_2_list_value != undefined && gem_3_sub_stat_type_2_list_value != "blank") {
+    gem_3_sub_stat_type_2_list.value = gem_3_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list );
+  }
+
+  var gem3_sub_stat_upgrade_2_list_value = getGemParameter(inputBox, "gem3_sub_stat_upgrade_2_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_2_list_value != undefined && gem3_sub_stat_upgrade_2_list_value != "blank") {
+    gem3_sub_stat_upgrade_2_list.value = gem3_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list);
+  }
+
+  var gem_3_sub_stat_2_list_value = getGemParameter(inputBox, "gem_3_sub_stat_2_list" + gemSlot);
+  if(gem_3_sub_stat_2_list_value != undefined && gem_3_sub_stat_2_list_value != "blank") {
+    gem_3_sub_stat_2_list.value = gem_3_sub_stat_2_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+  var gem_3_sub_stat_type_3_list_value = getGemParameter(inputBox, "gem_3_sub_stat_type_3_list" + gemSlot);
+  if(gem_3_sub_stat_type_3_list_value != undefined && gem_3_sub_stat_type_3_list_value != "blank") {
+    gem_3_sub_stat_type_3_list.value = gem_3_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list );
+  }
+
+  var gem3_sub_stat_upgrade_3_list_value = getGemParameter(inputBox, "gem3_sub_stat_upgrade_3_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_3_list_value != undefined && gem3_sub_stat_upgrade_3_list_value != "blank") {
+    gem3_sub_stat_upgrade_3_list.value = gem3_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list);
+  }
+
+  var gem_3_sub_stat_3_list_value = getGemParameter(inputBox, "gem_3_sub_stat_3_list" + gemSlot);
+  if(gem_3_sub_stat_3_list_value != undefined && gem_3_sub_stat_3_list_value != "blank") {
+    gem_3_sub_stat_3_list.value = gem_3_sub_stat_3_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  var gem_3_sub_stat_type_4_list_value = getGemParameter(inputBox, "gem_3_sub_stat_type_4_list" + gemSlot);
+  if(gem_3_sub_stat_type_4_list_value != undefined && gem_3_sub_stat_type_4_list_value != "blank") {
+    gem_3_sub_stat_type_4_list.value = gem_3_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list );
+  }
+
+  var gem3_sub_stat_upgrade_4_list_value = getGemParameter(inputBox, "gem3_sub_stat_upgrade_4_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_4_list_value != undefined && gem3_sub_stat_upgrade_4_list_value != "blank") {
+    gem3_sub_stat_upgrade_4_list.value = gem3_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list);
+  }
+
+  var gem_3_sub_stat_4_list_value = getGemParameter(inputBox, "gem_3_sub_stat_4_list" + gemSlot);
+  if(gem_3_sub_stat_4_list_value != undefined && gem_3_sub_stat_4_list_value != "blank") {
+    gem_3_sub_stat_4_list.value = gem_3_sub_stat_4_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+
 }
 
-var getUrlParameter = function getUrlParameter(sParam) {
-  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+
+function ReadGemFromUrl (gemSlot) {
+  if(gemSlot == undefined) {
+    gemSlot = "";
+  }
+  var gem_set_list = goog.dom.getElement("gem_set_list" + gemSlot);
+  var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list" + gemSlot);
+  var gem_1_type_list = goog.dom.getElement("gem_1_type_list" + gemSlot);
+  var gem_1_upgrade_list = goog.dom.getElement("gem_1_upgrade_list" + gemSlot);
+  // console.log("gem_1_upgrade_list" + gemSlot);
+  // console.log(gem_1_upgrade_list);
+  var gem_1_list = goog.dom.getElement("gem_1_list" + gemSlot);
+
+  var gem_2_grade_list = goog.dom.getElement("gem_2_grade_list" + gemSlot);
+  var gem_2_type_list = goog.dom.getElement("gem_2_type_list" + gemSlot);
+  var gem_2_upgrade_list = goog.dom.getElement("gem_2_upgrade_list" + gemSlot);
+  var gem_2_list = goog.dom.getElement("gem_2_list" + gemSlot);
+
+  var gem_3_grade_list = goog.dom.getElement("gem_3_grade_list" + gemSlot);
+  var gem_3_type_list = goog.dom.getElement("gem_3_type_list" + gemSlot);
+  var gem_3_upgrade_list = goog.dom.getElement("gem_3_upgrade_list" + gemSlot);
+  var gem_3_list = goog.dom.getElement("gem_3_list" + gemSlot);
+
+
+  var gem_1_sub_stat_type_1_list = goog.dom.getElement("gem_1_sub_stat_type_1_list" + gemSlot);
+  var gem1_sub_stat_upgrade_1_list = goog.dom.getElement("gem1_sub_stat_upgrade_1_list" + gemSlot);
+  var gem_1_sub_stat_1_list = goog.dom.getElement("gem_1_sub_stat_1_list" + gemSlot);
+  var gem_1_sub_stat_type_2_list = goog.dom.getElement("gem_1_sub_stat_type_2_list" + gemSlot);
+  var gem1_sub_stat_upgrade_2_list = goog.dom.getElement("gem1_sub_stat_upgrade_2_list" + gemSlot);
+  var gem_1_sub_stat_2_list = goog.dom.getElement("gem_1_sub_stat_2_list" + gemSlot);
+  var gem_1_sub_stat_type_3_list = goog.dom.getElement("gem_1_sub_stat_type_3_list" + gemSlot);
+  var gem1_sub_stat_upgrade_3_list = goog.dom.getElement("gem1_sub_stat_upgrade_3_list" + gemSlot);
+  var gem_1_sub_stat_3_list = goog.dom.getElement("gem_1_sub_stat_3_list" + gemSlot);
+  var gem_1_sub_stat_type_4_list = goog.dom.getElement("gem_1_sub_stat_type_4_list" + gemSlot);
+  var gem1_sub_stat_upgrade_4_list = goog.dom.getElement("gem1_sub_stat_upgrade_4_list" + gemSlot);
+  var gem_1_sub_stat_4_list = goog.dom.getElement("gem_1_sub_stat_4_list" + gemSlot);
+
+  var gem_2_sub_stat_type_1_list = goog.dom.getElement("gem_2_sub_stat_type_1_list" + gemSlot);
+  var gem2_sub_stat_upgrade_1_list = goog.dom.getElement("gem2_sub_stat_upgrade_1_list" + gemSlot);
+  var gem_2_sub_stat_1_list = goog.dom.getElement("gem_2_sub_stat_1_list" + gemSlot);
+  var gem_2_sub_stat_type_2_list = goog.dom.getElement("gem_2_sub_stat_type_2_list" + gemSlot);
+  var gem2_sub_stat_upgrade_2_list = goog.dom.getElement("gem2_sub_stat_upgrade_2_list" + gemSlot);
+  var gem_2_sub_stat_2_list = goog.dom.getElement("gem_2_sub_stat_2_list" + gemSlot);
+  var gem_2_sub_stat_type_3_list = goog.dom.getElement("gem_2_sub_stat_type_3_list" + gemSlot);
+  var gem2_sub_stat_upgrade_3_list = goog.dom.getElement("gem2_sub_stat_upgrade_3_list" + gemSlot);
+  var gem_2_sub_stat_3_list = goog.dom.getElement("gem_2_sub_stat_3_list" + gemSlot);
+  var gem_2_sub_stat_type_4_list = goog.dom.getElement("gem_2_sub_stat_type_4_list" + gemSlot);
+  var gem2_sub_stat_upgrade_4_list = goog.dom.getElement("gem2_sub_stat_upgrade_4_list" + gemSlot);
+  var gem_2_sub_stat_4_list = goog.dom.getElement("gem_2_sub_stat_4_list" + gemSlot);
+
+  var gem_3_sub_stat_type_1_list = goog.dom.getElement("gem_3_sub_stat_type_1_list" + gemSlot);
+  var gem3_sub_stat_upgrade_1_list = goog.dom.getElement("gem3_sub_stat_upgrade_1_list" + gemSlot);
+  var gem_3_sub_stat_1_list = goog.dom.getElement("gem_3_sub_stat_1_list" + gemSlot);
+  var gem_3_sub_stat_type_2_list = goog.dom.getElement("gem_3_sub_stat_type_2_list" + gemSlot);
+  var gem3_sub_stat_upgrade_2_list = goog.dom.getElement("gem3_sub_stat_upgrade_2_list" + gemSlot);
+  var gem_3_sub_stat_2_list = goog.dom.getElement("gem_3_sub_stat_2_list" + gemSlot);
+  var gem_3_sub_stat_type_3_list = goog.dom.getElement("gem_3_sub_stat_type_3_list" + gemSlot);
+  var gem3_sub_stat_upgrade_3_list = goog.dom.getElement("gem3_sub_stat_upgrade_3_list" + gemSlot);
+  var gem_3_sub_stat_3_list = goog.dom.getElement("gem_3_sub_stat_3_list" + gemSlot);
+  var gem_3_sub_stat_type_4_list = goog.dom.getElement("gem_3_sub_stat_type_4_list" + gemSlot);
+  var gem3_sub_stat_upgrade_4_list = goog.dom.getElement("gem3_sub_stat_upgrade_4_list" + gemSlot);
+  var gem_3_sub_stat_4_list = goog.dom.getElement("gem_3_sub_stat_4_list" + gemSlot);
+
+
+  var gemSet = getUrlParameter("gem_set_list" + gemSlot);
+
+  if(gemSet != undefined && gemSet != "") {
+
+    gem_set_list.value = gemSet;
+    SumGem(gemSlot);
+  }
+
+  var gem1GradeList = getUrlParameter("gem_1_grade_list" + gemSlot);
+  if(gem1GradeList != undefined && gem1GradeList != "") {
+
+    gem_1_grade_list.value = gem1GradeList;
+    ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem1GradeList = getUrlParameter("gem_1_grade_list" + gemSlot);
+  if(gem1GradeList != undefined && gem1GradeList != "") {
+    // var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list" + gemSlot);
+    gem_1_grade_list.value = gem1GradeList;
+    ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem2GradeList = getUrlParameter("gem_2_grade_list" + gemSlot);
+  if(gem2GradeList != undefined && gem2GradeList != "") {
+
+    gem_2_grade_list.value = gem2GradeList;
+    ChangeGemMainGrade(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+  var gem3GradeList = getUrlParameter("gem_3_grade_list" + gemSlot);
+  if(gem3GradeList != undefined && gem3GradeList != "") {
+
+    gem_3_grade_list.value = gem3GradeList;
+    ChangeGemMainGrade(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  var gem1TypeList = getUrlParameter("gem_1_type_list" + gemSlot);
+  if(gem1TypeList != undefined && gem1TypeList != "blank") {
+
+    gem_1_type_list.value = gem1TypeList;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem2TypeList = getUrlParameter("gem_2_type_list" + gemSlot);
+  if(gem2TypeList != undefined && gem1TypeList != "blank") {
+    gem_2_type_list.value = gem2TypeList;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+  var gem3TypeList = getUrlParameter("gem_3_type_list" + gemSlot);
+  if(gem3TypeList != undefined && gem1TypeList != "blank") {
+    gem_3_type_list.value = gem3TypeList;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+  var gem1UpgradeList = getUrlParameter("gem_1_upgrade_list" + gemSlot);
+  if(gem1UpgradeList != undefined && gem1UpgradeList != "blank") {
+    gem_1_upgrade_list.value = gem1UpgradeList;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem2UpgradeList = getUrlParameter("gem_2_upgrade_list" + gemSlot);
+  if(gem2UpgradeList != undefined && gem2UpgradeList != "blank") {
+    gem_2_upgrade_list.value = gem2UpgradeList;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+  var gem3UpgradeList = getUrlParameter("gem_3_upgrade_list" + gemSlot);
+  if(gem3UpgradeList != undefined && gem3UpgradeList != "blank") {
+    gem_3_upgrade_list.value = gem3UpgradeList;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  var gem_1_sub_stat_type_1_list_value = getUrlParameter("gem_1_sub_stat_type_1_list" + gemSlot);
+  if(gem_1_sub_stat_type_1_list_value != undefined && gem_1_sub_stat_type_1_list_value != "blank") {
+    gem_1_sub_stat_type_1_list.value = gem_1_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list );
+  }
+
+  var gem1_sub_stat_upgrade_1_list_value = getUrlParameter("gem1_sub_stat_upgrade_1_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_1_list_value != undefined && gem1_sub_stat_upgrade_1_list_value != "blank") {
+    gem1_sub_stat_upgrade_1_list.value = gem1_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list);
+  }
+
+  var gem_1_sub_stat_1_list_value = getUrlParameter("gem_1_sub_stat_1_list" + gemSlot);
+  if(gem_1_sub_stat_1_list_value != undefined && gem_1_sub_stat_1_list_value != "blank") {
+    gem_1_sub_stat_1_list.value = gem_1_sub_stat_1_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+
+
+  var gem_1_sub_stat_type_2_list_value = getUrlParameter("gem_1_sub_stat_type_2_list" + gemSlot);
+  if(gem_1_sub_stat_type_2_list_value != undefined && gem_1_sub_stat_type_2_list_value != "blank") {
+    gem_1_sub_stat_type_2_list.value = gem_1_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list );
+  }
+
+  var gem1_sub_stat_upgrade_2_list_value = getUrlParameter("gem1_sub_stat_upgrade_2_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_2_list_value != undefined && gem1_sub_stat_upgrade_2_list_value != "blank") {
+    gem1_sub_stat_upgrade_2_list.value = gem1_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list);
+  }
+
+  var gem_1_sub_stat_2_list_value = getUrlParameter("gem_1_sub_stat_2_list" + gemSlot);
+  if(gem_1_sub_stat_2_list_value != undefined && gem_1_sub_stat_2_list_value != "blank") {
+    gem_1_sub_stat_2_list.value = gem_1_sub_stat_2_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+
+  var gem_1_sub_stat_type_3_list_value = getUrlParameter("gem_1_sub_stat_type_3_list" + gemSlot);
+  if(gem_1_sub_stat_type_3_list_value != undefined && gem_1_sub_stat_type_3_list_value != "blank") {
+    gem_1_sub_stat_type_3_list.value = gem_1_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list );
+  }
+
+  var gem1_sub_stat_upgrade_3_list_value = getUrlParameter("gem1_sub_stat_upgrade_3_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_3_list_value != undefined && gem1_sub_stat_upgrade_3_list_value != "blank") {
+    gem1_sub_stat_upgrade_3_list.value = gem1_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list);
+  }
+
+  var gem_1_sub_stat_3_list_value = getUrlParameter("gem_1_sub_stat_3_list" + gemSlot);
+  if(gem_1_sub_stat_3_list_value != undefined && gem_1_sub_stat_3_list_value != "blank") {
+    gem_1_sub_stat_3_list.value = gem_1_sub_stat_3_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+  var gem_1_sub_stat_type_4_list_value = getUrlParameter("gem_1_sub_stat_type_4_list" + gemSlot);
+  if(gem_1_sub_stat_type_4_list_value != undefined && gem_1_sub_stat_type_4_list_value != "blank") {
+    gem_1_sub_stat_type_4_list.value = gem_1_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list );
+  }
+
+  var gem1_sub_stat_upgrade_4_list_value = getUrlParameter("gem1_sub_stat_upgrade_4_list" + gemSlot);
+  if(gem1_sub_stat_upgrade_4_list_value != undefined && gem1_sub_stat_upgrade_4_list_value != "blank") {
+    gem1_sub_stat_upgrade_4_list.value = gem1_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list);
+  }
+
+  var gem_1_sub_stat_4_list_value = getUrlParameter("gem_1_sub_stat_4_list" + gemSlot);
+  if(gem_1_sub_stat_4_list_value != undefined && gem_1_sub_stat_4_list_value != "blank") {
+    gem_1_sub_stat_4_list.value = gem_1_sub_stat_4_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list, gemSlot);
+  }
+
+
+
+
+  var gem_2_sub_stat_type_1_list_value = getUrlParameter("gem_2_sub_stat_type_1_list" + gemSlot);
+  if(gem_2_sub_stat_type_1_list_value != undefined && gem_2_sub_stat_type_1_list_value != "blank") {
+    gem_2_sub_stat_type_1_list.value = gem_2_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list );
+  }
+
+  var gem2_sub_stat_upgrade_1_list_value = getUrlParameter("gem2_sub_stat_upgrade_1_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_1_list_value != undefined && gem2_sub_stat_upgrade_1_list_value != "blank") {
+    gem2_sub_stat_upgrade_1_list.value = gem2_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list);
+  }
+
+  var gem_2_sub_stat_1_list_value = getUrlParameter("gem_2_sub_stat_1_list" + gemSlot);
+  if(gem_2_sub_stat_1_list_value != undefined && gem_2_sub_stat_1_list_value != "blank") {
+    gem_2_sub_stat_1_list.value = gem_2_sub_stat_1_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+
+  var gem_2_sub_stat_type_2_list_value = getUrlParameter("gem_2_sub_stat_type_2_list" + gemSlot);
+  if(gem_2_sub_stat_type_2_list_value != undefined && gem_2_sub_stat_type_2_list_value != "blank") {
+    gem_2_sub_stat_type_2_list.value = gem_2_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list );
+  }
+
+  var gem2_sub_stat_upgrade_2_list_value = getUrlParameter("gem2_sub_stat_upgrade_2_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_2_list_value != undefined && gem2_sub_stat_upgrade_2_list_value != "blank") {
+    gem2_sub_stat_upgrade_2_list.value = gem2_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list);
+  }
+
+  var gem_2_sub_stat_2_list_value = getUrlParameter("gem_2_sub_stat_2_list" + gemSlot);
+  if(gem_2_sub_stat_2_list_value != undefined && gem_2_sub_stat_2_list_value != "blank") {
+    gem_2_sub_stat_2_list.value = gem_2_sub_stat_2_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+  var gem_2_sub_stat_type_3_list_value = getUrlParameter("gem_2_sub_stat_type_3_list" + gemSlot);
+  if(gem_2_sub_stat_type_3_list_value != undefined && gem_2_sub_stat_type_3_list_value != "blank") {
+    gem_2_sub_stat_type_3_list.value = gem_2_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list );
+  }
+
+  var gem2_sub_stat_upgrade_3_list_value = getUrlParameter("gem2_sub_stat_upgrade_3_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_3_list_value != undefined && gem2_sub_stat_upgrade_3_list_value != "blank") {
+    gem2_sub_stat_upgrade_3_list.value = gem2_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list);
+  }
+
+  var gem_2_sub_stat_3_list_value = getUrlParameter("gem_2_sub_stat_3_list" + gemSlot);
+  if(gem_2_sub_stat_3_list_value != undefined && gem_2_sub_stat_3_list_value != "blank") {
+    gem_2_sub_stat_3_list.value = gem_2_sub_stat_3_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+  var gem_2_sub_stat_type_4_list_value = getUrlParameter("gem_2_sub_stat_type_4_list" + gemSlot);
+  if(gem_2_sub_stat_type_4_list_value != undefined && gem_2_sub_stat_type_4_list_value != "blank") {
+    gem_2_sub_stat_type_4_list.value = gem_2_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list );
+  }
+
+  var gem2_sub_stat_upgrade_4_list_value = getUrlParameter("gem2_sub_stat_upgrade_4_list" + gemSlot);
+  if(gem2_sub_stat_upgrade_4_list_value != undefined && gem2_sub_stat_upgrade_4_list_value != "blank") {
+    gem2_sub_stat_upgrade_4_list.value = gem2_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list);
+  }
+
+  var gem_2_sub_stat_4_list_value = getUrlParameter("gem_2_sub_stat_4_list" + gemSlot);
+  if(gem_2_sub_stat_4_list_value != undefined && gem_2_sub_stat_4_list_value != "blank") {
+    gem_2_sub_stat_4_list.value = gem_2_sub_stat_4_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list, gemSlot);
+  }
+
+
+
+  var gem_3_sub_stat_type_1_list_value = getUrlParameter("gem_3_sub_stat_type_1_list" + gemSlot);
+  if(gem_3_sub_stat_type_1_list_value != undefined && gem_3_sub_stat_type_1_list_value != "blank") {
+    gem_3_sub_stat_type_1_list.value = gem_3_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list );
+  }
+
+  var gem3_sub_stat_upgrade_1_list_value = getUrlParameter("gem3_sub_stat_upgrade_1_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_1_list_value != undefined && gem3_sub_stat_upgrade_1_list_value != "blank") {
+    gem3_sub_stat_upgrade_1_list.value = gem3_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list);
+  }
+
+  var gem_3_sub_stat_1_list_value = getUrlParameter("gem_3_sub_stat_1_list" + gemSlot);
+  if(gem_3_sub_stat_1_list_value != undefined && gem_3_sub_stat_1_list_value != "blank") {
+    gem_3_sub_stat_1_list.value = gem_3_sub_stat_1_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+
+  var gem_3_sub_stat_type_2_list_value = getUrlParameter("gem_3_sub_stat_type_2_list" + gemSlot);
+  if(gem_3_sub_stat_type_2_list_value != undefined && gem_3_sub_stat_type_2_list_value != "blank") {
+    gem_3_sub_stat_type_2_list.value = gem_3_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list );
+  }
+
+  var gem3_sub_stat_upgrade_2_list_value = getUrlParameter("gem3_sub_stat_upgrade_2_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_2_list_value != undefined && gem3_sub_stat_upgrade_2_list_value != "blank") {
+    gem3_sub_stat_upgrade_2_list.value = gem3_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list);
+  }
+
+  var gem_3_sub_stat_2_list_value = getUrlParameter("gem_3_sub_stat_2_list" + gemSlot);
+  if(gem_3_sub_stat_2_list_value != undefined && gem_3_sub_stat_2_list_value != "blank") {
+    gem_3_sub_stat_2_list.value = gem_3_sub_stat_2_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+
+  var gem_3_sub_stat_type_3_list_value = getUrlParameter("gem_3_sub_stat_type_3_list" + gemSlot);
+  if(gem_3_sub_stat_type_3_list_value != undefined && gem_3_sub_stat_type_3_list_value != "blank") {
+    gem_3_sub_stat_type_3_list.value = gem_3_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list );
+  }
+
+  var gem3_sub_stat_upgrade_3_list_value = getUrlParameter("gem3_sub_stat_upgrade_3_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_3_list_value != undefined && gem3_sub_stat_upgrade_3_list_value != "blank") {
+    gem3_sub_stat_upgrade_3_list.value = gem3_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list);
+  }
+
+  var gem_3_sub_stat_3_list_value = getUrlParameter("gem_3_sub_stat_3_list" + gemSlot);
+  if(gem_3_sub_stat_3_list_value != undefined && gem_3_sub_stat_3_list_value != "blank") {
+    gem_3_sub_stat_3_list.value = gem_3_sub_stat_3_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  var gem_3_sub_stat_type_4_list_value = getUrlParameter("gem_3_sub_stat_type_4_list" + gemSlot);
+  if(gem_3_sub_stat_type_4_list_value != undefined && gem_3_sub_stat_type_4_list_value != "blank") {
+    gem_3_sub_stat_type_4_list.value = gem_3_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list );
+  }
+
+  var gem3_sub_stat_upgrade_4_list_value = getUrlParameter("gem3_sub_stat_upgrade_4_list" + gemSlot);
+  if(gem3_sub_stat_upgrade_4_list_value != undefined && gem3_sub_stat_upgrade_4_list_value != "blank") {
+    gem3_sub_stat_upgrade_4_list.value = gem3_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list);
+  }
+
+  var gem_3_sub_stat_4_list_value = getUrlParameter("gem_3_sub_stat_4_list" + gemSlot);
+  if(gem_3_sub_stat_4_list_value != undefined && gem_3_sub_stat_4_list_value != "blank") {
+    gem_3_sub_stat_4_list.value = gem_3_sub_stat_4_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list, gemSlot);
+  }
+
+  SumGem(gemSlot);
+
+
+}
+
+
+
+
+
+function ReadUrlParams() {
+
+  var gem_set_list = goog.dom.getElement("gem_set_list");
+  var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list");
+  var gem_1_type_list = goog.dom.getElement("gem_1_type_list");
+  var gem_1_upgrade_list = goog.dom.getElement("gem_1_upgrade_list");
+  var gem_1_list = goog.dom.getElement("gem_1_list");
+
+  var gem_2_grade_list = goog.dom.getElement("gem_2_grade_list");
+  var gem_2_type_list = goog.dom.getElement("gem_2_type_list");
+  var gem_2_upgrade_list = goog.dom.getElement("gem_2_upgrade_list");
+  var gem_2_list = goog.dom.getElement("gem_2_list");
+
+  var gem_3_grade_list = goog.dom.getElement("gem_3_grade_list");
+  var gem_3_type_list = goog.dom.getElement("gem_3_type_list");
+  var gem_3_upgrade_list = goog.dom.getElement("gem_3_upgrade_list");
+  var gem_3_list = goog.dom.getElement("gem_3_list");
+
+
+  var gem_1_sub_stat_type_1_list = goog.dom.getElement("gem_1_sub_stat_type_1_list");
+  var gem1_sub_stat_upgrade_1_list = goog.dom.getElement("gem1_sub_stat_upgrade_1_list");
+  var gem_1_sub_stat_1_list = goog.dom.getElement("gem_1_sub_stat_1_list");
+  var gem_1_sub_stat_type_2_list = goog.dom.getElement("gem_1_sub_stat_type_2_list");
+  var gem1_sub_stat_upgrade_2_list = goog.dom.getElement("gem1_sub_stat_upgrade_2_list");
+  var gem_1_sub_stat_2_list = goog.dom.getElement("gem_1_sub_stat_2_list");
+  var gem_1_sub_stat_type_3_list = goog.dom.getElement("gem_1_sub_stat_type_3_list");
+  var gem1_sub_stat_upgrade_3_list = goog.dom.getElement("gem1_sub_stat_upgrade_3_list");
+  var gem_1_sub_stat_3_list = goog.dom.getElement("gem_1_sub_stat_3_list");
+  var gem_1_sub_stat_type_4_list = goog.dom.getElement("gem_1_sub_stat_type_4_list");
+  var gem1_sub_stat_upgrade_4_list = goog.dom.getElement("gem1_sub_stat_upgrade_4_list");
+  var gem_1_sub_stat_4_list = goog.dom.getElement("gem_1_sub_stat_4_list");
+
+  var gem_2_sub_stat_type_1_list = goog.dom.getElement("gem_2_sub_stat_type_1_list");
+  var gem2_sub_stat_upgrade_1_list = goog.dom.getElement("gem2_sub_stat_upgrade_1_list");
+  var gem_2_sub_stat_1_list = goog.dom.getElement("gem_2_sub_stat_1_list");
+  var gem_2_sub_stat_type_2_list = goog.dom.getElement("gem_2_sub_stat_type_2_list");
+  var gem2_sub_stat_upgrade_2_list = goog.dom.getElement("gem2_sub_stat_upgrade_2_list");
+  var gem_2_sub_stat_2_list = goog.dom.getElement("gem_2_sub_stat_2_list");
+  var gem_2_sub_stat_type_3_list = goog.dom.getElement("gem_2_sub_stat_type_3_list");
+  var gem2_sub_stat_upgrade_3_list = goog.dom.getElement("gem2_sub_stat_upgrade_3_list");
+  var gem_2_sub_stat_3_list = goog.dom.getElement("gem_2_sub_stat_3_list");
+  var gem_2_sub_stat_type_4_list = goog.dom.getElement("gem_2_sub_stat_type_4_list");
+  var gem2_sub_stat_upgrade_4_list = goog.dom.getElement("gem2_sub_stat_upgrade_4_list");
+  var gem_2_sub_stat_4_list = goog.dom.getElement("gem_2_sub_stat_4_list");
+
+  var gem_3_sub_stat_type_1_list = goog.dom.getElement("gem_3_sub_stat_type_1_list");
+  var gem3_sub_stat_upgrade_1_list = goog.dom.getElement("gem3_sub_stat_upgrade_1_list");
+  var gem_3_sub_stat_1_list = goog.dom.getElement("gem_3_sub_stat_1_list");
+  var gem_3_sub_stat_type_2_list = goog.dom.getElement("gem_3_sub_stat_type_2_list");
+  var gem3_sub_stat_upgrade_2_list = goog.dom.getElement("gem3_sub_stat_upgrade_2_list");
+  var gem_3_sub_stat_2_list = goog.dom.getElement("gem_3_sub_stat_2_list");
+  var gem_3_sub_stat_type_3_list = goog.dom.getElement("gem_3_sub_stat_type_3_list");
+  var gem3_sub_stat_upgrade_3_list = goog.dom.getElement("gem3_sub_stat_upgrade_3_list");
+  var gem_3_sub_stat_3_list = goog.dom.getElement("gem_3_sub_stat_3_list");
+  var gem_3_sub_stat_type_4_list = goog.dom.getElement("gem_3_sub_stat_type_4_list");
+  var gem3_sub_stat_upgrade_4_list = goog.dom.getElement("gem3_sub_stat_upgrade_4_list");
+  var gem_3_sub_stat_4_list = goog.dom.getElement("gem_3_sub_stat_4_list");
+
+
+
+  var playerMon = getUrlParameter("input_astromon_name");
+  var playerElement = getUrlParameter("element_list");
+  var gemSet = getUrlParameter("gem_set_list");
+  var grade = getUrlParameter("grade");
+  var lvlList = getUrlParameter("lvl_list");
+  var awakenList = getUrlParameter("awaken_list");
+
+  // SumGem();
+  SetDataFromUrl(playerMon, playerElement, gemSet, grade, lvlList, awakenList);
+  // console.log(playerElement);
+
+
+
+  if(gemSet != undefined && gemSet != "") {
+
+    gem_set_list.value = gemSet;
+    SumGem();
+  }
+
+  var gem1GradeList = getUrlParameter("gem_1_grade_list");
+  if(gem1GradeList != undefined && gem1GradeList != "") {
+
+    gem_1_grade_list.value = gem1GradeList;
+    ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+  var gem1GradeList = getUrlParameter("gem_1_grade_list");
+  if(gem1GradeList != undefined && gem1GradeList != "") {
+    // var gem_1_grade_list = goog.dom.getElement("gem_1_grade_list");
+    gem_1_grade_list.value = gem1GradeList;
+    ChangeGemMainGrade(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+  var gem2GradeList = getUrlParameter("gem_2_grade_list");
+  if(gem2GradeList != undefined && gem2GradeList != "") {
+
+    gem_2_grade_list.value = gem2GradeList;
+    ChangeGemMainGrade(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+  var gem3GradeList = getUrlParameter("gem_3_grade_list");
+  if(gem3GradeList != undefined && gem3GradeList != "") {
+
+    gem_3_grade_list.value = gem3GradeList;
+    ChangeGemMainGrade(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+  var gem1TypeList = getUrlParameter("gem_1_type_list");
+  if(gem1TypeList != undefined && gem1TypeList != "blank") {
+
+    gem_1_type_list.value = gem1TypeList;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+  var gem2TypeList = getUrlParameter("gem_2_type_list");
+  if(gem2TypeList != undefined && gem1TypeList != "blank") {
+    gem_2_type_list.value = gem2TypeList;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+
+  var gem3TypeList = getUrlParameter("gem_3_type_list");
+  if(gem3TypeList != undefined && gem1TypeList != "blank") {
+    gem_3_type_list.value = gem3TypeList;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+
+  var gem1UpgradeList = getUrlParameter("gem_1_upgrade_list");
+  if(gem1UpgradeList != undefined && gem1UpgradeList != "blank") {
+    gem_1_upgrade_list.value = gem1UpgradeList;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+  var gem2UpgradeList = getUrlParameter("gem_2_upgrade_list");
+  if(gem2UpgradeList != undefined && gem2UpgradeList != "blank") {
+    gem_2_upgrade_list.value = gem2UpgradeList;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+  var gem3UpgradeList = getUrlParameter("gem_3_upgrade_list");
+  if(gem3UpgradeList != undefined && gem3UpgradeList != "blank") {
+    gem_3_upgrade_list.value = gem3UpgradeList;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+  var gem_1_sub_stat_type_1_list_value = getUrlParameter("gem_1_sub_stat_type_1_list");
+  if(gem_1_sub_stat_type_1_list_value != undefined && gem_1_sub_stat_type_1_list_value != "blank") {
+    gem_1_sub_stat_type_1_list.value = gem_1_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list );
+  }
+
+  var gem1_sub_stat_upgrade_1_list_value = getUrlParameter("gem1_sub_stat_upgrade_1_list");
+  if(gem1_sub_stat_upgrade_1_list_value != undefined && gem1_sub_stat_upgrade_1_list_value != "blank") {
+    gem1_sub_stat_upgrade_1_list.value = gem1_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_1_list, gem1_sub_stat_upgrade_1_list, gem_1_sub_stat_1_list);
+  }
+
+  var gem_1_sub_stat_1_list_value = getUrlParameter("gem_1_sub_stat_1_list");
+  if(gem_1_sub_stat_1_list_value != undefined && gem_1_sub_stat_1_list_value != "blank") {
+    gem_1_sub_stat_1_list.value = gem_1_sub_stat_1_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+
+
+  var gem_1_sub_stat_type_2_list_value = getUrlParameter("gem_1_sub_stat_type_2_list");
+  if(gem_1_sub_stat_type_2_list_value != undefined && gem_1_sub_stat_type_2_list_value != "blank") {
+    gem_1_sub_stat_type_2_list.value = gem_1_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list );
+  }
+
+  var gem1_sub_stat_upgrade_2_list_value = getUrlParameter("gem1_sub_stat_upgrade_2_list");
+  if(gem1_sub_stat_upgrade_2_list_value != undefined && gem1_sub_stat_upgrade_2_list_value != "blank") {
+    gem1_sub_stat_upgrade_2_list.value = gem1_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_2_list, gem1_sub_stat_upgrade_2_list, gem_1_sub_stat_2_list);
+  }
+
+  var gem_1_sub_stat_2_list_value = getUrlParameter("gem_1_sub_stat_2_list");
+  if(gem_1_sub_stat_2_list_value != undefined && gem_1_sub_stat_2_list_value != "blank") {
+    gem_1_sub_stat_2_list.value = gem_1_sub_stat_2_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+
+  var gem_1_sub_stat_type_3_list_value = getUrlParameter("gem_1_sub_stat_type_3_list");
+  if(gem_1_sub_stat_type_3_list_value != undefined && gem_1_sub_stat_type_3_list_value != "blank") {
+    gem_1_sub_stat_type_3_list.value = gem_1_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list );
+  }
+
+  var gem1_sub_stat_upgrade_3_list_value = getUrlParameter("gem1_sub_stat_upgrade_3_list");
+  if(gem1_sub_stat_upgrade_3_list_value != undefined && gem1_sub_stat_upgrade_3_list_value != "blank") {
+    gem1_sub_stat_upgrade_3_list.value = gem1_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_3_list, gem1_sub_stat_upgrade_3_list, gem_1_sub_stat_3_list);
+  }
+
+  var gem_1_sub_stat_3_list_value = getUrlParameter("gem_1_sub_stat_3_list");
+  if(gem_1_sub_stat_3_list_value != undefined && gem_1_sub_stat_3_list_value != "blank") {
+    gem_1_sub_stat_3_list.value = gem_1_sub_stat_3_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+  var gem_1_sub_stat_type_4_list_value = getUrlParameter("gem_1_sub_stat_type_4_list");
+  if(gem_1_sub_stat_type_4_list_value != undefined && gem_1_sub_stat_type_4_list_value != "blank") {
+    gem_1_sub_stat_type_4_list.value = gem_1_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list );
+  }
+
+  var gem1_sub_stat_upgrade_4_list_value = getUrlParameter("gem1_sub_stat_upgrade_4_list");
+  if(gem1_sub_stat_upgrade_4_list_value != undefined && gem1_sub_stat_upgrade_4_list_value != "blank") {
+    gem1_sub_stat_upgrade_4_list.value = gem1_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_1_grade_list, gem_1_sub_stat_type_4_list, gem1_sub_stat_upgrade_4_list, gem_1_sub_stat_4_list);
+  }
+
+  var gem_1_sub_stat_4_list_value = getUrlParameter("gem_1_sub_stat_4_list");
+  if(gem_1_sub_stat_4_list_value != undefined && gem_1_sub_stat_4_list_value != "blank") {
+    gem_1_sub_stat_4_list.value = gem_1_sub_stat_4_list_value;
+    ChangeGemStat(gem_1_grade_list, gem_1_type_list, gem_1_upgrade_list, gem_1_list);
+  }
+
+
+
+
+  var gem_2_sub_stat_type_1_list_value = getUrlParameter("gem_2_sub_stat_type_1_list");
+  if(gem_2_sub_stat_type_1_list_value != undefined && gem_2_sub_stat_type_1_list_value != "blank") {
+    gem_2_sub_stat_type_1_list.value = gem_2_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list );
+  }
+
+  var gem2_sub_stat_upgrade_1_list_value = getUrlParameter("gem2_sub_stat_upgrade_1_list");
+  if(gem2_sub_stat_upgrade_1_list_value != undefined && gem2_sub_stat_upgrade_1_list_value != "blank") {
+    gem2_sub_stat_upgrade_1_list.value = gem2_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_1_list, gem2_sub_stat_upgrade_1_list, gem_2_sub_stat_1_list);
+  }
+
+  var gem_2_sub_stat_1_list_value = getUrlParameter("gem_2_sub_stat_1_list");
+  if(gem_2_sub_stat_1_list_value != undefined && gem_2_sub_stat_1_list_value != "blank") {
+    gem_2_sub_stat_1_list.value = gem_2_sub_stat_1_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+
+
+  var gem_2_sub_stat_type_2_list_value = getUrlParameter("gem_2_sub_stat_type_2_list");
+  if(gem_2_sub_stat_type_2_list_value != undefined && gem_2_sub_stat_type_2_list_value != "blank") {
+    gem_2_sub_stat_type_2_list.value = gem_2_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list );
+  }
+
+  var gem2_sub_stat_upgrade_2_list_value = getUrlParameter("gem2_sub_stat_upgrade_2_list");
+  if(gem2_sub_stat_upgrade_2_list_value != undefined && gem2_sub_stat_upgrade_2_list_value != "blank") {
+    gem2_sub_stat_upgrade_2_list.value = gem2_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_2_list, gem2_sub_stat_upgrade_2_list, gem_2_sub_stat_2_list);
+  }
+
+  var gem_2_sub_stat_2_list_value = getUrlParameter("gem_2_sub_stat_2_list");
+  if(gem_2_sub_stat_2_list_value != undefined && gem_2_sub_stat_2_list_value != "blank") {
+    gem_2_sub_stat_2_list.value = gem_2_sub_stat_2_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+
+  var gem_2_sub_stat_type_3_list_value = getUrlParameter("gem_2_sub_stat_type_3_list");
+  if(gem_2_sub_stat_type_3_list_value != undefined && gem_2_sub_stat_type_3_list_value != "blank") {
+    gem_2_sub_stat_type_3_list.value = gem_2_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list );
+  }
+
+  var gem2_sub_stat_upgrade_3_list_value = getUrlParameter("gem2_sub_stat_upgrade_3_list");
+  if(gem2_sub_stat_upgrade_3_list_value != undefined && gem2_sub_stat_upgrade_3_list_value != "blank") {
+    gem2_sub_stat_upgrade_3_list.value = gem2_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_3_list, gem2_sub_stat_upgrade_3_list, gem_2_sub_stat_3_list);
+  }
+
+  var gem_2_sub_stat_3_list_value = getUrlParameter("gem_2_sub_stat_3_list");
+  if(gem_2_sub_stat_3_list_value != undefined && gem_2_sub_stat_3_list_value != "blank") {
+    gem_2_sub_stat_3_list.value = gem_2_sub_stat_3_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+  var gem_2_sub_stat_type_4_list_value = getUrlParameter("gem_2_sub_stat_type_4_list");
+  if(gem_2_sub_stat_type_4_list_value != undefined && gem_2_sub_stat_type_4_list_value != "blank") {
+    gem_2_sub_stat_type_4_list.value = gem_2_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list );
+  }
+
+  var gem2_sub_stat_upgrade_4_list_value = getUrlParameter("gem2_sub_stat_upgrade_4_list");
+  if(gem2_sub_stat_upgrade_4_list_value != undefined && gem2_sub_stat_upgrade_4_list_value != "blank") {
+    gem2_sub_stat_upgrade_4_list.value = gem2_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_2_grade_list, gem_2_sub_stat_type_4_list, gem2_sub_stat_upgrade_4_list, gem_2_sub_stat_4_list);
+  }
+
+  var gem_2_sub_stat_4_list_value = getUrlParameter("gem_2_sub_stat_4_list");
+  if(gem_2_sub_stat_4_list_value != undefined && gem_2_sub_stat_4_list_value != "blank") {
+    gem_2_sub_stat_4_list.value = gem_2_sub_stat_4_list_value;
+    ChangeGemStat(gem_2_grade_list, gem_2_type_list, gem_2_upgrade_list, gem_2_list);
+  }
+
+
+
+  var gem_3_sub_stat_type_1_list_value = getUrlParameter("gem_3_sub_stat_type_1_list");
+  if(gem_3_sub_stat_type_1_list_value != undefined && gem_3_sub_stat_type_1_list_value != "blank") {
+    gem_3_sub_stat_type_1_list.value = gem_3_sub_stat_type_1_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list );
+  }
+
+  var gem3_sub_stat_upgrade_1_list_value = getUrlParameter("gem3_sub_stat_upgrade_1_list");
+  if(gem3_sub_stat_upgrade_1_list_value != undefined && gem3_sub_stat_upgrade_1_list_value != "blank") {
+    gem3_sub_stat_upgrade_1_list.value = gem3_sub_stat_upgrade_1_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_1_list, gem3_sub_stat_upgrade_1_list, gem_3_sub_stat_1_list);
+  }
+
+  var gem_3_sub_stat_1_list_value = getUrlParameter("gem_3_sub_stat_1_list");
+  if(gem_3_sub_stat_1_list_value != undefined && gem_3_sub_stat_1_list_value != "blank") {
+    gem_3_sub_stat_1_list.value = gem_3_sub_stat_1_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+
+
+  var gem_3_sub_stat_type_2_list_value = getUrlParameter("gem_3_sub_stat_type_2_list");
+  if(gem_3_sub_stat_type_2_list_value != undefined && gem_3_sub_stat_type_2_list_value != "blank") {
+    gem_3_sub_stat_type_2_list.value = gem_3_sub_stat_type_2_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list );
+  }
+
+  var gem3_sub_stat_upgrade_2_list_value = getUrlParameter("gem3_sub_stat_upgrade_2_list");
+  if(gem3_sub_stat_upgrade_2_list_value != undefined && gem3_sub_stat_upgrade_2_list_value != "blank") {
+    gem3_sub_stat_upgrade_2_list.value = gem3_sub_stat_upgrade_2_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_2_list, gem3_sub_stat_upgrade_2_list, gem_3_sub_stat_2_list);
+  }
+
+  var gem_3_sub_stat_2_list_value = getUrlParameter("gem_3_sub_stat_2_list");
+  if(gem_3_sub_stat_2_list_value != undefined && gem_3_sub_stat_2_list_value != "blank") {
+    gem_3_sub_stat_2_list.value = gem_3_sub_stat_2_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+
+  var gem_3_sub_stat_type_3_list_value = getUrlParameter("gem_3_sub_stat_type_3_list");
+  if(gem_3_sub_stat_type_3_list_value != undefined && gem_3_sub_stat_type_3_list_value != "blank") {
+    gem_3_sub_stat_type_3_list.value = gem_3_sub_stat_type_3_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list );
+  }
+
+  var gem3_sub_stat_upgrade_3_list_value = getUrlParameter("gem3_sub_stat_upgrade_3_list");
+  if(gem3_sub_stat_upgrade_3_list_value != undefined && gem3_sub_stat_upgrade_3_list_value != "blank") {
+    gem3_sub_stat_upgrade_3_list.value = gem3_sub_stat_upgrade_3_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_3_list, gem3_sub_stat_upgrade_3_list, gem_3_sub_stat_3_list);
+  }
+
+  var gem_3_sub_stat_3_list_value = getUrlParameter("gem_3_sub_stat_3_list");
+  if(gem_3_sub_stat_3_list_value != undefined && gem_3_sub_stat_3_list_value != "blank") {
+    gem_3_sub_stat_3_list.value = gem_3_sub_stat_3_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+  var gem_3_sub_stat_type_4_list_value = getUrlParameter("gem_3_sub_stat_type_4_list");
+  if(gem_3_sub_stat_type_4_list_value != undefined && gem_3_sub_stat_type_4_list_value != "blank") {
+    gem_3_sub_stat_type_4_list.value = gem_3_sub_stat_type_4_list_value;
+    ChangeGemSubStatType(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list );
+  }
+
+  var gem3_sub_stat_upgrade_4_list_value = getUrlParameter("gem3_sub_stat_upgrade_4_list");
+  if(gem3_sub_stat_upgrade_4_list_value != undefined && gem3_sub_stat_upgrade_4_list_value != "blank") {
+    gem3_sub_stat_upgrade_4_list.value = gem3_sub_stat_upgrade_4_list_value;
+    ChangeGemSubStatUpgrade(gem_3_grade_list, gem_3_sub_stat_type_4_list, gem3_sub_stat_upgrade_4_list, gem_3_sub_stat_4_list);
+  }
+
+  var gem_3_sub_stat_4_list_value = getUrlParameter("gem_3_sub_stat_4_list");
+  if(gem_3_sub_stat_4_list_value != undefined && gem_3_sub_stat_4_list_value != "blank") {
+    gem_3_sub_stat_4_list.value = gem_3_sub_stat_4_list_value;
+    ChangeGemStat(gem_3_grade_list, gem_3_type_list, gem_3_upgrade_list, gem_3_list);
+  }
+
+
+
+
+
+
+
+}
+
+function SetDataFromUrl(playerMon, playerElement, gemSet, grade, lvlList, awakenList) {
+// console.log(playerMon.length);
+  if(playerMon != undefined && playerMon.length > 0) {
+    var dataListAstromon = goog.dom.getElement("input_astromon_name");
+    dataListAstromon.value = playerMon;
+    ChangeMonFromUrl(true, playerMon, playerElement, grade, lvlList, awakenList);
+  }
+
+
+
+  // ChangeGemMainGrade()
+
+
+}
+
+var getGemParameter = function getGemParameter(inputBox, sParam) {
+  // var myOtherUrl =
+  //      "http://example.com/index.html?url=" + encodeURIComponent(myUrl);
+
+
+  var url = inputBox.value;
+  // console.log(url);
+  var string = encodeURIComponent(url);
+  // console.log(string) ;
+  var sPageURL = decodeURIComponent(string),
       sURLVariables = sPageURL.split('&'),
       sParameterName,
       i;
+
 
   for (i = 0; i < sURLVariables.length; i++) {
       sParameterName = sURLVariables[i].split('=');
 
       if (sParameterName[0] === sParam) {
-          return sParameterName[1] === undefined ? true : sParameterName[1];
+          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+          //
+      }
+  }
+};
+
+var getUrlParameter = function getUrlParameter(sParam) {
+  // var myOtherUrl =
+  //      "http://example.com/index.html?url=" + encodeURIComponent(myUrl);
+
+
+  var url = window.location.search.substring(1);
+  var string = encodeURIComponent(url);
+  // console.log(string) ;
+  var sPageURL = decodeURIComponent(string),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+
+  for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
+
+      if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+          //
       }
   }
 };
 
 
 
-function ChangeMonFromUrl(needToClearElement, playerMon, playerElement) {
-  // console.log(input_astromon);
+function ChangeMonFromUrl(needToClearElement, playerMon, playerElement, grade, lvlList, awakenList) {
+
+
+  // console.log(grade)
+  if(grade != undefined && grade != "") {
+    var grade_list = goog.dom.getElement("grade_list");
+    grade_list.value = grade;
+  }
+
+
+
+
+  if(awakenList != undefined && awakenList != "") {
+    var awaken_list = goog.dom.getElement("awaken_list")
+    awaken_list.value = awakenList;
+  }
+
   var imgIcon = goog.dom.getElement("img_mon_icon");
 
   var input_astromon = goog.dom.getElement("input_astromon_name");
@@ -2742,23 +4049,282 @@ function ChangeMonFromUrl(needToClearElement, playerMon, playerElement) {
 
   UpdateLvlSelect(grade);
 
+  if(lvlList != undefined && lvlList != "") {
+    var lvl_list = goog.dom.getElement("lvl_list");
+    lvl_list.value = lvlList;
+  }
+
   UpdateMonStat(grade);
 
   SumGem();
 }
 
-function processForm(e) {
-    if (e.preventDefault) e.preventDefault();
-    console.log(e);
-    /* do what you want with the form */
-
-    // You must return false to prevent the default form behavior
-    return false;
+function GetStatFloatFromDiv (div) {
+  var statDiv = goog.dom.getElement(div).textContent;
+  var indexBracket = statDiv.indexOf("(") - 1;
+  // console.log(indexBracket);
+  if(indexBracket <= 0) {
+    indexBracket = statDiv.length;
+  }
+  var refined = statDiv.substring(0, indexBracket).replace(",", "");
+  return parseFloat(refined);
 }
 
-var form = document.getElementById('main_form');
-if (form.attachEvent) {
-    form.attachEvent("submit", processForm);
-} else {
-    form.addEventListener("submit", processForm);
+function drawChart(statType) {
+
+  var hp = GetStatFloatFromDiv("div_hp");
+  var hpA = GetStatFloatFromDiv("div_gem_hp");
+  var hpB = GetStatFloatFromDiv("div_gem_hp_b");
+  var hpC = GetStatFloatFromDiv("div_gem_hp_c");
+
+  var maxHp = Math.max(hp, hpA, hpB, hpC);
+
+  var atk = GetStatFloatFromDiv("div_atk");
+  var atkA = GetStatFloatFromDiv("div_gem_atk");
+  var atkB = GetStatFloatFromDiv("div_gem_atk_b");
+  var atkC = GetStatFloatFromDiv("div_gem_atk_c");
+
+  var def = GetStatFloatFromDiv("div_def");
+  var defA = GetStatFloatFromDiv("div_gem_def");
+  var defB = GetStatFloatFromDiv("div_gem_def_b");
+  var defC = GetStatFloatFromDiv("div_gem_def_c");
+
+  var heal = GetStatFloatFromDiv("div_heal");
+  var healA = GetStatFloatFromDiv("div_gem_heal");
+  var healB = GetStatFloatFromDiv("div_gem_heal_b");
+  var healC = GetStatFloatFromDiv("div_gem_heal_c");
+
+  var crit_dmg = GetStatFloatFromDiv("div_crit_dmg");
+  var crit_dmgA = GetStatFloatFromDiv("div_gem_crit_dmg");
+  var crit_dmgB = GetStatFloatFromDiv("div_gem_crit_dmg_b");
+  var crit_dmgC = GetStatFloatFromDiv("div_gem_crit_dmg_c");
+
+  var crit_rate = GetStatFloatFromDiv("div_crit_rate");
+  var crit_rateA = GetStatFloatFromDiv("div_gem_crit_rate");
+  var crit_rateB = GetStatFloatFromDiv("div_gem_crit_rate_b");
+  var crit_rateC = GetStatFloatFromDiv("div_gem_crit_rate_c");
+
+  var resist = GetStatFloatFromDiv("div_resist");
+  var resistA = GetStatFloatFromDiv("div_gem_resist");
+  var resistB = GetStatFloatFromDiv("div_gem_resist_b");
+  var resistC = GetStatFloatFromDiv("div_gem_resist_c");
+
+
+
+  var data = google.visualization.arrayToDataTable([
+    ['Hp', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', hp, hp,
+    hpA, hpA,
+    hpB, hpB,
+    hpC, hpC ]
+  ]);
+
+  var options = {
+    vAxes: {
+      0: {
+        title: 'Hp'
+      }
+    },
+    hAxis: {
+      maxValue: 100000
+    },
+    title: 'Stats Comparison',
+    legend: {position:'top'},
+    theme: 'material'
+  };
+
+  // var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+  //
+  // chart.draw(data, google.charts.Bar.convertOptions(options));
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_material"));
+  chart.draw(data, options)
+
+
+  var dataAtk = google.visualization.arrayToDataTable([
+    ['Atk', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', atk, atk,
+    atkA, atkA,
+    atkB, atkB,
+    atkC, atkC ]
+  ]);
+
+  var optionsAtk = {
+    vAxes: {
+      0: {
+        title: 'Attack'
+      }
+    },
+    hAxis: {
+      maxValue: 10000
+    },
+    legend: {position:'none'},
+    theme: 'material'
+  };
+
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_materialAtk"));
+  chart.draw(dataAtk, optionsAtk)
+
+
+
+  var dataDef = google.visualization.arrayToDataTable([
+    ['Def', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', def, def,
+    defA, defA,
+    defB, defB,
+    defC, defC ]
+
+  ]);
+
+  var optionsDef= {
+    vAxes: {
+      0: {
+        title: 'Defense'
+      }
+    },
+    hAxis: {
+      maxValue: 10000
+    },
+
+    legend: {position:'none'},
+    theme: 'material'
+  };
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_materialDef"));
+  chart.draw(dataDef, optionsDef)
+
+
+  var dataHeal = google.visualization.arrayToDataTable([
+    ['Recovery', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', heal, heal,
+    healA, healA,
+    healB, healB,
+    healC, healC ]
+
+  ]);
+
+  var optionsHeal = {
+    vAxes: {
+      0: {
+        title: 'Recovery'
+      }
+    },
+    hAxis: {
+      maxValue: 10000
+    },
+
+    legend: {position:'none'},
+    theme: 'material'
+  };
+
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_materialHeal"));
+  chart.draw(dataHeal, optionsHeal)
+
+
+  var dataCritDmg = google.visualization.arrayToDataTable([
+    ['Crit Dmg', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', crit_dmg, crit_dmg,
+    crit_dmgA, crit_dmgA,
+    crit_dmgB, crit_dmgB,
+    crit_dmgC, crit_dmgC ]
+
+  ]);
+
+  var optionsCritDmg = {
+    vAxes: {
+      0: {
+        title: 'Crit Dmg'
+      }
+    },
+    hAxis: {
+      maxValue: 200
+    },
+
+    legend: {position:'none'},
+    theme: 'material'
+  };
+
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_materialCritDmg"));
+  chart.draw(dataCritDmg, optionsCritDmg)
+
+
+  var dataCritRate = google.visualization.arrayToDataTable([
+    ['Crit Rate', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', crit_rate, crit_rate,
+    crit_rateA, crit_rateA,
+    crit_rateB, crit_rateB,
+    crit_rateC, crit_rateC ]
+
+  ]);
+
+  var optionsCritRate = {
+    vAxes: {
+      0: {
+        title: 'Crit Rate'
+      }
+    },
+    hAxis: {
+      maxValue: 100
+    },
+
+    legend: {position:'none'},
+    theme: 'material'
+  };
+
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_materialCritRate"));
+  chart.draw(dataCritRate, optionsCritRate)
+
+
+  var dataResist = google.visualization.arrayToDataTable([
+    ['Resist', 'Original', { role: 'annotation' },
+    'Gem A', { role: 'annotation' },
+    'Gem B', { role: 'annotation' },
+    'Gem C', { role: 'annotation' }],
+    [' ', resist, resist,
+    resistA, resistA,
+    resistB, resistB,
+    resistC, resistC ]
+
+  ]);
+
+  var optionsResist = {
+    vAxes: {
+      0: {
+        title: 'Resist'
+      }
+    },
+    hAxis: {
+      maxValue: 85
+    },
+
+    legend: {position:'none'},
+    theme: 'material'
+  };
+
+
+  var chart = new google.visualization.BarChart(document.getElementById("barchart_materialResist"));
+  chart.draw(dataResist, optionsResist)
+
 }
