@@ -861,3 +861,11 @@ div.tab button.active {
     border: 1px solid #ccc;
     border-top: none;
 }
+
+.stat_table td div {
+  text-align: center;
+}
+
+.stat_table td {
+  text-align: center;
+}
