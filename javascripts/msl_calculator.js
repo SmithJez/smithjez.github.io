@@ -2718,38 +2718,38 @@ function SumGem (gemSlot) {
   var divLeaderSelectedValue = divLeaderValue.options[divLeaderValue.selectedIndex].value;
   var divLeaderSelected = divLeader.options[divLeader.selectedIndex].value;
 
-  var totalBuffHp = 0;
-  var totalBuffAtk = 0;
-  var totalBuffDef = 0;
-  var totalBuffHeal = 0;
-  var totalBuffCritDmg = 0;
-  var totalBuffCritRate = 0;
-  var totalBuffResist = 0;
+  var totalLeaderBuffHp = 0;
+  var totalLeaderBuffAtk = 0;
+  var totalLeaderBuffDef = 0;
+  var totalLeaderBuffHeal = 0;
+  var totalLeaderBuffCritDmg = 0;
+  var totalLeaderBuffCritRate = 0;
+  var totalLeaderBuffResist = 0;
 
 
 
   switch (divLeaderSelected) {
     case "se_leaderbuffhp":
-      totalBuffHp += playerRealHp * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffHp += playerRealHp * parseFloat(divLeaderSelectedValue);
       break;
     case "se_leaderbuffattack":
-      totalBuffAtk += playerRealAtk * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffAtk += playerRealAtk * parseFloat(divLeaderSelectedValue);
       break;
     case "se_leaderbuffheal":
-      totalBuffHeal += playerRealHeal * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffHeal += playerRealHeal * parseFloat(divLeaderSelectedValue);
       break;
     case "se_leaderbuffcriticaldamage":
-      totalBuffCritDmg += playerRealCritDmg * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffCritDmg += (parseFloat(divLeaderSelectedValue) * 100);
       break;
     case "se_leaderbuffdefence":
-      totalBuffDef += playerRealDef * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffDef += playerRealDef * parseFloat(divLeaderSelectedValue);
       break;
     case "se_leaderbuffcriticalprob":
-      totalBuffCritRate += playerRealCritRate * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffCritRate +=  (parseFloat(divLeaderSelectedValue) * 100);
       break;
 
     case "se_leaderbuffresist":
-      totalBuffResist += playerRealResist * parseFloat(divLeaderSelectedValue);
+      totalLeaderBuffResist +=  (parseFloat(divLeaderSelectedValue) * 100);
       break;
 
     case "se_leaderbuffhpcrystalrecovery":
@@ -2765,23 +2765,95 @@ function SumGem (gemSlot) {
 
   }
 
-  // console.log(totalLeaderHp);
-  // console.log(totalHp);
 
-  var div_buff_hp = goog.dom.getElement("div_buff_hp");
-  var div_buff_atk = goog.dom.getElement("div_buff_atk");
-  var div_buff_def = goog.dom.getElement("div_buff_def");
-  var div_buff_heal = goog.dom.getElement("div_buff_heal");
-  var div_buff_crit_dmg = goog.dom.getElement("div_buff_crit_dmg");
-  var div_buff_crit_rate = goog.dom.getElement("div_buff_crit_rate");
-  var div_buff_resist = goog.dom.getElement("div_buff_resist");
-  div_buff_hp.innerHTML = "+" + Math.round(totalBuffHp).toLocaleString();
-  div_buff_atk.innerHTML = "+" + Math.round(totalBuffAtk).toLocaleString();
-  div_buff_def.innerHTML = "+" + Math.round(totalBuffDef).toLocaleString();
-  div_buff_heal.innerHTML = "+" + Math.round(totalBuffHeal).toLocaleString();
-  div_buff_crit_dmg.innerHTML = "+" + Math.round(totalBuffCritDmg).toLocaleString();
-  div_buff_crit_rate.innerHTML = "+" + Math.round(totalBuffCritRate).toLocaleString();
-  div_buff_resist.innerHTML = "+" + Math.round(totalBuffResist).toLocaleString();
+  var totalDebuffHp = 0;
+  var totalDebuffAtk = 0;
+  var totalDebuffDef = 0;
+  var totalDebuffHeal = 0;
+  var totalDebuffCritDmg = 0;
+  var totalDebuffCritRate = 0;
+  var totalDebuffResist = 0;
+
+  var gemHp = playerRealHp * totalPercentHp + totalHp;
+  var oriGemHp = playerRealHp + gemHp;
+
+  var gemAtk = playerRealAtk * totalPercentAtk + totalAtk;
+  var oriGemAtk = playerRealAtk + gemAtk + totalLeaderBuffAtk;
+
+  console.log(oriGemAtk);
+
+  var buff_class = goog.dom.getElementsByClass("buff_switch");
+  var buff_class_size = buff_class.length;
+
+  for(i = 0; i < buff_class_size; i++) {
+
+    var selectedValue = buff_class[i].value;
+    var selectedChecked = buff_class[i].checked;
+
+    if(selectedChecked) {
+      switch (selectedValue) {
+        case "atk_down":
+          oriGemAtk *= 0.5;
+          break;
+
+        case "taunt":
+          oriGemAtk *= 0.3;
+          break;
+
+        case "def_down":
+
+          break;
+
+        case "shock":
+
+          break;
+
+        case "blind":
+
+          break;
+
+        case "seal":
+
+          break;
+
+        case "heal_down":
+
+          break;
+
+        default:
+
+      }
+
+
+    }
+
+
+    // console.log(selectedValue);
+    // console.log(selectedChecked);
+  }
+
+  console.log(oriGemAtk);
+
+
+
+
+
+
+  // var div_buff_hp = goog.dom.getElement("div_buff_hp");
+  // var div_buff_atk = goog.dom.getElement("div_buff_atk");
+  // var div_buff_def = goog.dom.getElement("div_buff_def");
+  // var div_buff_heal = goog.dom.getElement("div_buff_heal");
+  // var div_buff_crit_dmg = goog.dom.getElement("div_buff_crit_dmg");
+  // var div_buff_crit_rate = goog.dom.getElement("div_buff_crit_rate");
+  // var div_buff_resist = goog.dom.getElement("div_buff_resist");
+  //
+  // div_buff_hp.innerHTML = "+" + Math.round(totalLeaderBuffHp).toLocaleString();
+  // div_buff_atk.innerHTML = "+" + Math.round(totalLeaderBuffAtk).toLocaleString();
+  // div_buff_def.innerHTML = "+" + Math.round(totalLeaderBuffDef).toLocaleString();
+  // div_buff_heal.innerHTML = "+" + Math.round(totalLeaderBuffHeal).toLocaleString();
+  // div_buff_crit_dmg.innerHTML = "+" + Math.round(totalLeaderBuffCritDmg).toLocaleString() + "%";
+  // div_buff_crit_rate.innerHTML = "+" + Math.round(totalLeaderBuffCritRate).toLocaleString() + "%";
+  // div_buff_resist.innerHTML = "+" + Math.round(totalLeaderBuffResist).toLocaleString() + "%";
 
 
   var div_final_hp = goog.dom.getElement("div_final_hp" + gemSlot);
@@ -2811,7 +2883,7 @@ function SumGem (gemSlot) {
    colorSpanHp = "<span style='color:#FF0000'>";
   }
   playerRealGemHp = displayHp;
-  var finalHp = playerRealHp + playerRealGemHp + totalBuffHp;
+  var finalHp = playerRealHp + playerRealGemHp + totalLeaderBuffHp;
   div_gem_hp.innerHTML =  colorSpanHp + prefixHp + Math.round( displayHp).toLocaleString() +  "</span>";
   div_final_hp.innerHTML = Math.round(finalHp).toLocaleString();
 
@@ -2826,7 +2898,7 @@ function SumGem (gemSlot) {
     colorSpanAtk = "<span style='color:#FF0000'>";
   }
   playerRealGemAtk = displayAtk;
-  var finalAtk = playerRealAtk + playerRealGemAtk + totalBuffAtk;
+  var finalAtk = playerRealAtk + playerRealGemAtk + totalLeaderBuffAtk;
 
   div_final_atk.innerHTML = Math.round(finalAtk).toLocaleString();
   div_gem_atk.innerHTML = colorSpanAtk + prefixAtk + Math.round( displayAtk).toLocaleString() +  "</span>";
@@ -3925,41 +3997,41 @@ function GetStatFloatFromDiv (div) {
 function drawChart(statType) {
 
   var hp = GetStatFloatFromDiv("div_hp");
-  var hpA = GetStatFloatFromDiv("div_gem_hp_a");
-  var hpB = GetStatFloatFromDiv("div_gem_hp_b");
-  var hpC = GetStatFloatFromDiv("div_gem_hp_c");
+  var hpA = GetStatFloatFromDiv("div_final_hp_a");
+  var hpB = GetStatFloatFromDiv("div_final_hp_b");
+  var hpC = GetStatFloatFromDiv("div_final_hp_c");
 
   var maxHp = Math.max(hp, hpA, hpB, hpC);
 
   var atk = GetStatFloatFromDiv("div_atk");
-  var atkA = GetStatFloatFromDiv("div_gem_atk_a");
-  var atkB = GetStatFloatFromDiv("div_gem_atk_b");
-  var atkC = GetStatFloatFromDiv("div_gem_atk_c");
+  var atkA = GetStatFloatFromDiv("div_final_atk_a");
+  var atkB = GetStatFloatFromDiv("div_final_atk_b");
+  var atkC = GetStatFloatFromDiv("div_final_atk_c");
 
   var def = GetStatFloatFromDiv("div_def");
-  var defA = GetStatFloatFromDiv("div_gem_def_a");
-  var defB = GetStatFloatFromDiv("div_gem_def_b");
-  var defC = GetStatFloatFromDiv("div_gem_def_c");
+  var defA = GetStatFloatFromDiv("div_final_def_a");
+  var defB = GetStatFloatFromDiv("div_final_def_b");
+  var defC = GetStatFloatFromDiv("div_final_def_c");
 
   var heal = GetStatFloatFromDiv("div_heal");
-  var healA = GetStatFloatFromDiv("div_gem_heal_a");
-  var healB = GetStatFloatFromDiv("div_gem_heal_b");
-  var healC = GetStatFloatFromDiv("div_gem_heal_c");
+  var healA = GetStatFloatFromDiv("div_final_heal_a");
+  var healB = GetStatFloatFromDiv("div_final_heal_b");
+  var healC = GetStatFloatFromDiv("div_final_heal_c");
 
   var crit_dmg = GetStatFloatFromDiv("div_crit_dmg");
-  var crit_dmgA = GetStatFloatFromDiv("div_gem_crit_dmg_a");
-  var crit_dmgB = GetStatFloatFromDiv("div_gem_crit_dmg_b");
-  var crit_dmgC = GetStatFloatFromDiv("div_gem_crit_dmg_c");
+  var crit_dmgA = GetStatFloatFromDiv("div_final_crit_dmg_a");
+  var crit_dmgB = GetStatFloatFromDiv("div_final_crit_dmg_b");
+  var crit_dmgC = GetStatFloatFromDiv("div_final_crit_dmg_c");
 
   var crit_rate = GetStatFloatFromDiv("div_crit_rate");
-  var crit_rateA = GetStatFloatFromDiv("div_gem_crit_rate_a");
-  var crit_rateB = GetStatFloatFromDiv("div_gem_crit_rate_b");
-  var crit_rateC = GetStatFloatFromDiv("div_gem_crit_rate_c");
+  var crit_rateA = GetStatFloatFromDiv("div_final_crit_rate_a");
+  var crit_rateB = GetStatFloatFromDiv("div_final_crit_rate_b");
+  var crit_rateC = GetStatFloatFromDiv("div_final_crit_rate_c");
 
   var resist = GetStatFloatFromDiv("div_resist");
-  var resistA = GetStatFloatFromDiv("div_gem_resist_a");
-  var resistB = GetStatFloatFromDiv("div_gem_resist_b");
-  var resistC = GetStatFloatFromDiv("div_gem_resist_c");
+  var resistA = GetStatFloatFromDiv("div_final_resist_a");
+  var resistB = GetStatFloatFromDiv("div_final_resist_b");
+  var resistC = GetStatFloatFromDiv("div_final_resist_c");
 
 
 
@@ -4288,5 +4360,11 @@ function ChangeLeaderBuffValue () {
   SumGem("_b");
   SumGem("_c");
 
+
+}
+
+
+function ApplyBuffAndDebuff () {
+  console.log("work");
 
 }

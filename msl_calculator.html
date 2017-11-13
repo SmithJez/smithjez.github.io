@@ -16,6 +16,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <link rel="stylesheet" href="css/base.css">
+
+
 <script src="closure/goog/base.js"></script>
 <script src="protobuf/arith.js"></script>
 <script src="protobuf/constants.js"></script>
@@ -29,13 +31,13 @@
 <script src="javascripts/msg_game_data.js"></script>
 <script src="javascripts/msl_calculator.js"></script>
 
-<script type="text/javascript">
-
-    </script>
-
 
 <script>
   // var monListUniq;
+
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]'),
+    setChecked = null;
+
 
 
   function GetData(mapType, callback) {
@@ -282,8 +284,8 @@
 
 
 
-          <div id="left_zone" class="w3-half">
-            <table class="width_max " table-layout=fixed>
+          <div id="left_zone" class="w3-half horizontal_scroll">
+            <table class="width_max min_width_500" table-layout=fixed>
               <tbody>
                 <tr>
                   <td rowspan="3">
@@ -372,20 +374,20 @@
             </table>
 
 
+            <h4 class="text_align_center black_2">Stat</h4>
 
-            <div class="w3-col">
+            <div class="horizontal_scroll">
+
               <table class="max-width stat_table" table-layout=fixed>
-                <caption>Stat</caption>
-                <tbody>
+
+                <thead>
+
                   <tr>
                     <td rowspan="2">
                       Stat
                     </td>
                     <td rowspan="2">
                       Original
-                    </td>
-                    <td rowspan="2">
-                      Buff
                     </td>
 
                     <td colspan="2">
@@ -406,15 +408,6 @@
                   </tr>
 
                   <tr>
-                    <!-- <td>
-                      Stat
-                    </td>
-                    <td>
-                      Original
-                    </td> -->
-                    <!-- <td>
-                      Buff
-                    </td> -->
 
                     <td class="text_align_center">
                       Gem
@@ -444,6 +437,9 @@
                     </td>
 
                   </tr>
+                </thead>
+                <tbody>
+
 
 
 
@@ -459,11 +455,6 @@
                       </div>
                     </td>
 
-                    <td>
-                      <div id="div_buff_hp">
-
-                      </div>
-                    </td>
 
 
                     <td>
@@ -525,11 +516,6 @@
                       </div>
                     </td>
 
-                    <td>
-                      <div id="div_buff_atk">
-
-                      </div>
-                    </td>
 
 
                     <td>
@@ -585,12 +571,6 @@
                     </td>
                     <td>
                       <div id="div_def">
-
-                      </div>
-                    </td>
-
-                    <td>
-                      <div id="div_buff_def">
 
                       </div>
                     </td>
@@ -654,12 +634,6 @@
                       </div>
                     </td>
 
-                    <td>
-                      <div id="div_buff_heal">
-
-                      </div>
-                    </td>
-
 
                     <td>
                       <div id="div_gem_heal_a">
@@ -715,12 +689,6 @@
 
                     <td>
                       <div id="div_crit_dmg">
-
-                      </div>
-                    </td>
-
-                    <td>
-                      <div id="div_buff_crit_dmg">
 
                       </div>
                     </td>
@@ -784,12 +752,6 @@
                       </div>
                     </td>
 
-                    <td>
-                      <div id="div_buff_crit_rate">
-
-                      </div>
-                    </td>
-
 
                     <td>
                       <div id="div_gem_crit_rate_a">
@@ -845,12 +807,6 @@
 
                     <td>
                       <div id="div_resist">
-
-                      </div>
-                    </td>
-
-                    <td>
-                      <div id="div_buff_resist">
 
                       </div>
                     </td>
@@ -912,6 +868,10 @@
                       </div>
                     </td>
 
+                    <td colspan="6">
+
+                    </td>
+
                   </tr>
 
                 </tbody>
@@ -922,13 +882,298 @@
 
             </div>
 
+            <h4 class="text_align_center black_2"> Battle </h4>
 
-            <div id="div_buff" class="div_buff">
-              <table id="table_buff">
+            <div id="div_buff" class="padding_8 div_buff">
+
+              <div class="horizontal_scroll">
+
+                <table class="max-width stat_table" table-layout=fixed>
+
+                <thead>
+
+                  <tr>
+                    <td>
+                      Battle Value
+                    </td>
+
+                    <td>
+                      Value Gem A
+                    </td>
+
+
+
+                    <td>
+                      Value Gem B
+                    </td>
+
+
+                    <td>
+                      Value Gem C
+                    </td>
+
+                  </tr>
+
+
+                </thead>
+                <tbody>
+
+
+
+
+                  <tr>
+                    <td>
+                      <div>
+                        Passive Damage
+                      </div>
+                    </td>
+
+                    <td>
+                      <div id="div_dmg_passive_a">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_hp_b">
+
+                      </div>
+
+                    </td>
+
+
+                    <td>
+                      <div id="div_buff_hp_c">
+
+                      </div>
+
+                    </td>
+
+
+                  </tr>
+                  <tr>
+                    <td>
+                      Passive Crit Damage
+
+                    </td>
+
+
+
+                    <td>
+                      <div id="div_buff_atk_a">
+
+                      </div>
+
+                    </td>
+
+
+
+
+                    <td>
+                      <div id="div_buff_atk_b">
+
+                      </div>
+
+                    </td>
+
+
+
+
+                    <td>
+                      <div id="div_buff_atk_c">
+
+                      </div>
+
+                    </td>
+
+
+
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Defense
+                    </td>
+
+                    <td>
+                      <div id="div_buff_def_a">
+
+                      </div>
+
+                    </td>
+
+
+
+
+                    <td>
+                      <div id="div_buff_def_b">
+
+                      </div>
+
+                    </td>
+
+
+
+                    <td>
+                      <div id="div_buff_def_c">
+
+                      </div>
+
+                    </td>
+
+
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Recovery
+                    </td>
+
+
+
+                    <td>
+                      <div id="div_buff_heal_a">
+
+                      </div>
+
+                    </td>
+
+
+
+
+                    <td>
+                      <div id="div_buff_heal_b">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_heal_c">
+
+                      </div>
+
+                    </td>
+
+
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Crit Dmg
+                    </td>
+
+                    <td>
+                      <div id="div_buff_crit_dmg_a">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_crit_dmg_b">
+
+                      </div>
+
+                    </td>
+
+
+                    <td>
+                      <div id="div_buff_crit_dmg_c">
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Crit Rate
+                    </td>
+
+
+                    <td>
+                      <div id="div_buff_crit_rate_a">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_crit_rate_b">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_crit_rate_c">
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Resist
+                    </td>
+
+                    <td>
+                      <div id="div_buff_resist_a">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_resist_b">
+
+                      </div>
+
+                    </td>
+
+                    <td>
+                      <div id="div_buff_resist_c">
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+              </div>
+
+            </div>
+
+
+            <h4 class="text_align_center black_2">Buff/Debuff</h4>
+
+
+
+
+
+            <div id="div_buff" class="padding_8 div_buff">
+
+
+
+              <table id="table_buff" class="max-width">
                 <tbody>
                   <tr>
+                    <td>
+                      Leader Skill
+                    </td>
+                  </tr>
+                  <tr>
                     <td rowspan="2">
-                      <img id="leader_list_img" src="img/se_leaderbuffheal.png" />
+                      <img class="skill_icon" id="leader_list_img" src="img/se_leaderbuffheal.png" />
                     </td>
                     <td>
                       <select id="leader_list" name="leader_list" onchange="GetLeaderSkillValue()">
@@ -952,10 +1197,138 @@
                     </td>
 
                   </tr>
+
+
                 </tbody>
 
 
 
+              </table>
+
+
+              <table class="w3-half buff_debuff_table  ">
+                <tbody>
+                  <tr>
+                    <td>
+                      Debuff
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="atk_down" name="atk_down" value="atk_down" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_debuffattack.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">  Attack Down</span> <br /> (Attack decreased by 50%)
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="taunt" name="taunt" value="taunt" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_provokeme.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">Taunt</span> <br /> (Attack decreased by 30%)
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="def_down" name="def_down" value="def_down" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_debuffdefence.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">Defense Down</span> <br /> (Defense decreased by 70%)
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="shock" name="shock" value="shock" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_stunelectricshock.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">Shock</span> <br /> (Defense decreased by 50%)
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="blind" name="blind" value="blind" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_debuffcriticalprobanddamage.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">Blind</span> <br /> (Crit Dmg/Rate decreased by 50%)
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="seal" name="seal" value="seal" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_sealstatuseffect.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">Seal</span> <br /> (Disable skill's effect)
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <label class="switch">
+                        <input id="heal_down" name="heal_down" value="heal_down" class="buff_switch" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <img class="skill_icon" id="leader_list_img" src="img/se_debufffinalvalueheal.png" />
+                    </td>
+                    <td>
+                      <span style="color:#FFD428">Recovery Down</span> <br /> (Hp recovery decreased by 50%)
+                    </td>
+                  </tr>
+
+
+
+
+
+
+
+                </tbody>
               </table>
 
             </div>
@@ -3384,7 +3757,7 @@
       var key = window.location.origin + window.location.pathname;
       $("#fixedUrl").val(key + "?" + $('#main_form').serialize() + "&" + $('#gem_form_a').serialize()   + "&" +  $('#gem_form_b').serialize() + "&" +  $('#gem_form_c').serialize() )
 
-      // console.log(($('#main_form').serializeArray()))
+      console.log(($('#main_form').serializeArray()))
       // console.log(($('#main_form').serialize()))
     };
     update();
