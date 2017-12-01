@@ -1164,14 +1164,21 @@
 
 
 
-              <table id="table_buff" class="max-width">
+              <table id="table_buff" class="buff_debuff_table  ">
                 <tbody>
                   <tr>
-                    <td>
+                    <td colspan="3">
                       Leader Skill
                     </td>
                   </tr>
                   <tr>
+                    <td rowspan="2">
+                      <label class="switch">
+                        <input id="leader_toggle" name="leader_toggle" value="leader_toggle" class="leader_toggle" type="checkbox" onchange="ApplyBuffAndDebuff()">
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+
                     <td rowspan="2">
                       <img class="skill_icon" id="leader_list_img" src="img/se_leaderbuffheal.png" />
                     </td>

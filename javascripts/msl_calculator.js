@@ -1,6 +1,18 @@
 goog.require('goog.dom');
 goog.require('goog.net.XhrIo');
 
+var playerDefaultSkill;
+var playerDefaultSkillStatusEffect;
+
+var playerActiveSkill;
+var playerActiveSkillStatusEffect;
+
+var playerCondActiveSkill;
+var playerCondActiveSkillStatusEffect;
+
+var playerLeaderSkill;
+var playerLeaderStatusEffect;
+
 var stringMap = {};
 var monsterMap = {};
 var monsterNameMap = {};
@@ -85,10 +97,12 @@ function ChangeAstromonEvent(needToClearElement) {
 
   var monElementMap = {};
 
+
+
   for (i = 2; i <= 6; i++) {
     var tempKey = monsterNameMap[input_astromon.value + "|" + i];
     if (tempKey != undefined) {
-      var elementName = toTitleCase(ReadEnumFromNumber(proto.msggamedata.MonsterElementType, tempKey[21]).replace("ME_", "").replace("TREE", "Wood"));
+      var elementName = toTitleCase(ReadEnumFromNumber(proto.msggamedata.MonsterElementType, tempKey.getElement()).replace("ME_", "").replace("TREE", "Wood"));
       monElementMap[elementName] = tempKey;
     }
   }
@@ -116,13 +130,14 @@ function ChangeAstromonEvent(needToClearElement) {
     }
   }
 
+      // console.log(monElementMap);
 
   // SetElement
-  imgIcon.setAttribute('src', 'img/' + monElementMap[currentElement][29] + '.png');
+  imgIcon.setAttribute('src', 'img/' + monElementMap[currentElement].getResourceName() + '.png');
 
   var imgElement = goog.dom.getElement("img_mon_element");
 
-  var evoStage = monElementMap[currentElement][28];
+  var evoStage = monElementMap[currentElement].getEvolution();
   var oriElement = currentElement.replace("Wood", "Tree").toLowerCase();
 
   // SetMonIcon
@@ -268,7 +283,8 @@ function GenerateFloor(file1, dunType) {
   var allEnList = [];
   goog.dom.removeChildren(floor_list);
   for (i = 0; i < lastFloor; i++) {
-    var mDubSubStage = dunSubStageMap[golemArray[i]][9];
+    var mDubSubStage = dunSubStageMap[golemArray[i]].getBattlesList();
+
     var floorSize = mDubSubStage.length;
 
 
@@ -302,26 +318,27 @@ function GenerateEnemy() {
 
   var selectedFloor = floorList.options[floorList.selectedIndex].value;
   var dunSubStage = dunSubStageMap[selectedFloor];
-  var battleArray = dunSubStage[9];
+  var battleArray = dunSubStage.getBattlesList();
 
   var lastBattleArrayIndex = battleArray.length - 1;
 
   var bossGroup = battleArray[lastBattleArrayIndex];
-  var bossMon = bossGroup[3];
+  // console.log(bossGroup);
+
+  var bossMon = bossGroup.getRequiredMonster();
 
   if (bossMon != undefined) {
     // hasBoss
     var boss = monStageMap[bossMon];
-    var bossName = stringMap[monsterMap[boss[1]][1]];
-
+    var bossName = stringMap[monsterMap[boss .getMonster() ] .getName()];
 
     var option = goog.dom.createDom('option', {
       "value": bossMon
-    }, bossName + " (Lv. " + boss[2] + ")");
+    }, bossName + " (Lv. " + boss.getMonsterLev() + ")");
     goog.dom.appendChild(enemyList, option);
     enemyList.add(option);
 
-    var fixedMonOnBoss = bossGroup[4];
+    var fixedMonOnBoss = bossGroup.getFixedMonsterList();
 
 
     for (l = 0; l < fixedMonOnBoss.length; l++) {
@@ -331,11 +348,11 @@ function GenerateEnemy() {
         suffix.push(" (Left)");
         suffix.push(" (Right)");
       }
-      var fixedMonOnBossName = stringMap[monMap[dunMonMap[fixedMonOnBoss[l]][1]][1]];
+      var fixedMonOnBossName = stringMap[monMap[dunMonMap[fixedMonOnBoss[l]] .getMonster()  ] .getName()  ];
 
       var option = goog.dom.createDom('option', {
         "value": fixedMonOnBoss[l]
-      }, fixedMonOnBossName + " (Lv. " + dunMonMap[fixedMonOnBoss[l]][2] + ")" + suffix[l]);
+      }, fixedMonOnBossName + " (Lv. " + dunMonMap[fixedMonOnBoss[l]]  .getMonsterLev() + ")" + suffix[l]);
       goog.dom.appendChild(enemyList, option);
       enemyList.add(option);
     }
@@ -344,14 +361,14 @@ function GenerateEnemy() {
     var fixedCount = 0;
 
     if (lastBattleArrayIndex != 0) {
-      var fixedGroup = stage1Group[4];
+      var fixedGroup = stage1Group.getFixedMonsterList();
       for (o = fixedGroup.length - 1; o >= 0; o--) {
 
-        var fixedMonName = stringMap[monMap[dunMonMap[fixedGroup[o]][1]][1]];
+        var fixedMonName = stringMap[monMap[dunMonMap[fixedGroup[o]] .getMonster()  ] .getName() ];
 
         var option = goog.dom.createDom('option', {
           "value": fixedGroup[o]
-        }, fixedMonName + " (Lv. " + dunMonMap[fixedGroup[o]][2] + ")");
+        }, fixedMonName + " (Lv. " + dunMonMap[fixedGroup[o]]  .getMonsterLev() + ")");
         goog.dom.appendChild(enemyList, option);
         enemyList.add(option);
         fixedCount++;
@@ -359,20 +376,20 @@ function GenerateEnemy() {
 
       // bossGroup
 
-      var maxBossMon = bossGroup[1];
+      var maxBossMon = bossGroup.getMonsterCountMax();
 
       if (fixedCount < maxBossMon) {
-        var stageBossGroup = bossGroup[2];
-        var bossGroupArray = monGroupMap[stageBossGroup][1];
+        var stageBossGroup = bossGroup.getMonsterGroup();
+        var bossGroupArray = monGroupMap[stageBossGroup].getMonstersList();
 
 
         for (qq = 0; qq < bossGroupArray.length; qq++) {
-          var groupName = stringMap[monMap[dunMonMap[bossGroupArray[qq][0]][1]][1]];
+          var groupName = stringMap[monMap[dunMonMap[bossGroupArray[qq] .getUid()   ]  .getMosnter()  ] .getName()  ];
           var exist = optionExists(bossGroupArray[qq][0], enemyList);
           if (exist == false) {
             var option = goog.dom.createDom('option', {
               "value": bossGroupArray[qq][0]
-            }, groupName + " (Lv. " + dunMonMap[bossGroupArray[qq][0]][2] + ")");
+            }, groupName + " (Lv. " + dunMonMap[bossGroupArray[qq] .getUid()  ]  .getMonsterLev() + ")");
             goog.dom.appendChild(enemyList, option);
             enemyList.add(option);
           }
@@ -382,16 +399,16 @@ function GenerateEnemy() {
 
       }
 
-      var groupOnly = stage1Group[2];
-      var groupArray = monGroupMap[groupOnly][1];
+      var groupOnly = stage1Group.getMonsterGroup();
+      var groupArray = monGroupMap[groupOnly].getMonstersList();
 
       for (p = 0; p < groupArray.length; p++) {
-        var groupName = stringMap[monMap[dunMonMap[groupArray[p][0]][1]][1]];
+        var groupName = stringMap[monMap[dunMonMap[groupArray[p] .getUid()  ]  .getMonster()   ]  .getName()];
         var exist = optionExists(groupArray[p][0], enemyList);
         if (exist == false) {
           var option = goog.dom.createDom('option', {
             "value": groupArray[p][0]
-          }, groupName + " (Lv. " + dunMonMap[groupArray[p][0]][2] + ")");
+          }, groupName + " (Lv. " + dunMonMap[groupArray[p] .getUid() ] .getMonsterLev() + ")");
           goog.dom.appendChild(enemyList, option);
           enemyList.add(option);
         }
@@ -408,10 +425,10 @@ function GenerateEnemy() {
   } else {
     // noBoss
 
-    var fixedGroup = stage1Group[4];
+    var fixedGroup = stage1Group.getFixedMonsterList;
     for (o = fixedGroup.length - 1; o >= 0; o--) {
 
-      var fixedMonName = stringMap[monMap[dunMonMap[fixedGroup[o]][1]][1]];
+      var fixedMonName = stringMap[monMap[dunMonMap[fixedGroup[o]] .getMonster()   ].getName()];
 
       var option = goog.dom.createDom('option', {
         "value": fixedGroup[o]
@@ -420,16 +437,16 @@ function GenerateEnemy() {
       enemyList.add(option);
     }
 
-    var groupOnly = stage1Group[2];
-    var groupArray = monGroupMap[groupOnly][1];
+    var groupOnly = stage1Group.getMonsterGroup();
+    var groupArray = monGroupMap[groupOnly].getMonstersList();
 
     for (p = 0; p < groupArray.length; p++) {
-      var groupName = stringMap[monMap[dunMonMap[groupArray[p][0]][1]][1]];
-      var exist = optionExists(groupArray[p][0], enemyList);
+      var groupName = stringMap[monMap[dunMonMap [groupArray[p] .getUid() ] .getMonster()   ].getName()];
+      var exist = optionExists(groupArray[p] .getUid(), enemyList);
       // console.log(exist)
       if (exist == false) {
         var option = goog.dom.createDom('option', {
-          "value": groupArray[p][0]
+          "value": groupArray[p].getUid()
         }, groupName);
         goog.dom.appendChild(enemyList, option);
         enemyList.add(option);
@@ -455,8 +472,9 @@ function UpdateEnemyStat() {
   if (dunMon == undefined) {
     dunMon = monStageMap[selectedEnemy];
   }
+  // console.log(monMap[dunMon.getMonster() ]);
 
-  var enemyStat = CalStat(dunMon, monMap[dunMon[1]])
+  var enemyStat = CalStat(dunMon, monMap[dunMon.getMonster() ])
 
 
   enemyRealHp = enemyStat[1];
@@ -486,14 +504,17 @@ function UpdateEnemyStat() {
   // console.log(enemyStat);
 
   // SetElement
+
+  // console.log(monMap);
+
   var imgEnemyIcon = goog.dom.getElement("img_enemy_icon");
-  imgEnemyIcon.setAttribute('src', 'img/' + monMap[dunMon[1]][29] + '.png')
+  imgEnemyIcon.setAttribute('src', 'img/' + monMap[dunMon.getMonster()  ].getResourceName() + '.png')
 
 
   var imgElement = goog.dom.getElement("img_enemy_element");
 
-  var evoStage = monMap[dunMon[1]][28];
-  var element = ReadEnumFromNumber(proto.msggamedata.MonsterElementType, monMap[dunMon[1]][21]);
+  var evoStage = monMap[dunMon  .getMonster()  ] .getEvolution();
+  var element = ReadEnumFromNumber(proto.msggamedata.MonsterElementType, monMap[dunMon.getMonster()].getElement());
 
 
 
@@ -525,11 +546,11 @@ function clamp(num, min, max) {
 
 function CalStat(stageMonsterArray, monsterArray) {
 
-  var num1 = clamp((parseFloat(stageMonsterArray[2]) - 1), 0, Number.MAX_SAFE_INTEGER);
-  var inc2 = monsterArray[14];
-  var inc3 = monsterArray[15];
-  var inc4 = monsterArray[16];
-  var inc5 = monsterArray[13];
+  var num1 = clamp((parseFloat(stageMonsterArray.getMonsterLev()) - 1), 0, Number.MAX_SAFE_INTEGER);
+  var inc2 = monsterArray.getIncAttack();
+  var inc3 = monsterArray.getIncDefence();
+  var inc4 = monsterArray.getIncHeal();
+  var inc5 = monsterArray.getIncHp();
 
   if (inc2 == undefined) {
     inc2 = 0;
@@ -544,46 +565,46 @@ function CalStat(stageMonsterArray, monsterArray) {
     inc5 = 0;
   }
 
-  var num2 = monsterArray[10] * inc2;
-  var num3 = monsterArray[11] * inc3;
-  var num4 = monsterArray[12] * inc4;
-  var num5 = monsterArray[9] * inc5;
+  var num2 = monsterArray.getDefAttack() * inc2;
+  var num3 = monsterArray.getDefDefence() * inc3;
+  var num4 = monsterArray.getDefHeal() * inc4;
+  var num5 = monsterArray.getDefHp() * inc5;
 
   /* var monsterUid = stageMonsterArray[1]; */
-  var grade = stageMonsterArray[25];
-  var attack = (monsterArray[10] + num2 * num1 * stageMonsterArray[5]);
-  var defence = (monsterArray[11] + num3 * num1 * stageMonsterArray[6]);
-  var heal = Math.round((monsterArray[12] + num4 * num1) * stageMonsterArray[7]);
-  var hp = Math.round((monsterArray[9] + num5 * num1) * stageMonsterArray[8]);
+  var grade = stageMonsterArray.getMonsterSkillGrade();
+  var attack = (monsterArray.getDefAttack()  + num2 * num1 * stageMonsterArray.getAttackAbility());
+  var defence = (monsterArray.getDefDefence() + num3 * num1 * stageMonsterArray.getDefenceAbility());
+  var heal = Math.round((monsterArray.getDefHeal() + num4 * num1) * stageMonsterArray.getHealAbility()  );
+  var hp = Math.round((monsterArray.getDefHp() + num5 * num1) * stageMonsterArray.getHpAbility());
 
-  var cDmg = stageMonsterArray[27];
+  var cDmg = stageMonsterArray.getAddCriticalDamagePercent();
   if (cDmg == undefined) {
     cDmg = 0;
   }
 
-  var cRate = stageMonsterArray[28];
+  var cRate = stageMonsterArray.getAddCriticalProbPercent();
   if (cRate == undefined) {
     cRate = 0;
   }
 
-  var cResist = stageMonsterArray[29];
+  var cResist = stageMonsterArray.getAddStatusEffectResistancePercent();
   if (cResist == undefined) {
     cResist = 0;
   }
 
-  var bResist = monsterArray[34];
+  var bResist = monsterArray.getStatusEffectResistance();
   if (bResist == undefined) {
     bResist = 0;
   }
 
-  var critDmg = (cDmg + monsterArray[33] - 1) * 100 + "%";
-  var critRate = Math.round(((cRate + monsterArray[32]) * 100)) + "%";
+  var critDmg = (cDmg + monsterArray.getCriticalDamage() - 1) * 100 + "%";
+  var critRate = Math.round(((cRate + monsterArray.getCriticalProb()) * 100)) + "%";
   var resist = Math.round((cResist + bResist) * 100) + "%";
 
-  var sp = monsterArray[17];
-  var spFillPercent = Math.floor(monsterArray[17] / stageMonsterArray[23]);
+  var sp = monsterArray.getMp();
+  var spFillPercent = Math.floor(monsterArray.getMp() / stageMonsterArray.getMpFillCount());
 
-  var pureDef = Math.round((monsterArray[11] + num3 * num1) * stageMonsterArray[6]);
+  var pureDef = Math.round((monsterArray.getDefDefence() + num3 * num1) * stageMonsterArray.getDefenceAbility());
 
   var defencePercent = (Math.round(pureDef / (1200 + pureDef) * 10000) / 100).toString() + "%";
 
@@ -619,6 +640,9 @@ function optionExists(needle, haystack) {
 
 
 
+
+
+
 function UpdateMonStat(grade, selectedLv) {
   // if(selectedMon == undefined) {
   //   selectedMon =  goog.dom.getElement("input_astromon_name").value;
@@ -643,23 +667,23 @@ function UpdateMonStat(grade, selectedLv) {
   var monsterType = GetMonsterType(selectedMon);
   var monsterGradeWeight = (parseFloat(grade) - 1) / 10;
 
-  var num1 = monsterType[12] * monsterType[2];
-  var num2 = monsterType[12] * monsterType[3];
-  var num3 = monsterType[12] * monsterType[4];
-  var num4 = monsterType[12] - (num1 + num2 + num3);
-  var num5 = num1 + selectedMon[10];
-  var num6 = num2 + selectedMon[11];
-  var num7 = num3 + selectedMon[12];
-  var num8 = num4 + selectedMon[9];
+  var num1 = monsterType.getSp() * monsterType.getAttackWeight();
+  var num2 = monsterType.getSp() * monsterType.getDefenceWeight();
+  var num3 = monsterType.getSp() * monsterType.getHealWeight();
+  var num4 = monsterType.getSp() - (num1 + num2 + num3);
+  var num5 = num1 + selectedMon.getDefAttack();
+  var num6 = num2 + selectedMon.getDefDefence();
+  var num7 = num3 + selectedMon.getDefHeal();
+  var num8 = num4 + selectedMon.getDefHp();
   var num9 = num5 + num5 * monsterGradeWeight; //atk
   var num10 = num6 + num6 * monsterGradeWeight; //def
   var num11 = num7 + num7 * monsterGradeWeight; //heal
   var num12 = num8 + num8 * monsterGradeWeight; //hp
 
-  var num1_1 = num9 * selectedMon[14];
-  var num2_1 = num10 * selectedMon[15];
-  var num3_1 = num11 * selectedMon[16];
-  var num4_1 = num12 * selectedMon[13];
+  var num1_1 = num9 * selectedMon.getIncAttack();
+  var num2_1 = num10 * selectedMon.getIncDefence();
+  var num3_1 = num11 * selectedMon.getIncHeal();
+  var num4_1 = num12 * selectedMon.getIncHp();
   var num5_1 = selectedLv - 1;
 
   var awakenList = goog.dom.getElement("awaken_list");
@@ -696,7 +720,7 @@ function UpdateMonStat(grade, selectedLv) {
   var divHeal = goog.dom.getElement("div_heal");
   divHeal.innerHTML = displayHeal.toLocaleString();
 
-  var critRate = selectedMon[32];
+  var critRate = selectedMon.getCriticalProb();
 
   if (critRate == undefined) {
     critRate = 0;
@@ -704,7 +728,7 @@ function UpdateMonStat(grade, selectedLv) {
     critRate = Math.round(critRate * 100);
   }
 
-  var resist = selectedMon[34];
+  var resist = selectedMon.getStatusEffectResistance();
   if (resist == undefined) {
     resist = 0;
   } else {
@@ -712,7 +736,7 @@ function UpdateMonStat(grade, selectedLv) {
   }
 
   var divCritDmg = goog.dom.getElement("div_crit_dmg");
-  divCritDmg.innerHTML = ((selectedMon[33] - 1) * 100) + "%";
+  divCritDmg.innerHTML = ((selectedMon.getCriticalDamage() - 1) * 100) + "%";
   var divCritRate = goog.dom.getElement("div_crit_rate");
   divCritRate.innerHTML = critRate + "%";
   var divResist = goog.dom.getElement("div_resist");
@@ -720,9 +744,9 @@ function UpdateMonStat(grade, selectedLv) {
 
 
   var divSp = goog.dom.getElement("div_sp")
-  divSp.innerHTML = selectedMon[17];
+  divSp.innerHTML = selectedMon.getMp();
 
-  playerRealCritDmg = ((selectedMon[33] - 1) * 100);
+  playerRealCritDmg = ((selectedMon.getCriticalDamage() - 1) * 100);
   playerRealCritRate = critRate;
   playerRealResist = resist;
 
@@ -746,14 +770,21 @@ function SetSkill(selectedMon) {
 
 
 
-  var boss_passive_skill_effect = statusEffectMap[selectedMon[25]];
-  var boss_passive_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect[4]).replace("SEST", "se").toLowerCase();
+  var boss_passive_skill_effect = statusEffectMap[selectedMon.getDefaultSkillStatusEffectBeyond()];
+  var boss_passive_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_passive_skill_effect.getSubType() ).replace("SEST", "se").toLowerCase();
 
-  var boss_active_skill_effect = statusEffectMap[selectedMon[26]];
-  var boss_active_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect[4]).replace("SEST", "se").toLowerCase();
+  var boss_active_skill_effect = statusEffectMap[selectedMon.getActiveSkillStatusEffectBeyond()];
+  var boss_active_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_active_skill_effect.getSubType()).replace("SEST", "se").toLowerCase();
 
-  var passive_skill = skillMap[selectedMon[23]];
-  var active_skill = skillMap[selectedMon[24]];
+  var passive_skill = skillMap[selectedMon.getDefaultSkill()];
+  var active_skill = skillMap[selectedMon.getActiveSkill()];
+
+  playerDefaultSkill = passive_skill;
+  playerDefaultSkillStatusEffect = boss_passive_skill_effect;
+
+  playerActiveSkill = active_skill;
+  playerActiveSkillStatusEffect = boss_active_skill_effect;
+
 
 
   var div_skill_col2 = goog.dom.createDom('div', "black_3 width_max", "");
@@ -775,27 +806,35 @@ function SetSkill(selectedMon) {
   // Leader
 
 
-  var leaderSkill = skillMap[selectedMon[27]];
+  var leaderSkill = skillMap[selectedMon.getLeaderSkill()];
+  playerLeaderSkill = leaderSkill;
 
-  var boss_leader_skill_effect = statusEffectMap[leaderSkill[6]];
-  var boss_leader_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_leader_skill_effect[4]).replace("SEST", "se").toLowerCase();
+  var boss_leader_skill_effect = statusEffectMap[leaderSkill.getStatusEffect()];
+  var boss_leader_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_leader_skill_effect.getSubType()).replace("SEST", "se").toLowerCase();
 
-  var conditionalSkill = skillMap[selectedMon[44]];
+  var conditionalSkill = skillMap[selectedMon.getCondActiveSkill()];
 
   if (conditionalSkill != undefined) {
     var div_skill_col_holder = goog.dom.createDom('div', "w3-half padding_8", "");
     goog.dom.appendChild(div_skill_col, div_skill_col_holder);
 
-    var boss_cond_skill_effect = statusEffectMap[selectedMon[45]];
-    console.log(conditionalSkill)
-    var boss_cond_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_cond_skill_effect[4]).replace("SEST", "se").toLowerCase();
+    var boss_cond_skill_effect = statusEffectMap[selectedMon.getCondActiveSkillStatusEffectBeyond()];
+    var boss_cond_skill_effect_icon = ReadEnumFromNumber(proto.msggamedata.MsgStatusEffect.StatusEffectSubType, boss_cond_skill_effect.getSubType()).replace("SEST", "se").toLowerCase();
 
     CreateLeaderSkillTable(div_skill_col_holder, boss_leader_skill_effect, leaderSkill, boss_leader_skill_effect_icon, "Leader");
+
+
+
+    playerCondActiveSkill = conditionalSkill;
+    playerCondActiveSkillStatusEffect = boss_cond_skill_effect;
+
 
     var div_skill_col_holder = goog.dom.createDom('div', "w3-half padding_8", "");
     goog.dom.appendChild(div_skill_col, div_skill_col_holder);
     CreateSkillTable(div_skill_col_holder, boss_cond_skill_effect, conditionalSkill, boss_cond_skill_effect_icon, "Super");
   } else {
+
+
     var div_skill_col_holder = goog.dom.createDom('div', "w3-col padding_8", "");
     goog.dom.appendChild(div_skill_col, div_skill_col_holder);
 
@@ -809,7 +848,9 @@ function SetSkill(selectedMon) {
 
 function GetMonsterType(selectedMon) {
 
-  var key = selectedMon[28] + "_" + "1" + "_" + selectedMon[19];
+  var key = selectedMon.getEvolution() + "_" + "1" + "_" + selectedMon.getDefStatType();
+
+  console.log(key);
 
   return monsterTypeMap[key];
 
@@ -833,213 +874,60 @@ function ReadProto(file) {
 
 function GetAstromonUniqueList(file1, file2) {
 
-  var req = new XMLHttpRequest();
-  req.open('GET', file1, false);
-  req.overrideMimeType('text/plain; charset=x-user-defined');
-  req.send(null);
-  if (req.status != 200) throw '[' + req.status + ']' + req.statusText;
-  this.stream = req.responseText;
-  var bytes = [];
-  for (i = 0; i < this.stream.length; i++) {
-    bytes[i] = this.stream.charCodeAt(i) & 0xff;
-  }
-
-  var req = new XMLHttpRequest();
-  req.open('GET', file2, false);
-  req.overrideMimeType('text/plain; charset=x-user-defined');
-  req.send(null);
-  if (req.status != 200) throw '[' + req.status + ']' + req.statusText;
-  this.stream = req.responseText;
-  var bytes2 = [];
-  for (i = 0; i < this.stream.length; i++) {
-    bytes2[i] = this.stream.charCodeAt(i) & 0xff;
-  }
-
-  var file3 = "/data/monster_types.smj"
-
-  var req = new XMLHttpRequest();
-  req.open('GET', file3, false);
-  req.overrideMimeType('text/plain; charset=x-user-defined');
-  req.send(null);
-  if (req.status != 200) throw '[' + req.status + ']' + req.statusText;
-  this.stream = req.responseText;
-  var bytes3 = [];
-  for (i = 0; i < this.stream.length; i++) {
-    bytes3[i] = this.stream.charCodeAt(i) & 0xff;
-  }
-
   var stringFile = "/data/string.en.pb"
-  var reqString = new XMLHttpRequest();
-  reqString.open('GET', stringFile, false);
-  reqString.overrideMimeType('text/plain; charset=x-user-defined');
-  reqString.send(null);
-  if (reqString.status != 200) throw '[' + reqString.status + ']' + reqString.statusText;
-  this.streamString = reqString.responseText;
-  var bytesString = [];
-  for (i = 0; i < this.streamString.length; i++) {
-    bytesString[i] = this.streamString.charCodeAt(i) & 0xff;
-  }
-
-
+  var monsterTypeFile = "/data/monster_types.smj"
   var statusEffectFile = "/data/status_effects.smj"
-  var reqString = new XMLHttpRequest();
-  reqString.open('GET', statusEffectFile, false);
-  reqString.overrideMimeType('text/plain; charset=x-user-defined');
-  reqString.send(null);
-  if (reqString.status != 200) throw '[' + reqString.status + ']' + reqString.statusText;
-  this.streamString = reqString.responseText;
-  var bytesStatusEffect = [];
-  for (i = 0; i < this.streamString.length; i++) {
-    bytesStatusEffect[i] = this.streamString.charCodeAt(i) & 0xff;
-  }
-
-
   var monsterSkillFile = "/data/monster_skills.smj"
-  var reqString = new XMLHttpRequest();
-  reqString.open('GET', monsterSkillFile, false);
-  reqString.overrideMimeType('text/plain; charset=x-user-defined');
-  reqString.send(null);
-  if (reqString.status != 200) throw '[' + reqString.status + ']' + reqString.statusText;
-  this.streamString = reqString.responseText;
-  var bytesSkill = [];
-  for (i = 0; i < this.streamString.length; i++) {
-    bytesSkill[i] = this.streamString.charCodeAt(i) & 0xff;
-  }
-
   var superEvolutionMonsterFile = "/data/super_evolution_monsters.smj"
-  var reqString = new XMLHttpRequest();
-  reqString.open('GET', superEvolutionMonsterFile, false);
-  reqString.overrideMimeType('text/plain; charset=x-user-defined');
-  reqString.send(null);
-  if (reqString.status != 200) throw '[' + reqString.status + ']' + reqString.statusText;
-  this.streamString = reqString.responseText;
-  var bytesSuperEvolutionMonster = [];
-  for (i = 0; i < this.streamString.length; i++) {
-    bytesSuperEvolutionMonster[i] = this.streamString.charCodeAt(i) & 0xff;
-  }
+
+  var monsterDict = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file1));
+  var monster = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file2));
+  var monsterType = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(monsterTypeFile));
+  var stringText = new proto.msggamedata.MsgString.deserializeBinary(ReadProto(stringFile));
+  var statusEffect = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(statusEffectFile));
+  var skill = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(monsterSkillFile));
+  var superEvolutionMonster = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(superEvolutionMonsterFile));
 
 
-  var monsterDict = new proto.msggamedata.MsgGameData.deserializeBinary(bytes);
-  var monster = new proto.msggamedata.MsgGameData.deserializeBinary(bytes2);
-  var monsterType = new proto.msggamedata.MsgGameData.deserializeBinary(bytes3);
-  var stringText = new proto.msggamedata.MsgString.deserializeBinary(bytesString);
-  var statusEffect = new proto.msggamedata.MsgGameData.deserializeBinary(bytesStatusEffect);
-  var skill = new proto.msggamedata.MsgGameData.deserializeBinary(bytesSkill);
-  var superEvolutionMonster = new proto.msggamedata.MsgGameData.deserializeBinary(bytesSuperEvolutionMonster);
 
-  var arrayMonsterDict = monsterDict.array[29];
-  var arrayMonster = monster.array[3];
-  var arrayMonsterType = monsterType.array[4];
-  var arrayStatusEffect = statusEffect.array[20];
-  var arraySkill = skill.array[7];
-  var arraySuperEvolutionMonster = superEvolutionMonster.array[97];
+  // var arrayMonsterDict = monsterDict.array[29];
 
-  //sepppp
+  var arrayMonsterDict = monsterDict.getMonsterDictList();
 
 
-  var file2 = "/data/dungeon_substages.smj"
-  var file3 = "/data/dungeon_monster_groups.smj"
-  var file4 = "/data/dungeon_monsters.smj"
-  var file5 = "/data/monsters.smj"
-  var file6 = "/data/stage_monsters.smj"
+  var arrayMonster = monster.getMonstersList();
 
 
-  var req2 = new XMLHttpRequest();
-  req2.open('GET', file2, false);
-  req2.overrideMimeType('text/plain; charset=x-user-defined');
-  req2.send(null);
-  if (req2.status != 200) throw '[' + req2.status + ']' + req2.statusText;
-  this.stream2 = req2.responseText;
-  var bytes2 = [];
-  for (i = 0; i < this.stream2.length; i++) {
-    bytes2[i] = this.stream2.charCodeAt(i) & 0xff;
-  }
 
-  var req3 = new XMLHttpRequest();
-  req3.open('GET', file3, false);
-  req3.overrideMimeType('text/plain; charset=x-user-defined');
-  req3.send(null);
-  if (req3.status != 200) throw '[' + req3.status + ']' + req3.statusText;
-  this.stream3 = req3.responseText;
-  var bytes3 = [];
-  for (i = 0; i < this.stream3.length; i++) {
-    bytes3[i] = this.stream3.charCodeAt(i) & 0xff;
-  }
+  var arrayMonsterType = monsterType.getMonsterTypesList();
+  var arrayStatusEffect = statusEffect.getStatusEffectsList();
+  var arraySkill = skill.getMonsterSkillsList();
 
-  var req4 = new XMLHttpRequest();
-  req4.open('GET', file4, false);
-  req4.overrideMimeType('text/plain; charset=x-user-defined');
-  req4.send(null);
-  if (req4.status != 200) throw '[' + req4.status + ']' + req4.statusText;
-  this.stream4 = req4.responseText;
-  var bytes4 = [];
-  for (i = 0; i < this.stream4.length; i++) {
-    bytes4[i] = this.stream4.charCodeAt(i) & 0xff;
-  }
+  var arraySuperEvolutionMonster = superEvolutionMonster.getSuperEvolutionMonstersList();
 
-  var req5 = new XMLHttpRequest();
-  req5.open('GET', file5, false);
-  req5.overrideMimeType('text/plain; charset=x-user-defined');
-  req5.send(null);
-  if (req5.status != 200) throw '[' + req5.status + ']' + req5.statusText;
-  this.stream5 = req5.responseText;
-  var bytes5 = [];
-  for (i = 0; i < this.stream5.length; i++) {
-    bytes5[i] = this.stream5.charCodeAt(i) & 0xff;
-  }
 
-  var req6 = new XMLHttpRequest();
-  req6.open('GET', file6, false);
-  req6.overrideMimeType('text/plain; charset=x-user-defined');
-  req6.send(null);
-  if (req6.status != 200) throw '[' + req6.status + ']' + req6.statusText;
-  this.stream6 = req6.responseText;
-  var bytes6 = [];
-  for (i = 0; i < this.stream6.length; i++) {
-    bytes6[i] = this.stream6.charCodeAt(i) & 0xff;
-  }
+
+  var uidFile = "data/uids.smj"
+  var uids = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(uidFile));
+
+  var arrayUids = uids.getUidsList();
 
   var runeFile = "/data/runes.smj"
 
-
-  var req7 = new XMLHttpRequest();
-  req7.open('GET', runeFile, false);
-  req7.overrideMimeType('text/plain; charset=x-user-defined');
-  req7.send(null);
-  if (req7.status != 200) throw '[' + req7.status + ']' + req7.statusText;
-  this.stream6 = req7.responseText;
-  var bytesRune = [];
-  for (i = 0; i < this.stream6.length; i++) {
-    bytesRune[i] = this.stream6.charCodeAt(i) & 0xff;
-  }
-
-  var uidFile = "data/uids.smj"
-  var req7 = new XMLHttpRequest();
-  req7.open('GET', uidFile, false);
-  req7.overrideMimeType('text/plain; charset=x-user-defined');
-  req7.send(null);
-  if (req7.status != 200) throw '[' + req7.status + ']' + req7.statusText;
-  this.stream6 = req7.responseText;
-  var bytesUids = [];
-  for (i = 0; i < this.stream6.length; i++) {
-    bytesUids[i] = this.stream6.charCodeAt(i) & 0xff;
-  }
-
-  var uids = new proto.msggamedata.MsgGameData.deserializeBinary(bytesUids);
-  var arrayUids = uids.getUidsList();
-
-  // var runes = new proto.msggamedata.MsgGameData.deserializeBinary(bytesRune);
-  var runes = new proto.msggamedata.MsgGameData.deserializeBinary(bytesRune);
+  var runes = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(runeFile));
   var arrayRune = runes.getRunesList();
   var runeKeyArray = [];
   var runeObjectArray = [];
 
 
-  var arrayString = stringText.array[0];
+  var arrayString = stringText.getLocalStringsList(); //stringText.array[0];
+
+  // console.log(arrayString);
+
 
   stringMap = {};
   for (var i = 0; i < arrayString.length; i++) {
-    stringMap[arrayString[i][0]] = arrayString[i][1];
+    stringMap[arrayString[i].getUid()] = arrayString[i].getText();
   }
 
   var uidsMap = {};
@@ -1171,14 +1059,9 @@ function GetAstromonUniqueList(file1, file2) {
 
 
     var name = stringMap[arrayRune[i].getName()]
-    // console.log(name);
-    // var key = "rune_icon_" + color + "_" + shape + "_" + 1;
-
 
     var key = "rune_icon_" + color + "_" + 1 + "|" + name;
     runeKeyArray.push(key);
-
-    // console.log(arrayRune[i].getRuneEffectsList())
 
     var runeEffectList = arrayRune[i].getRuneEffectsList();
 
@@ -1194,14 +1077,7 @@ function GetAstromonUniqueList(file1, file2) {
       value = runeEffectList[0].getVInt();
     }
 
-    // console.log(   runeEffectTypeText + "_" + value)
-    // getVFloat()
-    // getVInt()
-    // if (     )
-
-    // runeObjectArray.push( arrayRune[i].getColor() + "_" + runeEffectTypeText + "_" + value  );
     runeObjectArray.push(runeEffectTypeText + "|" + value);
-    // console.log(key);
   }
 
 
@@ -1416,50 +1292,60 @@ function GetAstromonUniqueList(file1, file2) {
   //
   // });
 
+  var file2 = "/data/dungeon_substages.smj"
+  var file3 = "/data/dungeon_monster_groups.smj"
+  var file4 = "/data/dungeon_monsters.smj"
+  var file5 = "/data/monsters.smj"
+  var file6 = "/data/stage_monsters.smj"
+
+
+  var dunSubStage = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file2));
+  var dunMonGroup = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file3));
+  var dunMon = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file4));
+  var mon = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file5));
+  var monStage = new proto.msggamedata.MsgGameData.deserializeBinary(ReadProto(file6));
 
 
 
-
-
-  var dunSubStage = new proto.msggamedata.MsgGameData.deserializeBinary(bytes2);
-  var dunMonGroup = new proto.msggamedata.MsgGameData.deserializeBinary(bytes3);
-  var dunMon = new proto.msggamedata.MsgGameData.deserializeBinary(bytes4);
-  var mon = new proto.msggamedata.MsgGameData.deserializeBinary(bytes5);
-  var monStage = new proto.msggamedata.MsgGameData.deserializeBinary(bytes6);
-
-  var arrayDunSub = dunSubStage.array[17];
-  var arrayDunMonGroup = dunMonGroup.array[19];
-  var arrayDunMon = dunMon.array[18];
-  var arrayMon = mon.array[3];
-  var arrayMonStage = monStage.array[14];
+  var arrayDunSub = dunSubStage.getDungeonSubstagesList();
+  var arrayDunMonGroup = dunMonGroup.getDungeonMonsterGroupsList();
+  var arrayDunMon = dunMon.getDungeonMonstersList();
+  var arrayMon = mon.getMonstersList();
+  var arrayMonStage = monStage.getStageMonstersList();
 
   // arrayMon.forEach(function(item) {
   //   console.log(item [39])
   // })
 
 
+
+
   dunSubStageMap = {};
   for (var i = 0; i < arrayDunSub.length; i++) {
-    dunSubStageMap[arrayDunSub[i][0]] = arrayDunSub[i];
+    dunSubStageMap[arrayDunSub[i].getUid()] = arrayDunSub[i];
   }
+
+
 
   monGroupMap = {};
   for (var i = 0; i < arrayDunMonGroup.length; i++) {
-    monGroupMap[arrayDunMonGroup[i][0]] = arrayDunMonGroup[i];
+    monGroupMap[arrayDunMonGroup[i].getUid()] = arrayDunMonGroup[i];
   }
+
+    // console.log(arrayDunMon);
 
   dunMonMap = {};
   for (var i = 0; i < arrayDunMon.length; i++) {
-    dunMonMap[arrayDunMon[i][0]] = arrayDunMon[i];
+    dunMonMap[arrayDunMon[i].getUid()] = arrayDunMon[i];
   }
   monMap = {};
   for (var i = 0; i < arrayMon.length; i++) {
-    monMap[arrayMon[i][0]] = arrayMon[i];
+    monMap[arrayMon[i].getUid()] = arrayMon[i];
   }
 
   monStageMap = {};
   for (var i = 0; i < arrayMonStage.length; i++) {
-    monStageMap[arrayMonStage[i][0]] = arrayMonStage[i];
+    monStageMap[arrayMonStage[i].getUid()] = arrayMonStage[i];
   }
 
 
@@ -1468,46 +1354,47 @@ function GetAstromonUniqueList(file1, file2) {
 
   dictMap = {};
   for (var i = 0; i < arrayMonsterDict.length; i++) {
-    dictMap[arrayMonsterDict[i][0]] = arrayMonsterDict[i];
+    dictMap[arrayMonsterDict[i].getUid()] = arrayMonsterDict;
   }
 
   monsterMap = {};
   for (var i = 0; i < arrayMonster.length; i++) {
-    monsterMap[arrayMonster[i][0]] = arrayMonster[i];
+    monsterMap[arrayMonster[i].getUid()] = arrayMonster[i];
   }
 
   monsterTypeMap = {};
   for (var i = 0; i < arrayMonsterType.length; i++) {
 
-    var typeKey = arrayMonsterType[i][10] + "_" + arrayMonsterType[i][1] + "_" + arrayMonsterType[i][0];
+    var typeKey = arrayMonsterType[i].getEvolution() + "_" + arrayMonsterType[i].getWeightType() + "_" + arrayMonsterType[i].getType();
+    console.log(typeKey);
 
     monsterTypeMap[typeKey] = arrayMonsterType[i];
   }
 
   statusEffectMap = {};
   for (var i = 0; i < arrayStatusEffect.length; i++) {
-    statusEffectMap[arrayStatusEffect[i][0]] = arrayStatusEffect[i];
+    statusEffectMap[arrayStatusEffect[i].getUid()] = arrayStatusEffect[i];
   }
 
   skillMap = {};
   for (var i = 0; i < arraySkill.length; i++) {
-    skillMap[arraySkill[i][0]] = arraySkill[i];
+    skillMap[arraySkill[i].getUid()] = arraySkill[i];
   }
 
   var skillLeaderOnlyMap = {};
   skillLeaderDescMap = {};
   for (val of arraySkill) {
-    var skillType = ReadEnumFromNumber( proto.msggamedata.MonsterSkillType  , val[3]);
+    var skillType = ReadEnumFromNumber( proto.msggamedata.MonsterSkillType  , val.getType());
 
     if(skillType == "MS_LEADER") {
-      var skillEffectName = stringMap[statusEffectMap[ val [6]][1]];
-      var skillEffect = statusEffectMap[ val [6]];
-      var skillEffectValue = skillEffect[8];
+      var skillEffectName = stringMap[statusEffectMap[ val.getStatusEffect() ].getName()];
+      var skillEffect = statusEffectMap[ val .getStatusEffect()];
+      var skillEffectValue = skillEffect.getVFloat();
 
 
-      var skillImg = val[8].replace(".", "_");
+      var skillImg = val.getIcon().replace(".", "_");
 
-      var skillWhere = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectWhere  , skillEffect[10]);
+      var skillWhere = ReadEnumFromNumber( proto.msggamedata.MsgStatusEffect.StatusEffectWhere  , skillEffect.getWhere());
 
       // console.log(skillEffectName);
       // console.log( statusEffectMap[ val [6]]   );
@@ -1528,7 +1415,7 @@ function GetAstromonUniqueList(file1, file2) {
 
 
       if(skillWhere == "SEW_ALL") {
-        skillLeaderDescMap[key] = stringMap[skillEffect[2]];
+        skillLeaderDescMap[key] = stringMap[skillEffect.getDesc()];
       }
 
     }
@@ -1581,7 +1468,7 @@ function GetAstromonUniqueList(file1, file2) {
 
   superEvolutionMonsterMap = {};
   for (var i = 0; i < arraySuperEvolutionMonster.length; i++) {
-    superEvolutionMonsterMap[arraySuperEvolutionMonster[i][0]] = arraySuperEvolutionMonster[i];
+    superEvolutionMonsterMap[arraySuperEvolutionMonster[i].getUid()] = arraySuperEvolutionMonster[i];
   }
 
 
@@ -1589,8 +1476,8 @@ function GetAstromonUniqueList(file1, file2) {
 
   monsterNameMap = {};
   for (var i = 0; i < arrayMonster.length; i++) {
-    if(monsterNameMap[stringMap[arrayMonster[i][1]] + "|" + arrayMonster[i][21]] == undefined  ) {
-      monsterNameMap[stringMap[arrayMonster[i][1]] + "|" + arrayMonster[i][21]] = arrayMonster[i];
+    if(monsterNameMap[stringMap[arrayMonster[i].getName()] + "|" + arrayMonster[i].getElement()] == undefined  ) {
+      monsterNameMap[stringMap[arrayMonster[i].getName()] + "|" + arrayMonster[i].getElement()] = arrayMonster[i];
     }
 
   }
@@ -1598,7 +1485,7 @@ function GetAstromonUniqueList(file1, file2) {
   var superList = [];
 
   for (m = 0; m < arraySuperEvolutionMonster.length; m++) {
-    superList.push(arraySuperEvolutionMonster[m][1]);
+    superList.push(arraySuperEvolutionMonster[m].getToMonstersList());
   }
 
   var uniq = GetUniqueList(superList, arrayMonsterDict);
@@ -1633,6 +1520,9 @@ function GetAstromonUniqueList(file1, file2) {
   ReadGemFromUrl("_c");
 
 
+  CalcDamage(playerDefaultSkill.getType() );
+
+
 }
 
 function GetUniqueListForAll(arr) {
@@ -1653,7 +1543,7 @@ function GetUniqueList(superList, arr) {
     a = [];
   for (var i = 0, l = superList.length; i < l; ++i) {
     for (j = 0; j < superList[i].length; j++) {
-      var monName = stringMap[monsterMap[superList[i][j]][1]];
+      var monName = stringMap[monsterMap[superList[i][j]].getName()];
       if (!u.hasOwnProperty(monName)) {
         a.push(monName);
         u[monName] = 1;
@@ -1664,7 +1554,7 @@ function GetUniqueList(superList, arr) {
 
 
   for (var i = 0, l = arr.length; i < l; ++i) {
-    var monName = stringMap[monsterMap[arr[i][1]][1]];
+    var monName = stringMap[monsterMap[arr[i].getMonsterUid()].getName()];
     if (!u.hasOwnProperty(monName)) {
       a.push(monName);
       u[monName] = 1;
@@ -1697,10 +1587,12 @@ function CreateSkillTable(div_skill_col_holder, boss_skill_effect, boss_skill, b
   var pureType = "";
   var actionPower;
   try {
-    pureType = boss_skill[5][0];
+
+    pureType = boss_skill.getAction().getType();
     rawType = ReadEnumFromNumber(proto.msggamedata.MsgMonsterSkillAction.ActionType, pureType);
-    rawTarget = ReadEnumFromNumber(proto.msggamedata.MonsterSkillTargetType, boss_skill[4]);
-    actionPower = (Math.round(boss_skill[5][1] * 10000) / 100).toString() + "%";
+    rawTarget = ReadEnumFromNumber(proto.msggamedata.MonsterSkillTargetType, boss_skill.getTarget());
+    actionPower = (Math.round(boss_skill.getAction().getWeight() * 10000) / 100).toString() + "%";
+    console.log(actionPower);
   } catch (err) {
 
   }
@@ -1730,7 +1622,7 @@ function CreateSkillTable(div_skill_col_holder, boss_skill_effect, boss_skill, b
   var tdSkillName = goog.dom.createDom('td', {
     "class": "bold_text yellow_text right_text",
     "colspan": "4"
-  }, stringMap[boss_skill[1]]);
+  }, stringMap[boss_skill.getName()]);
   goog.dom.appendChild(rowSkillTitle, tdSkillName);
 
   // rowDetail
@@ -1742,7 +1634,7 @@ function CreateSkillTable(div_skill_col_holder, boss_skill_effect, boss_skill, b
   goog.dom.appendChild(rowSkillDetail, tdSkillIcon);
   var imgSkillIcon = goog.dom.createDom('img', {
     "class": "skill_icon",
-    "src": "img/" + boss_skill[8].toLowerCase() + ".png"
+    "src": "img/" + boss_skill.getIcon().toLowerCase() + ".png"
   }, "");
 
   goog.dom.appendChild(tdSkillIcon, imgSkillIcon);
@@ -1769,7 +1661,7 @@ function CreateSkillTable(div_skill_col_holder, boss_skill_effect, boss_skill, b
     "class": "skill_desc",
     "colspan": "6",
     "rowspan": "2"
-  }, stringMap[boss_skill[2]]);
+  }, stringMap[boss_skill.getDesc()]);
   goog.dom.appendChild(rowSkillDesc, tdSkillDesc);
   var rowBlank = goog.dom.createDom('tr', "");
   goog.dom.appendChild(tbody, rowBlank);
@@ -1785,13 +1677,13 @@ function CreateSkillTable(div_skill_col_holder, boss_skill_effect, boss_skill, b
   var tdSkillEffectName = goog.dom.createDom('td', {
     "class": "bold_text yellow_text right_text",
     "colspan": "4"
-  }, stringMap[boss_skill_effect[1]]);
+  }, stringMap[boss_skill_effect.getName()]);
   goog.dom.appendChild(rowSkillEffectTitle, tdSkillEffectName);
 
 
   // rowEffectDesc
 
-  var skill_desc = stringMap[boss_skill_effect[2]]
+  var skill_desc = stringMap[boss_skill_effect.getDesc()]
 
   var skill_desc_display = SetSkillDesc(skill_desc, boss_skill_effect);
   var rowSkillEffectDesc = goog.dom.createDom('tr', "");
@@ -1832,10 +1724,10 @@ function CreateLeaderSkillTable(div_skill_col_holder, boss_skill_effect, boss_sk
   var pureType = "";
   var actionPower;
   try {
-    pureType = boss_skill[5][0];
+    pureType = boss_skill.getAction().getType();
     rawType = ReadEnumFromNumber(proto.msggamedata.MsgMonsterSkillAction.ActionType, pureType);
-    rawTarget = ReadEnumFromNumber(proto.msggamedata.MonsterSkillTargetType, boss_skill[4]);
-    actionPower = (Math.round(boss_skill[5][1] * 10000) / 100).toString() + "%";
+    rawTarget = ReadEnumFromNumber(proto.msggamedata.MonsterSkillTargetType, boss_skill.getTarget());
+    actionPower = (Math.round(boss_skill.getAction().getWeight() * 10000) / 100).toString() + "%";
   } catch (err) {
 
   }
@@ -1865,7 +1757,7 @@ function CreateLeaderSkillTable(div_skill_col_holder, boss_skill_effect, boss_sk
   var tdSkillName = goog.dom.createDom('td', {
     "class": "bold_text yellow_text right_text",
     "colspan": "4"
-  }, stringMap[boss_skill_effect[1]]);
+  }, stringMap[boss_skill_effect.getName()]);
   goog.dom.appendChild(rowSkillTitle, tdSkillName);
 
 
@@ -1877,7 +1769,7 @@ function CreateLeaderSkillTable(div_skill_col_holder, boss_skill_effect, boss_sk
 
   // rowEffectDesc
 
-  var skill_desc = stringMap[boss_skill_effect[2]]
+  var skill_desc = stringMap[boss_skill_effect.getName()]
 
   var skill_desc_display = SetSkillDesc(skill_desc, boss_skill_effect);
   var rowSkillEffectDesc = goog.dom.createDom('tr', "");
@@ -1916,24 +1808,24 @@ function SetSkillDesc(ori_desc, m) {
   var text = ori_desc;
   var text2 = "";
 
-  var argChance = Math.round(m[7] * 100).toString();
+  var argChance = Math.round(m.getProb() * 100).toString();
   var arg = argChance;
 
-  var argDuration = m[6].toString();
+  var argDuration = m.getTurn().toString();
   var arg2 = argDuration;
 
-  var num = Math.round(m[8] * 100);
+  var num = Math.round(m.getVFloat() * 100);
   var value = "";
 
   if (num == undefined) {
-    value = m[9].toString();
+    value = m.getVInt().toString();
   } else {
     value = num.toString();
   }
 
   var arg4;
   try {
-    arg4 = m[11][2];
+    arg4 = m.getBossSelf().getCondCount();
   } catch (err) {
     arg4 = "";
     // console.log(m);
@@ -3908,10 +3800,12 @@ function ChangeMonFromUrl(needToClearElement, playerMon, playerElement, grade, l
 
   var monElementMap = {};
 
+
+
   for (i = 2; i <= 6; i++) {
     var tempKey = monsterNameMap[input_astromon.value + "|" + i];
     if (tempKey != undefined) {
-      var elementName = toTitleCase(ReadEnumFromNumber(proto.msggamedata.MonsterElementType, tempKey[21]).replace("ME_", "").replace("TREE", "Wood"));
+      var elementName = toTitleCase(ReadEnumFromNumber(proto.msggamedata.MonsterElementType, tempKey.getElement()).replace("ME_", "").replace("TREE", "Wood"));
       monElementMap[elementName] = tempKey;
     }
   }
@@ -3949,11 +3843,11 @@ function ChangeMonFromUrl(needToClearElement, playerMon, playerElement, grade, l
 
 
   // SetElement
-  imgIcon.setAttribute('src', 'img/' + monElementMap[currentElement][29] + '.png');
+  imgIcon.setAttribute('src', 'img/' + monElementMap[currentElement].getResourceName() + '.png');
 
   var imgElement = goog.dom.getElement("img_mon_element");
 
-  var evoStage = monElementMap[currentElement][28];
+  var evoStage = monElementMap[currentElement].getEvolution();
   var oriElement = currentElement.replace("Wood", "Tree").toLowerCase();
 
   // SetMonIcon
@@ -4363,8 +4257,156 @@ function ChangeLeaderBuffValue () {
 
 }
 
+function CalcEffect(val, targetSe, targetSt, targetElement = proto.msggamedata.MonsterElementType.ME_NONE, invertVal = false, addValue = 0) {
+  if(targetSe != null && targetSe.getSubType() == targetSt ) {
+    var num = targetSe.getVFloat() + addValue;
+    if(invertVal) {
+      num = -num;
+    }
+    if(targetSe.getElement() == proto.msggamedata.MonsterElementType.ME_NONE || targetSe.getElement() == targetElement) {
+      return val * num;
+    }
+
+  }
+  return 0;
+}
+
+function CalcLeaderEffect(val) {
+  var leaderValueDiv = goog.dom.getElement("leader_list_value");
+  var leaderValueSelected = leaderValueDiv.options[leaderValueDiv.selectedIndex].value;
+
+  return val * parseFloat(leaderValueSelected);
+}
+
+function Attack (mst) {
+  var num1 = 0;
+  var flag1 = false;
+  var playerSe = undefined;
+
+  // console.log(proto.msggamedata.MonsterSkillType.MS_DEFAULT);
+
+  if(mst == proto.msggamedata.MonsterSkillType.MS_DEFAULT) {
+    playerSe = playerDefaultSkillStatusEffect;
+  }
+  else if(mst == proto.msggamedata.MonsterSkillType.MS_ACTIVE) {
+    playerSe = playerActiveSkillStatusEffect;
+  }
+  else if(mst == proto.msggamedata.MonsterSkillType.MS_CONDACTIVE) {
+    playerSe = playerCondActiveSkillStatusEffect;
+  }
+
+  var flag2 = playerSe != undefined;
+
+  if(flag2) {
+    var subType = playerSe.getSubType();
+    var val = 0;
+
+    if(subType == proto.msggamedata.MsgStatusEffect.StatusEffectSubType.SEST_SELFREPLACEDATTACKBYMAXDEFENCE   ) {
+
+    } else if(subType == proto.msggamedata.MsgStatusEffect.StatusEffectSubType.SEST_SELFREPLACEDATTACKBYMAXHEAL) {
+
+    } else if (subType == proto.msggamedata.MsgStatusEffect.StatusEffectSubType.SEST_SELFREPLACEDATTACKBYMAXHP) {
+
+    }
+    num1 = ApplyAttackBuff(val);
+
+  }
+
+  if(!flag1) {
+    var ret = playerRealAtk;
+    var num2 = playerRealGemAtk;
+    var num3 = ApplyLeaderSkill(ret, proto.msggamedata.MsgStatusEffect.StatusEffectSubType.SEST_LEADERBUFFATTACK );
+    console.log(num3);
+  }
+
+
+
+  return num1;
+
+}
+
+function ApplyLeaderSkill (ret, st) {
+  var leaderToggle = goog.dom.getElement("leader_toggle");
+  if(!leaderToggle.checked) {
+    return 0;
+  }
+  var statusEffect = statusEffectMap[playerLeaderSkill.getStatusEffect()];
+
+  if(statusEffect == undefined) {
+    return 0;
+  }
+
+  return CalcLeaderEffect(ret);
+
+
+}
+
+function ApplyAttackBuff(val) {
+  var num1 = val;
+  var num2 = val;
+  var flag1 = false;
+  var flag2 = false;
+
+  var num4 = attackDown();
+  if(num4 != 0 ) {
+    flag2 = true;
+    num2 *= num4 + 1;
+  }
+
+
+
+  if(flag1 && flag2) {
+    return (num1 + num2) / 2;
+  }
+
+  if(flag1) {
+    return num1;
+  }
+
+  if(flag2) {
+    return num2;
+  }
+
+  return val;
+
+}
+
+
+// function attackUp() {
+//   if(isOn) {
+//     return 0.5;
+//   } else {
+//     return 0;
+//   }
+// }
+
+function attackDown() {
+  var atkDownInput = goog.dom.getElement("atk_down");
+  console.log(atkDownInput.checked);
+  if(atkDownInput.checked) {
+    return 0.5;
+  } else {
+    return 0;
+  }
+
+
+}
+
+
+
+
+
+
 
 function ApplyBuffAndDebuff () {
   console.log("work");
+  CalcDamage(playerDefaultSkill.getType());
+}
 
+
+
+function CalcDamage(mst) {
+  var num1 = Attack(mst);
+
+  console.log(num1);
 }
