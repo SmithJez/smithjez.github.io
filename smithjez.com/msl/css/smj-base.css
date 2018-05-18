@@ -1,0 +1,27 @@
+/* td.details-control {
+    background: url('../img_base/details_open.png') no-repeat center center;
+    cursor: pointer;
+} */
+td {
+  cursor: pointer;
+}
+
+/* tr.shown td.details-control {
+    background: url('../img_base/details_close.png') no-repeat center center;
+} */
+
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+}
+
+.smj_foot input {
+  width: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+/* tfoot {
+    display: table-header-group;
+} */

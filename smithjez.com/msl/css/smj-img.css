@@ -1,0 +1,57 @@
+/* .mon_icon_container {
+    position: relative;
+}
+.mon_icon {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+}
+.imageOne {
+    z-index: 0;
+}
+.imageTwo {
+    z-index: 1;
+}
+.imageThree {
+    z-index:2;
+} */
+
+
+.img_1 {
+  display: block;
+  margin: auto;
+  vertical-align: top;
+  width: 92px;
+  height: auto;
+  z-index: 1;
+  margin-bottom: -98px;
+  margin-left: 4px;
+}
+
+
+/* .img_2 {
+position: relative;
+z-index: 3;
+margin-top: auto;
+margin-left: 0;
+} */
+.img_3 {
+  position: relative;
+  display: block;
+  margin: auto;
+  vertical-align: top;
+  width: 92px;
+  height: auto;
+  /* z-index: 5; */
+  margin-left: 4px;
+}
+
+.monster_icon {
+    display: block;
+    margin: -20px 0px 0px 0px;
+    vertical-align: top;
+    /*width: 128px;*/
+    width: 100px;
+    max-width: 100px;
+    height: auto;
+}
